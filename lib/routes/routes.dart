@@ -9,4 +9,5 @@ class Routes {
   static const String previewPage = '/previewPage';
   static const String cameraPage = '/cameraPage';
   static const String profilePage = '/profilePage';
+  static const String trackPage = '/track';
 }

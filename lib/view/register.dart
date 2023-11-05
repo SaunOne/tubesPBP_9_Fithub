@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/database/sql_helperUser.dart';
 import 'package:ugd6_b_9/view/login.dart';
 
 import '../routes/routes.dart';
 
 // String? name, email, gender, password, tanggalLahir;
+
+enum Gender { male, female }
 
 class Register extends StatefulWidget {
   Register({super.key});
@@ -20,175 +23,324 @@ class _RegisterState extends State<Register> {
   TextEditingController genderController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController tanggal_lahirController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
+  Gender? selectedGender;
 
   bool isVisible = false;
   bool isExist = false;
+  bool isChecked = false;
+
   String selectedValue = ''; // Track the selected value
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            body: Form(
-              key: formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    'Sign Up',
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+                  ),
+                  const Text(
+                    'Sign up with your username and password',
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.normal,
+                        color: Color.fromARGB(255, 100, 100, 100)),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    controller: fullnameController,
+                    decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.badge_outlined),
+                        labelText: 'Full Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        )),
+                    validator: (value) =>
+                        value == '' ? 'Please enter your username' : null,
+                  ),
+                  SizedBox(
+                    height: 21,
+                  ),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.person_outline),
                         labelText: 'Username',
-                      ),
-                      validator: (value) =>
-                          value == '' ? 'Please enter your username' : null,
-                    ),
-                    TextFormField(
-                        controller: emailController,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.mail),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50.5),
+                        )),
+                    validator: (value) =>
+                        value == '' ? 'Please enter your username' : null,
+                  ),
+                  SizedBox(height: 21.0),
+                  TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.mail_outline),
                           labelText: 'Email',
-                        ),
-                        onChanged: (value) async {
-                          isExist = await isEmail(value);
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.5),
+                          )),
+                      onChanged: (value) async {
+                        isExist = await isEmail(value);
+                        setState(() {
+                          isExist;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == '') {
+                          return 'Please enter your email';
+                        } else if (isExist) {
+                          return 'Email already exist';
+                        } else {
+                          return null;
+                        }
+                      }),
+                  SizedBox(height: 21.0),
+                  TextFormField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50.5),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
                           setState(() {
-                            isExist;
+                            isVisible = !isVisible;
                           });
                         },
-                        validator: (value) {
-                          if (value == '') {
-                            return 'Please enter your email';
-                          } else if (isExist) {
-                            return 'Email already exist';
-                          } else {
-                            return null;
-                          }
-                        }),
-                    TextFormField(
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock),
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isVisible = !isVisible;
-                            });
-                          },
-                          icon: Icon(isVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                        ),
+                        icon: Icon(isVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
                       ),
-                      obscureText: !isVisible,
-                      validator: (value) =>
-                          value == '' ? 'Please enter your password' : null,
                     ),
-                    TextFormField(
-                      controller: genderController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person),
-                        labelText: 'Gender',
-                      ),
-                      validator: (value) =>
-                          value == '' ? 'Please enter your Gender' : null,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                        );
-                        tanggal_lahirController.text = '${date!.day}/${date.month}/${date.year}';
-                      },
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          controller: tanggal_lahirController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.date_range),
-                            labelText: 'Date of Birth',
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1900),
-                                  lastDate: DateTime.now(),
-                                );
-                                tanggal_lahirController.text =
-                                    '${date!.day}/${date.month}/${date.year}';
-                              },
-                              icon: Icon(Icons.date_range),
-                            ),
+                    obscureText: !isVisible,
+                    validator: (value) =>
+                        value == '' ? 'Please enter your password' : null,
+                  ),
+                  SizedBox(height: 21.0),
+                  GestureDetector(
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                      );
+                      tanggal_lahirController.text =
+                          '${date!.day}/${date.month}/${date.year}';
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: tanggal_lahirController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.date_range),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.5),
                           ),
-                          validator: (value) =>
-                              value == '' ? 'Please select a birth date' : null,
-                          onTap: () {
-                            // Ini mencegah keyboard dari muncul saat menekan TextFormField
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
+                          labelText: 'Date of Birth',
+                          suffixIcon: IconButton(
+                            onPressed: () async {
+                              final date = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                              );
+                              tanggal_lahirController.text =
+                                  '${date!.day}/${date.month}/${date.year}';
+                            },
+                            icon: Icon(Icons.date_range),
+                          ),
                         ),
+                        validator: (value) =>
+                            value == '' ? 'Please select a birth date' : null,
+                        onTap: () {
+                          // Ini mencegah keyboard dari muncul saat menekan TextFormField
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 115, 0, 54),
+                  ),
+                  // TextFormField(
+                  //   controller: genderController,
+                  //   keyboardType: TextInputType.number,
+                  //   decoration: const InputDecoration(
+                  //     prefixIcon: Icon(Icons.person),
+                  //     labelText: 'Gender',
+                  //   ),
+                  //   validator: (value) =>
+                  //       value == '' ? 'Please enter your Gender' : null,
+                  // ),
+                  Row(
+                    children: [
+                      Radio<Gender>(
+                        activeColor: primaryColor,
+                        value: Gender.male,
+                        groupValue: selectedGender,
+                        onChanged: (Gender? value) {
+                          setState(() {
+                            selectedGender = value;
+                            genderController.text = 'Male';
+                          });
+                        },
+                      ),
+                      const Text(
+                        'Male',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Radio<Gender>(
+                        activeColor: primaryColor,
+                        value: Gender.female,
+                        groupValue: selectedGender,
+                        onChanged: (Gender? value) {
+                          setState(() {
+                            selectedGender = value;
+                            genderController.text = 'Female';
+                          });
+                        },
+                      ),
+                      const Text(
+                        'Female',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        value: isChecked,
+                        activeColor: primaryColor,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isChecked = value!;
+                          });
+                        },
+                      ),
+                      const Text(
+                        'Have read the ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 100, 100, 100),
+                        ),
+                      ),
+                      const Text(
+                        'terms of service',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: primaryColor,
+                            decoration: TextDecoration.underline),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(50),
                             ),
-                        )),
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            await addEmployee();
-                            Navigator.pushNamed(context, Routes.login);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Register Success'),
+                          )),
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          await addEmployee();
+                          Navigator.pushNamed(context, Routes.login);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: primaryColor,
+                              content: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Register Success',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
                               ),
-                            );
-                          }
-                        },
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical:15.0,
-                              horizontal: 10.0,
                             ),
-                            child: Text(
-                              'Register',
-                              style: TextStyle(fontSize: 18.0),
-                            )),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 10.0,
+                        ),
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 40),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                      );
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Have an account?',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Text(
+                          'Login',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: primaryColor,
+                              fontWeight: FontWeight.normal),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Login(),
-                  ),
-                );
-              },
-              child: const Icon(Icons.arrow_back),
-              backgroundColor:  Color.fromARGB(255, 115, 0, 54),
-            )));
+          ),
+        ),
+      ),
+    );
   }
-  
+
   Future<void> addEmployee() async {
     // String name, String email, String gender, String password, String tanggal_lahir
     await SQLHelper.addUser(
+        fullnameController.text,
         nameController.text,
         emailController.text,
         genderController.text,

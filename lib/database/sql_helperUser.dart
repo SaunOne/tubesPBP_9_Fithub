@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart' as sql;
 class SQLHelper {
   static Future<void> createTables(sql.Database database) async {
     await database.execute("""
-    CREATE TABLE User(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, gender TEXT, password TEXT, tanggal_lahir TEXT , PathPhoto TEXT)
+    CREATE TABLE User(id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT, name TEXT, email TEXT, gender TEXT, password TEXT, tanggal_lahir TEXT , PathPhoto TEXT)
     """);
   }
 
@@ -19,11 +19,12 @@ class SQLHelper {
     });
   }
 
-  static Future<int> addUser(String name, String email, String gender,
+  static Future<int> addUser(String fullname, String name, String email, String gender,
       String password, String tanggal_lahir) async {
     final db = await SQLHelper.db();
     print('add sudah sampe disini : $name');
     final data = {
+      'fullname' : fullname,
       'name': name,
       'email': email,
       'gender': gender,
@@ -38,11 +39,12 @@ class SQLHelper {
     return await db.query('User');
   }
 
-  static Future<int> editUser(int id, String name, String email,
+  static Future<int> editUser(int id, String fullname, String name, String email,
       String gender, String password, String tanggal_lahir) async {
     final db = await SQLHelper.db();
     print('idnya adalah : $id');
     final data = {
+      'fullname' : fullname,
       'name': name,
       'email': email,
       'gender': gender,

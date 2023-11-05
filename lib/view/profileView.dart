@@ -21,6 +21,7 @@ class _ProfileViewState extends State<ProfileView> {
   TextEditingController genderController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController tanggal_lahirController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
   String pathPhoto = '';
   Map<String, dynamic>? tempUser;
   int? id;
@@ -44,6 +45,7 @@ class _ProfileViewState extends State<ProfileView> {
         genderController.text = tempUser!['gender'];
         passwordController.text = tempUser!['password'];
         tanggal_lahirController.text = tempUser!['tanggal_lahir'];
+        fullnameController.text = tempUser!['fullname'];
         pathPhoto = tempUser!['PathPhoto'];
       });
     } else {
@@ -342,6 +344,7 @@ class _ProfileViewState extends State<ProfileView> {
   Future<void> editUser(int id) async {
     await SQLHelper.editUser(
         id,
+        fullnameController.text,
         nameController.text,
         emailController.text,
         genderController.text,
