@@ -9,4 +9,10 @@ class Routes {
   static const String previewPage = '/previewPage';
   static const String cameraPage = '/cameraPage';
   static const String profilePage = '/profilePage';
+  static const String trackPage = '/track';
+  static const String timerPage = '/timer';
+  static const String gridGuidePage = '/gridGuide';
+  static const String detailGuidePage= '/detailGuide';
+  static const String scanPage = '/scanPage';
+  static const String generateQr = '/generateQr';
 }
