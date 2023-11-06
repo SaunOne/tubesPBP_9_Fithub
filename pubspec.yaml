@@ -55,6 +55,8 @@ dependencies:
   google_fonts: ^6.1.0
   font_awesome_flutter: ^10.6.0
   contextmenu: ^3.0.0
+  mobile_scanner: ^3.5.2
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

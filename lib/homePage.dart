@@ -28,9 +28,17 @@ class _HomePageState extends State<HomePage> {
   int index = HomePage().noIndex;
   bool appBar = isApp, bottomBar = !isBottom;
   bool isPop = false;
+
+
   //widget masing masing menu
   List<Widget> onScreen = [
-    Text('hai'),
+    Center(
+      child: Row(
+        children: [
+          
+        ],
+      ),
+    ),
     Text('Chat'),
     Text('Add'),
     Text('Message'),
@@ -72,11 +80,13 @@ class _HomePageState extends State<HomePage> {
         onPressed: (context) {
           changeScreen(0, true);
         },
+        title: 'Home'
       ),
       PersistentBottomNavBarItem(
+          
           icon: Icon(FontAwesomeIcons.person),
           inactiveIcon: Icon(
-            FontAwesomeIcons.user,
+            FontAwesomeIcons.personRunning,
             size: 20,
             color: index == 1 ? ColorC().primaryColor1 : Colors.grey,
           ),
@@ -84,19 +94,25 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushNamed(context, Routes.trackPage);
             changeScreen(1, true);
           },
+          title: 'Spedometer',
           activeColorPrimary: Color.fromARGB(255, 0, 68, 170)),
+          
       PersistentBottomNavBarItem(
         icon: Icon(
           Icons.qr_code,
           color: Colors.white,
           size: 50,
         ),
+        onPressed: (p1){
+          Navigator.pushNamed(context, Routes.scanPage);
+        },
         activeColorPrimary: Color.fromARGB(255, 0, 68, 170),
+        
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.card_membership),
         inactiveIcon: Icon(
-          Icons.card_membership,
+          FontAwesomeIcons.clock,
           color: index == 3 ? ColorC().primaryColor1 : Colors.grey,
         ),
         activeColorPrimary: Color.fromARGB(255, 0, 68, 170),
@@ -106,6 +122,7 @@ class _HomePageState extends State<HomePage> {
           }));
           changeScreen(3, false);
         },
+        title: 'Timer'
       ),
       PersistentBottomNavBarItem(
           icon: Icon(
@@ -120,7 +137,9 @@ class _HomePageState extends State<HomePage> {
             changeScreen(4, false);
             
           },
+          title: 'Guide',
           activeColorPrimary: Color.fromARGB(255, 0, 68, 170)),
+          
     ];
   }
 
@@ -330,17 +349,18 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
+                        
                       },
                       child: Row(
                         children: [
                           Icon(
-                            Icons.history,
+                            Icons.qr_code,
                             size: 20,
                           ),
                           SizedBox(
                             width: 20,
                           ),
-                          Text('History', style: StyleText().styleH4bWithColor),
+                          Text('Generate Qr', style: StyleText().styleH4bWithColor),
                         ],
                       ),
                     ),
@@ -378,4 +398,5 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
+  
 }

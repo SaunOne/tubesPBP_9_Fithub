@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/detailGuide.dart';
+import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
 import 'package:ugd6_b_9/gridGuide.dart';
+import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
 import 'package:ugd6_b_9/timer.dart';
 import 'package:ugd6_b_9/view/camera.dart';
 import 'package:ugd6_b_9/homePage.dart';
@@ -16,7 +18,7 @@ void main(){
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(
-      initialRoute: Routes.homePage,
+      initialRoute: Routes.login,
       routes: {
         // Routes.trackPage: (context) => TrackPage(),
         Routes.login: (context) => const Login(),
@@ -28,6 +30,8 @@ void main(){
         Routes.timerPage: (context) => const Timer(), 
         Routes.gridGuidePage: (context) => const GridGuide(),
         Routes.detailGuidePage: (context) => const Guide(),
+        Routes.scanPage:(context) => const BarcodeScannerPageView(),
+        Routes.generateQr: (context) => const GenerateQRPage(),
       },
     ),
   );

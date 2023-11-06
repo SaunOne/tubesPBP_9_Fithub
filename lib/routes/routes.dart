@@ -13,4 +13,6 @@ class Routes {
   static const String timerPage = '/timer';
   static const String gridGuidePage = '/gridGuide';
   static const String detailGuidePage= '/detailGuide';
+  static const String scanPage = '/scanPage';
+  static const String generateQr = '/generateQr';
 }

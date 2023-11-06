@@ -105,7 +105,6 @@ class _GridGuideState extends State<GridGuide> {
                     MaterialButton(
                       onPressed: () {
                         if (i == 2) {
-                          
                           Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) {
                             return TrackPage();
