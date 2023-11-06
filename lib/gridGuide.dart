@@ -4,6 +4,8 @@ import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/detailGuide.dart';
 import 'package:ugd6_b_9/homePage.dart';
 import 'package:ugd6_b_9/main.dart';
+import 'package:ugd6_b_9/routes/routes.dart';
+import 'package:ugd6_b_9/view/track.dart';
 
 class GridGuide extends StatefulWidget {
   const GridGuide({super.key});
@@ -103,13 +105,14 @@ class _GridGuideState extends State<GridGuide> {
                     MaterialButton(
                       onPressed: () {
                         if (i == 2) {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (p1) {
-                            return Guide();
+                          
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return TrackPage();
                           }));
                         } else {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (p1) {
+                              MaterialPageRoute(builder: (context) {
                             return Guide();
                           }));
                         }

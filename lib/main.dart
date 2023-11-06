@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ugd6_b_9/detailGuide.dart';
+import 'package:ugd6_b_9/gridGuide.dart';
 import 'package:ugd6_b_9/timer.dart';
 import 'package:ugd6_b_9/view/camera.dart';
 import 'package:ugd6_b_9/homePage.dart';
@@ -24,6 +26,8 @@ void main(){
         Routes.profilePage: (context) => const ProfileView(),
         Routes.trackPage: (context) => const TrackPage(),
         Routes.timerPage: (context) => const Timer(), 
+        Routes.gridGuidePage: (context) => const GridGuide(),
+        Routes.detailGuidePage: (context) => const Guide(),
       },
     ),
   );

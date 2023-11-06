@@ -263,6 +263,7 @@ class _RegisterState extends State<Register> {
                             ),
                           )),
                       onPressed: () async {
+                        print('masuk sebelum validate');
                         if (formKey.currentState!.validate()) {
                           await addEmployee();
                           Navigator.pushNamed(context, Routes.login);

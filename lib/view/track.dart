@@ -29,7 +29,7 @@ class _TrackPageState extends State<TrackPage> {
         if (event.y > stepDistance && !isCountingStep) {
           isCountingStep = true;
           stepCount++;
-          Timer(Duration(milliseconds: 500), () {
+          Timer(Duration(milliseconds: 800), () {
             isCountingStep = false;
           });
         }

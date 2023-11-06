@@ -11,4 +11,6 @@ class Routes {
   static const String profilePage = '/profilePage';
   static const String trackPage = '/track';
   static const String timerPage = '/timer';
+  static const String gridGuidePage = '/gridGuide';
+  static const String detailGuidePage= '/detailGuide';
 }

@@ -37,6 +37,8 @@ class _HomePageState extends State<HomePage> {
     GridGuide(), //guide
   ];
 
+  
+
   List<Widget> _buildScreen() {
     return [
       onScreen[index],
@@ -116,6 +118,7 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: (p1) {
             changeScreen(4, false);
+            
           },
           activeColorPrimary: Color.fromARGB(255, 0, 68, 170)),
     ];
@@ -176,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                         width: 10,
                       ),
                       Text(
-                        'Workout Katagorie',
+                        'Workout Catagories',
                         style: StyleText(color: Colors.black).styleH3bWithColor,
                       ),
                     ],
@@ -220,8 +223,8 @@ class _HomePageState extends State<HomePage> {
         if (isPop)
           Positioned(
             child: Container(
-              height: 450,
-              width: 280,
+              height: 420,
+              width: 300,
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -272,7 +275,11 @@ class _HomePageState extends State<HomePage> {
                       height: 20,
                     ),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        isPop = false;
+                        Navigator.pushNamed(context, Routes.profilePage);
+                        
+                      },
                       child: Row(
                         children: [
                           Icon(
@@ -287,7 +294,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        isPop = false;
+                      },
                       child: Row(
                         children: [
                           Icon(
@@ -297,12 +306,14 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Profile', style: StyleText().styleH4bWithColor),
+                          Text('Schedule', style: StyleText().styleH4bWithColor),
                         ],
                       ),
                     ),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        isPop = false;
+                      },
                       child: Row(
                         children: [
                           Icon(
@@ -312,12 +323,14 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Profile', style: StyleText().styleH4bWithColor),
+                          Text('Trainer', style: StyleText().styleH4bWithColor),
                         ],
                       ),
                     ),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        isPop = false;
+                      },
                       child: Row(
                         children: [
                           Icon(
@@ -327,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Profile', style: StyleText().styleH4bWithColor),
+                          Text('History', style: StyleText().styleH4bWithColor),
                         ],
                       ),
                     ),
@@ -335,17 +348,20 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         alignment: Alignment.bottomLeft,
                         child: MaterialButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context);
+                            isPop = false;
+                          },
                           child: Row(
                             children: [
                               Icon(
-                                Icons.history,
+                                Icons.logout,
                                 size: 20,
                               ),
                               SizedBox(
                                 width: 20,
                               ),
-                              Text('Profile',
+                              Text('Logout',
                                   style: StyleText().styleH4bWithColor),
                             ],
                           ),
