@@ -8,6 +8,7 @@ import 'package:ugd6_b_9/gridGuide.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/test_audio.dart';
+import 'package:ugd6_b_9/view/home.dart';
 import 'package:ugd6_b_9/view/popUpMenu.dart';
 
 bool isBottom = true;
@@ -32,13 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   //widget masing masing menu
   List<Widget> onScreen = [
-    Center(
-      child: Row(
-        children: [
-          
-        ],
-      ),
-    ),
+    Home(),
     Text('Chat'),
     Text('Add'),
     Text('Message'),

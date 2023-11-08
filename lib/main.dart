@@ -31,7 +31,7 @@ void main(){
         Routes.gridGuidePage: (context) => const GridGuide(),
         Routes.detailGuidePage: (context) => const Guide(),
         Routes.scanPage:(context) => const BarcodeScannerPageView(),
-        Routes.generateQr: (context) => const GenerateQRPage(),
+        Routes.generateQr: (context) => const GenerateQRPage(), 
       },
     ),
   );
