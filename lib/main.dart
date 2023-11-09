@@ -12,7 +12,7 @@ import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/track.dart';
-
+import 'package:ugd6_b_9/view/showGym.dart';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ void main(){
         // Routes.trackPage: (context) => TrackPage(),
         Routes.login: (context) => const Login(),
         Routes.register: (context) => Register(),
-        Routes.homePage: (context) => HomePage(),
+        Routes.homePage: (context) => showGerakanGym(),
         Routes.previewPage: (context) => const ProfileView(),
         Routes.profilePage: (context) => const ProfileView(),
         Routes.trackPage: (context) => const TrackPage(),

@@ -18,7 +18,7 @@ class _GuideState extends State<Guide> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             alignment: Alignment.topCenter,
             image: AssetImage('assets/images/gym1.jpg'),
@@ -30,17 +30,17 @@ class _GuideState extends State<Guide> {
         child: Column( 
           children: [
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             alignment: Alignment.topLeft,
             height: 200,
-            child: IconButton(icon: Icon(FontAwesomeIcons.chevronLeft),onPressed: (){
+            child: IconButton(icon: const Icon(FontAwesomeIcons.chevronLeft),onPressed: (){
               Navigator.pop(context);
             },),
           ),
           Expanded(
             child: Container(
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: const Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),

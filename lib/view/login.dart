@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/database/sql_helperUser.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
-import 'package:ugd6_b_9/view/homePage.dart';
+import 'package:ugd6_b_9/view/ShowSchedule.dart';
 import 'package:ugd6_b_9/view/register.dart';
 
 
