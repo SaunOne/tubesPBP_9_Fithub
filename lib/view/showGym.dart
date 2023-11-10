@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ugd6_b_9/database/sql_helperGym.dart';
+import 'package:flutter/material.dart';
 
-import 'package:ugd6_b_9/view/homePage.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+
+import 'package:ugd6_b_9/view/ShowSchedule.dart';
+import 'package:ugd6_b_9/view/pdf_view.dart';
+import 'package:ugd6_b_9/view/preview_screenforPDF.dart';
+
+import 'package:ugd6_b_9/view/home.dart';
 
 class showGerakanGym extends StatefulWidget {
   const showGerakanGym({super.key});
@@ -26,11 +35,27 @@ class _showGerakanGymState extends State<showGerakanGym> {
     refresh();
     return Scaffold(
       backgroundColor:  const Color.fromARGB(255, 227, 227, 227),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(indexD: 2,)));
-      },
-      backgroundColor: const Color.fromARGB(255, 115, 0, 54),
-      child: const Icon(Icons.add)),
+      floatingActionButton:Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () async {
+              final doc = await generateDocument(gerakanGym);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => PreviewScreen(doc: doc,)));
+            },
+            backgroundColor: const Color.fromARGB(255, 115, 0, 54),
+            child: const Icon(Icons.print),
+          ),
+          const SizedBox(width: 10,),
+          FloatingActionButton(
+            onPressed: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(indexD: 2,)));
+            },
+            backgroundColor: const Color.fromARGB(255, 115, 0, 54),
+            child: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemCount: gerakanGym.length,
         itemBuilder: (context, index) {
@@ -60,7 +85,7 @@ class _showGerakanGymState extends State<showGerakanGym> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    
+
                     children: [
                       const SizedBox(height: 20,),
                       // ignore: prefer_interpolation_to_compose_strings
@@ -119,5 +144,7 @@ class _showGerakanGymState extends State<showGerakanGym> {
     refresh();
   }
 
-  
+
+
+
 }
