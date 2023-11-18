@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:ugd6_b_9/utils/imageUtility.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
-import '../routes/routes.dart';
+import '../../routes/routes.dart';
 
 
 class PreviewPage extends StatefulWidget {

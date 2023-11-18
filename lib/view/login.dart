@@ -119,8 +119,7 @@ class _LoginState extends State<Login> {
         ),
       );
       await saveLoginData(username, password);
-      Navigator.pushNamed(context, Routes.homePage);
-
+      Navigator.pushReplacementNamed(context, Routes.homePage);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

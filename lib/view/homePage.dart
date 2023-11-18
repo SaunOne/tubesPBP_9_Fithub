@@ -2,140 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/detailGuide.dart';
-import 'package:ugd6_b_9/gridGuide.dart';
+import 'package:ugd6_b_9/timer.dart';
+import 'package:ugd6_b_9/view/content/detailGuide.dart';
+import 'package:ugd6_b_9/view/content/gridGuide.dart';
 
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/test_audio.dart';
-import 'package:ugd6_b_9/view/home.dart';
+import 'package:ugd6_b_9/view/content/home.dart';
 import 'package:ugd6_b_9/view/popUpMenu.dart';
-
-bool isBottom = true;
-bool isApp = true;
-int noInd = 0;
+import 'package:ugd6_b_9/view/profileView.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, this.isBottomBar = true, this.noIndex = 0});
-  final bool isBottomBar;
-  final int noIndex;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final controller = PersistentTabController(initialIndex: 0);
-  int index = HomePage().noIndex;
-  bool appBar = isApp, bottomBar = !isBottom;
+  int indexContent = 0;
   bool isPop = false;
 
+  List<Widget> content = [Home(), ProfileView(), Timer(), GridGuide()];
 
-  //widget masing masing menu
-  List<Widget> onScreen = [
-    Home(),
-    Text('Chat'),
-    Text('Add'),
-    Text('Message'),
-    GridGuide(), //guide
-  ];
-
-  
-
-  List<Widget> _buildScreen() {
-    return [
-      onScreen[index],
-      Text('Chat'),
-      Text('Add'),
-      Text('Message'),
-      GridGuide(), //guide
-    ];
-  }
-
-  void changeScreen(index, appBar, {hideBottomBar = false}) {
-    setState(() {
-      this.appBar = appBar;
-      this.index = index;
-      this.bottomBar = hideBottomBar;
-    });
-  }
-
-  List<PersistentBottomNavBarItem> _navBarItem() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: Icon(
-          FontAwesomeIcons.house,
-          size: 20,
-        ),
-        activeColorPrimary: index == 0 ? ColorC().primaryColor1 : Colors.grey,
-        inactiveIcon: Icon(
-          Icons.sports_gymnastics,
-          color: index == 0 ? ColorC().primaryColor1 : Colors.grey,
-        ),
-        onPressed: (context) {
-          changeScreen(0, true);
-        },
-        title: 'Home'
-      ),
-      PersistentBottomNavBarItem(
-          
-          icon: Icon(FontAwesomeIcons.person),
-          inactiveIcon: Icon(
-            FontAwesomeIcons.personRunning,
-            size: 20,
-            color: index == 1 ? ColorC().primaryColor1 : Colors.grey,
-          ),
-          onPressed: (p1) {
-            Navigator.pushNamed(context, Routes.trackPage);
-            changeScreen(1, true);
-          },
-          title: 'Spedometer',
-          activeColorPrimary: Color.fromARGB(255, 0, 68, 170)),
-          
-      PersistentBottomNavBarItem(
-        icon: Icon(
-          Icons.qr_code,
-          color: Colors.white,
-          size: 50,
-        ),
-        onPressed: (p1){
-          Navigator.pushNamed(context, Routes.scanPage);
-        },
-        activeColorPrimary: Color.fromARGB(255, 0, 68, 170),
-        
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.card_membership),
-        inactiveIcon: Icon(
-          FontAwesomeIcons.clock,
-          color: index == 3 ? ColorC().primaryColor1 : Colors.grey,
-        ),
-        activeColorPrimary: Color.fromARGB(255, 0, 68, 170),
-        onPressed: (p1) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return Guide();
-          }));
-          changeScreen(3, false);
-        },
-        title: 'Timer'
-      ),
-      PersistentBottomNavBarItem(
-          icon: Icon(
-            Icons.sports_gymnastics,
-          ),
-          inactiveIcon: Icon(
-            FontAwesomeIcons.dumbbell,
-            size: 20,
-            color: index == 4 ? ColorC().primaryColor1 : Colors.grey,
-          ),
-          onPressed: (p1) {
-            changeScreen(4, false);
-            
-          },
-          title: 'Guide',
-          activeColorPrimary: Color.fromARGB(255, 0, 68, 170)),
-          
-    ];
+  void onChange(index) {
+    setState(
+      () {
+        indexContent = index;
+      },
+    );
   }
 
   @override
@@ -143,80 +38,100 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: [
         Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              if (appBar)
-                SliverAppBar(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  title: Text(
-                    'HOME',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  actions: [
-                    Icon(
-                      Icons.notification_add,
-                      color: Color.fromARGB(255, 0, 68, 170),
-                      size: 25,
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isPop = true;
-                        });
-                      },
-                      color: Color.fromARGB(255, 0, 68, 170),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                  ],
-                  toolbarHeight: 60,
+          appBar: AppBar(
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+            title: Text(
+              'HOME',
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: [
+              Icon(
+                Icons.notification_add,
+                color: Color.fromARGB(255, 0, 68, 170),
+                size: 25,
+              ),
+              SizedBox(
+                width: 25,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  size: 30,
                 ),
-              if (!appBar)
-                SliverAppBar(
-                  title: Row(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.chevronLeft,
-                        color: Colors.black,
-                        size: 18,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Workout Catagories',
-                        style: StyleText(color: Colors.black).styleH3bWithColor,
-                      ),
-                    ],
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-              SliverFillRemaining(
-                child: PersistentTabView(
-                  context,
-                  hideNavigationBar: bottomBar,
-                  hideNavigationBarWhenKeyboardShows: true,
-                  screens: _buildScreen(),
-                  items: _navBarItem(),
-                  backgroundColor: Colors.white,
-                  decoration: NavBarDecoration(
-                    borderRadius: BorderRadius.circular(1),
-                    colorBehindNavBar: Color.fromARGB(255, 0, 68, 170),
-                  ),
-                  navBarStyle: NavBarStyle.style15,
-                  navBarHeight: 70,
-                ),
+                onPressed: () {
+                  setState(() {
+                    isPop = true;
+                  });
+                },
+                color: Color.fromARGB(255, 0, 68, 170),
+              ),
+              SizedBox(
+                width: 20,
               ),
             ],
+            toolbarHeight: 60,
+          ),
+          body: content[indexContent],
+          bottomNavigationBar: BottomAppBar(
+            height: 60,
+            shape: CircularNotchedRectangle(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    onChange(0);
+                  },
+                  icon: Icon(
+                    FontAwesomeIcons.house,
+                    size: 18,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    onChange(1);
+                  },
+                  icon: Icon(
+                    Icons.person,
+                    size: 20,
+                  ),
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                IconButton(
+                  onPressed: () {
+                    onChange(2);
+                  },
+                  icon: Icon(
+                    Icons.card_membership,
+                    size: 20,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    onChange(3);
+                  },
+                  icon: Icon(
+                    FontAwesomeIcons.dumbbell,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            child: Icon(
+              FontAwesomeIcons.qrcode,
+              color: Colors.white,
+              size: 35,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.scanPage);
+            },
+            backgroundColor: ColorC().primaryColor1,
           ),
         ),
         if (isPop)
@@ -310,6 +225,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
+                        Navigator.pushNamed(context, Routes.calendarScreen);
                       },
                       child: Row(
                         children: [
@@ -393,5 +309,4 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-  
 }

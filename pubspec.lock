@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.8"
+  appkit_ui_element_colors:
+    dependency: transitive
+    description:
+      name: appkit_ui_element_colors
+      sha256: c3e50f900aae314d339de489535736238627071457c4a4a2dbbb1545b4f04f22
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   archive:
     dependency: transitive
     description:
@@ -225,6 +233,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dialogs:
+    dependency: "direct main"
+    description:
+      name: dialogs
+      sha256: "93f5fd23cfbe09e57a15bf43a0208b50232a9db3c718f0d8f8e94118e38c14e5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.9"
+  duration_picker:
+    dependency: "direct main"
+    description:
+      name: duration_picker
+      sha256: "052b34dac04c29f3849bb3817a26c5aebe9e5f0697c3a374be87db2b84d75753"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -302,6 +342,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_neat_and_clean_calendar:
+    dependency: "direct main"
+    description:
+      name: flutter_neat_and_clean_calendar
+      sha256: d475d8ea86d1b4721914e69641ff248ebba7f61ea537a298f9b27fa018380d40
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.14+32"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -310,14 +358,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
-  flutter_slidable:
-    dependency: "direct main"
-    description:
-      name: flutter_slidable
-      sha256: c7607eb808cdef19c8468246e95a133308aeaeb3971cdd9edfb9d5e31cedfbe9
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -344,6 +384,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
+  gradient_borders:
+    dependency: transitive
+    description:
+      name: gradient_borders
+      sha256: "69eeaff519d145a4c6c213ada1abae386bcc8981a4970d923e478ce7ba19e309"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   hive:
     dependency: "direct main"
     description:
@@ -440,6 +488,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
+  infinite_listview:
+    dependency: transitive
+    description:
+      name: infinite_listview
+      sha256: f6062c1720eb59be553dfa6b89813d3e8dd2f054538445aaa5edaddfa5195ce6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   intl:
     dependency: "direct main"
     description:
@@ -480,6 +536,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.0"
+  macos_ui:
+    dependency: transitive
+    description:
+      name: macos_ui
+      sha256: cc499122655c61728185561e9006af4b239f9526f98d7b2cbf42124e9044a0ff
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
+  macos_window_utils:
+    dependency: transitive
+    description:
+      name: macos_window_utils
+      sha256: b3dfd47bbc605f0e315af684b50370a8f84932267aaa542098063fa384d593bd
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   matcher:
     dependency: transitive
     description:
@@ -520,6 +592,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.2"
+  numberpicker:
+    dependency: "direct main"
+    description:
+      name: numberpicker
+      sha256: "4c129154944b0f6b133e693f8749c3f8bfb67c4d07ef9dcab48b595c22d1f156"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   path:
     dependency: "direct main"
     description:
@@ -672,6 +752,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  responsive_sizer:
+    dependency: "direct main"
+    description:
+      name: responsive_sizer
+      sha256: "206d1f77f65ed8394ef2a526583e38e874ee36f036f3fe9aefb0f58ecba9bef9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   rxdart:
     dependency: transitive
     description:
@@ -749,6 +837,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slideable:
+    dependency: "direct main"
+    description:
+      name: slideable
+      sha256: "80904a850128b6a9a4b019eee1a182c12b7a7f10734e4267af9e30c46093ad9b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   source_span:
     dependency: transitive
     description:

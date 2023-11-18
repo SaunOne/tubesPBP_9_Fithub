@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:ugd6_b_9/view/camera.dart';
+import 'package:ugd6_b_9/view/feature/camera.dart';
 import 'package:ugd6_b_9/database/sql_helperUser.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:ugd6_b_9/utils/imageUtility.dart';

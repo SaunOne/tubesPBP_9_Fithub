@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/detailGuide.dart';
-import 'package:ugd6_b_9/homePage.dart';
+import 'package:ugd6_b_9/view/content/detailGuide.dart';
+import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/main.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
-import 'package:ugd6_b_9/view/track.dart';
+import 'package:ugd6_b_9/view/feature/track.dart';
 
 class GridGuide extends StatefulWidget {
   const GridGuide({super.key});

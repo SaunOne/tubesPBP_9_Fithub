@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ugd6_b_9/view/Preview_page.dart';
+import 'package:ugd6_b_9/view/temporary/Preview_page.dart';
 
 class Camera extends StatefulWidget {
   const Camera({super.key, required this.camera});

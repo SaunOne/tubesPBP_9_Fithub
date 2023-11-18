@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ugd6_b_9/view/camera.dart';
+import 'package:ugd6_b_9/view/feature/camera.dart';
 
 class Routes {
   static const String home = '/';
@@ -15,4 +15,6 @@ class Routes {
   static const String detailGuidePage= '/detailGuide';
   static const String scanPage = '/scanPage';
   static const String generateQr = '/generateQr';
+  static const String homePage2 = '/homePage2';
+  static const String calendarScreen= '/calenderScreen';
 }
