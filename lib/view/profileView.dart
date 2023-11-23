@@ -1,358 +1,315 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:ugd6_b_9/view/feature/camera.dart';
-import 'package:ugd6_b_9/database/sql_helperUser.dart';
-import 'package:ugd6_b_9/view/login.dart';
-import 'package:ugd6_b_9/utils/imageUtility.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({super.key});
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
-  State<ProfileView> createState() => _ProfileViewState();
+  _ProfileViewState createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  final formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController tanggal_lahirController = TextEditingController();
-  TextEditingController fullnameController = TextEditingController();
-  String pathPhoto = '';
-  Map<String, dynamic>? tempUser;
-  int? id;
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  String gender = 'Male'; // Default gender value
+  final ImagePicker _picker = ImagePicker();
+  String? imagePath;
 
-  void getDataFromPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loginDataString = prefs.getString('login_data') ?? '';
-
-    Map<String, dynamic> loginData = jsonDecode(loginDataString);
-
-    String username = loginData['username'];
-    String password = loginData['password'];
-
-    tempUser = await userId(username, password);
-    if (tempUser != null) {
-      id = tempUser!['id'];
-      print('idnya : $id');
+  Future<void> _changeProfilePicture() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
       setState(() {
-        nameController.text = tempUser!['name'];
-        emailController.text = tempUser!['email'];
-        genderController.text = tempUser!['gender'];
-        passwordController.text = tempUser!['password'];
-        tanggal_lahirController.text = tempUser!['tanggal_lahir'];
-        fullnameController.text = tempUser!['fullname'];
-        pathPhoto = tempUser!['PathPhoto'];
+        imagePath = image.path;
       });
-    } else {
-      print('User not found');
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getDataFromPreferences();
+  void _saveProfile() {
+    // Implement your save logic here
+    print('Save profile data');
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text('Profile', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.black),
+            onPressed: () {
+              // Implement your edit logic here
+              print('Edit profile');
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: _changeProfilePicture,
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey.shade300,
+                backgroundImage:
+                    imagePath != null ? FileImage(File(imagePath!)) : null,
+                child: imagePath == null
+                    ? Icon(Icons.camera_alt, color: Colors.grey.shade800)
+                    : null,
+              ),
+            ),
+            SizedBox(height: 24),
+            _ProfileTextField(
+              controller: usernameController,
+              label: "Username",
+              icon: Icons.person_outline,
+            ),
+            _ProfileTextField(
+              controller: phoneController,
+              label: "No Telephone",
+              icon: Icons.phone_android_outlined,
+            ),
+            _ProfileTextField(
+              controller: emailController,
+              label: "Email",
+              icon: Icons.email_outlined,
+            ),
+            _ProfileTextField(
+              controller: passwordController,
+              label: "Password",
+              icon: Icons.lock_outline,
+              isPassword: true,
+            ),
+            _ProfileDateField(
+              controller: dateOfBirthController,
+              label: "Date of Birth",
+              icon: Icons.calendar_today_outlined,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 88, 0, 49),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(50),
-                      bottomLeft: Radius.circular(50),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            weight: 20,
-                            color: Colors.white,
-                          )),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(60),
-                              child: pathPhoto == ''
-                                  ? const Icon(
-                                      Icons.person,
-                                      size: 100,
-                                      color: Colors.white,
-                                    )
-                                  : Utility.imageFromBase64String(pathPhoto),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Hello, ${nameController.text}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text(
-                                'What a new experience!',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
+                Expanded(
+                  child: _ProfileMetricField(
+                    controller: heightController,
+                    label: "Height",
+                    icon: Icons.straighten,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      const Divider(
-                        height: 50,
-                        color: Colors.grey,
-                      ),
-                      TextFormField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          prefixIcon: const Icon(Icons.person),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        validator: (value) =>
-                            value == '' ? 'Please enter your Username' : null,
-                      ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          prefixIcon: const Icon(Icons.email),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        validator: (value) =>
-                            value == '' ? 'Please enter your Email' : null,
-                      ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          prefixIcon: const Icon(Icons.lock),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        validator: (value) =>
-                            value == '' ? 'Please enter your Password' : null,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      TextFormField(
-                        controller: genderController,
-                        decoration: InputDecoration(
-                          labelText: 'Gender',
-                          prefixIcon: const Icon(Icons.man),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        validator: (value) =>
-                            value == '' ? 'Please enter your Gender' : null,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          final date = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                          );
-                          tanggal_lahirController.text =
-                              '${date!.day}/${date.month}/${date.year}';
-                        },
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            controller: tanggal_lahirController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              prefixIcon: const Icon(Icons.date_range),
-                              labelText: 'Date of Birth',
-                              suffixIcon: IconButton(
-                                onPressed: () async {
-                                  final date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  tanggal_lahirController.text =
-                                      '${date!.day}/${date.month}/${date.year}';
-                                },
-                                icon: Icon(Icons.date_range),
-                              ),
-                            ),
-                            validator: (value) => value == ''
-                                ? 'Please select a birth date'
-                                : null,
-                            onTap: () {
-                              // Ini mencegah keyboard dari muncul saat menekan TextFormField
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              editUser(id!);
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Edit Berhasil'),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Save Edit',
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 88, 0, 49),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await availableCameras().then((value) =>
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            Camera(camera: value))));
-                          },
-                          child: Text('edit Photo'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 88, 0, 49),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Login(),
-                              ),
-                            );
-                          },
-                          child: Text('Logout'),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            onPrimary: Colors.red,
-                            onSurface: Colors.white,
-                            textStyle: TextStyle(color: Colors.red),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.red, width: 2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 100,
-                      ),
-                    ],
+                SizedBox(width: 10),
+                Expanded(
+                  child: _ProfileMetricField(
+                    controller: weightController,
+                    label: "Weight",
+                    icon: Icons.monitor_weight,
                   ),
                 ),
               ],
             ),
+            _GenderSelector(
+              gender: gender,
+              onGenderChanged: (newGender) {
+                setState(() {
+                  gender = newGender;
+                });
+              },
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _saveProfile,
+              child: Text('Save'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                onPrimary: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: Size(double.infinity, 50),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // Add BottomNavigationBar or other widgets if needed
+    );
+  }
+}
+
+class _ProfileTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final bool isPassword;
+
+  const _ProfileTextField({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.isPassword = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide.none,
           ),
+          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+        ),
+        obscureText: isPassword,
+      ),
+    );
+  }
+}
+
+class _ProfileMetricField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+
+  const _ProfileMetricField({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: TextField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         ),
       ),
     );
   }
+}
 
-  Future<Map<String, dynamic>?> userId(String username, String password) async {
-    return await SQLHelper.getUserIdByUsernamePassword(username, password);
+class _ProfileDateField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+
+  const _ProfileDateField({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+        ),
+        readOnly: true,
+        onTap: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2100),
+          );
+          if (pickedDate != null) {
+            String formattedDate =
+                "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+            controller.text = formattedDate;
+          }
+        },
+      ),
+    );
   }
+}
 
-  Future<void> editUser(int id) async {
-    await SQLHelper.editUser(
-        id,
-        fullnameController.text,
-        nameController.text,
-        emailController.text,
-        genderController.text,
-        passwordController.text,
-        tanggal_lahirController.text);
-  }
+class _GenderSelector extends StatelessWidget {
+  final String gender;
+  final ValueChanged<String> onGenderChanged;
 
-  Future<void> addPhoto(String PathPhoto, int id) async {
-    await SQLHelper.addPhoto(PathPhoto, id);
+  const _GenderSelector({
+    Key? key,
+    required this.gender,
+    required this.onGenderChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: ListTile(
+              title: const Text('Male'),
+              leading: Radio<String>(
+                value: 'Male',
+                groupValue: gender,
+                onChanged: (value) {
+                  onGenderChanged(value!);
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListTile(
+              title: const Text('Female'),
+              leading: Radio<String>(
+                value: 'Female',
+                groupValue: gender,
+                onChanged: (value) {
+                  onGenderChanged(value!);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
