@@ -1,8 +1,16 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:griding/Component/EllipsShape.dart';
 import 'package:griding/constant/color.dart';
 import 'package:griding/view/NewPassword.dart';
+import 'package:griding/dataBaseQuery/Auth.dart';
+import 'package:griding/dataBaseQuery/Auth.dart';
+import 'package:griding/view/test.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Entity/ResponseDataUser.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,11 +24,63 @@ class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
+  late String data;
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnection();
+  }
+
+  void handleLogin(String Email, String Password) async {
+    ResponseDataUser? responseDataUser = await Authentication().authenticate(Email, Password);
+    if (responseDataUser.message == "Login Success") {
+      print(responseDataUser.message);
+      print(responseDataUser.Data.gender);
+      print(responseDataUser.access_token);
+      print(responseDataUser.token_type);
+
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.setInt('id', responseDataUser.Data.id);
+      localStorage.setString('token', responseDataUser.access_token);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => test()),
+      );
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Row(
+            children: [
+              Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              SizedBox(width: 5),
+              Text(
+                responseDataUser.message,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          )));
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -56,8 +116,6 @@ class _LoginState extends State<Login> {
           ],
         ));
   }
-
-
 
   Form FormLogin(double height, BuildContext context) {
     return Form(
@@ -100,34 +158,42 @@ class _LoginState extends State<Login> {
                   left: 30,
                   right: 30,
                   top: 0.04 * height,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                  bottom: MediaQuery
+                      .of(context)
+                      .viewInsets
+                      .bottom + 20),
               child: Column(
                 children: [
                   TextFormField(
-                    scrollPadding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom + 30),
-                    controller: usernameController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      labelText: 'Username',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                      scrollPadding: EdgeInsets.only(
+                          bottom:
+                          MediaQuery
+                              .of(context)
+                              .viewInsets
+                              .bottom + 30),
+                      controller: usernameController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person),
+                        labelText: 'Username',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(40)),
+                        ),
                       ),
-                    ),
-                    validator: (value) {
-                      if (value == '' || value!.isEmpty) {
-                        return 'please enter your username';
-                      }
-                      return null;
-                    }
-
-                  ),
+                      validator: (value) {
+                        if (value == '' || value!.isEmpty) {
+                          return 'please enter your username';
+                        }
+                        return null;
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
                     scrollPadding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom + 30),
+                        bottom: MediaQuery
+                            .of(context)
+                            .viewInsets
+                            .bottom + 30),
                     controller: passwordController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
@@ -148,19 +214,22 @@ class _LoginState extends State<Login> {
                     ),
                     obscureText: !isPasswordVisible,
                     validator: (value) =>
-                        value == '' ? 'please enter your password' : null,
+                    value == '' ? 'please enter your password' : null,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   TextButton(
                     onPressed: () {
-                     if(passwordController.text == "" && usernameController.text.isNotEmpty || formKey.currentState!.validate()){
+                      if (passwordController.text == "" &&
+                          usernameController.text.isNotEmpty ||
+                          formKey.currentState!.validate()) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const NewPassword()),
+                          MaterialPageRoute(
+                              builder: (context) => const NewPassword()),
                         );
-                     }
+                      }
                     },
                     style: TextButton.styleFrom(
                       primary: ColorPallete.primaryColor,
@@ -176,25 +245,7 @@ class _LoginState extends State<Login> {
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: ColorPallete.primaryColor,
-                            content: const Row(
-                              children: [
-                                Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Login Successful",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 15)),
-                              ],
-                            ),
-                          ),
-                        );
+                        handleLogin(usernameController.text, passwordController.text);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -214,4 +265,56 @@ class _LoginState extends State<Login> {
           ],
         ));
   }
+
+
+  void checkConnection() {
+    Authentication.checkConnection().then((value) =>
+    {
+      if (!value)
+        {
+          print("No Internet Connection"),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: Colors.red,
+              content: Row(
+                children: [
+                  Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "No Internet Connection",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )))
+        }
+      else
+        if(value)
+          {
+            print("Connected"),
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                backgroundColor: Colors.green,
+                content: Row(
+                  children: [
+                    Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "Connected",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                )))
+          }
+    });
+  }
+
+
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:griding/constant/color.dart';
 import 'package:griding/Component/EllipsShape.dart';
 import 'package:griding/view/Login.dart';
+import 'package:griding/view/Register.dart';
 class PreLogin extends StatefulWidget {
   const PreLogin({super.key});
 
@@ -87,7 +88,12 @@ class _HomeState extends State<PreLogin> {
                   ),
                   const SizedBox(height: 20,),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Register()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(300, 60),
                       backgroundColor: ColorPallete.accentColor,
