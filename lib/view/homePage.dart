@@ -46,10 +46,12 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: Colors.black),
             ),
             actions: [
-              Icon(
-                Icons.notification_add,
+              IconButton(
+                icon: Icon(Icons.notification_add,size: 25),
                 color: Color.fromARGB(255, 0, 68, 170),
-                size: 25,
+                onPressed: (){
+                  Navigator.pushNamed(context, Routes.notificationView);
+                },
               ),
               SizedBox(
                 width: 25,

@@ -17,4 +17,6 @@ class Routes {
   static const String generateQr = '/generateQr';
   static const String homePage2 = '/homePage2';
   static const String calendarScreen= '/calenderScreen';
+  static const String trainerView = '/trainerView';
+  static const String notificationView = '/notificationView';
 }

@@ -5,6 +5,8 @@ import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
 import 'package:ugd6_b_9/timer.dart';
+import 'package:ugd6_b_9/view/content/notificationView.dart';
+import 'package:ugd6_b_9/view/content/trainerView.dart';
 import 'package:ugd6_b_9/view/feature/calender.dart';
 import 'package:ugd6_b_9/view/feature/camera.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
@@ -22,7 +24,7 @@ void main(){
   runApp(
     ResponsiveSizer(builder: (context,orientation,screenType){
       return MaterialApp(
-      initialRoute: Routes.login,
+      initialRoute: Routes.homePage,
       routes: {
         // Routes.trackPage: (context) => TrackPage(),
         Routes.login: (context) => const Login(),
@@ -37,6 +39,8 @@ void main(){
         Routes.scanPage:(context) => const BarcodeScannerPageView(),
         Routes.generateQr: (context) => const GenerateQRPage(), 
         Routes.calendarScreen: (context) =>  CalendarScreen(),   
+        Routes.trainerView: (context) => const TrainerView(), 
+        Routes.notificationView: (context) => const NotificationView()
       });
     })
   );
