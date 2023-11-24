@@ -14,6 +14,7 @@ import 'package:ugd6_b_9/view/content/inputGerakanGym.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
+import 'package:ugd6_b_9/view/profile.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
@@ -31,7 +32,7 @@ void main(){
         Routes.register: (context) => Register(),
         Routes.homePage: (context) => const HomePage(),
         Routes.previewPage: (context) => const ProfileView(),
-        Routes.profilePage: (context) => const ProfileView(),
+        Routes.profilePage: (context) => const Profile(),
         Routes.trackPage: (context) => const TrackPage(),
         Routes.timerPage: (context) => const Timer(), 
         Routes.gridGuidePage: (context) => const GridGuide(),

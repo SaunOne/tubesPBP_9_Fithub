@@ -11,23 +11,17 @@ import 'package:ugd6_b_9/database/sql_helperUser.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:ugd6_b_9/utils/imageUtility.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ugd6_b_9/view/profileView.dart';
 
-class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key}) : super(key: key);
+class Profile extends StatefulWidget {
+  const Profile({Key? key}) : super(key: key);
 
   @override
   ProfileViewState createState() => ProfileViewState();
 }
 
-class ProfileViewState extends State<ProfileView> {
+class ProfileViewState extends State<Profile> {
   int _selectedIndex = 0;
-  final String _fullName = 'I Komang Agus Tinar V. P.';
-  final String _email = 'Tinar123@gmail.com';
-  final String _phoneNumber = '08xxxxxxxxx';
-  final String _gender = 'Male';
-  final String _age = '20 years';
-  final String _height = '150 cm';
-  final String _weight = '55 kg';
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +37,6 @@ class ProfileViewState extends State<ProfileView> {
           IconButton(
             icon: Icon(Icons.settings, color: Colors.black),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileView()),
-              );
             },
           ),
         ],
@@ -63,19 +53,18 @@ class ProfileViewState extends State<ProfileView> {
                   backgroundImage: AssetImage('assets/profile01.jpg'),
                 ),
                 SizedBox(height: 20),
-                Text(_fullName, style: Theme.of(context).textTheme.headline6),
-                Text(_email, style: Theme.of(context).textTheme.caption),
-                Text(_phoneNumber, style: Theme.of(context).textTheme.caption),
+                Text('',style: Theme.of(context).textTheme.headline6),
+                Text('',style: Theme.of(context).textTheme.caption),
+                Text('', style: Theme.of(context).textTheme.caption),
                 Divider(),
-                InfoTile(title: 'Gender', value: _gender),
-                InfoTile(title: 'Age', value: _age),
-                InfoTile(title: 'Height', value: _height),
-                InfoTile(title: 'Weight', value: _weight),
+                InfoTile(title: 'Gender', value: 'Male'),
+                InfoTile(title: 'Age', value: '20 years'),
+                InfoTile(title: 'Height', value: '150 cm'),
+                InfoTile(title: 'Weight', value: '55 kg'),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Asumsikan Anda memiliki halaman bernama EditProfilePage
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ProfileView(),
                       ));
@@ -100,42 +89,42 @@ class ProfileViewState extends State<ProfileView> {
           ListTile(
             leading: Icon(Icons.help_outline),
             title: Text('Get Help'),
-            onTap: () {},
+            onTap: () {
+            },
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () {},
+            onTap: () {
+            },
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home,
-                color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
+            icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline,
-                color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
+            icon: Icon(Icons.chat_bubble_outline),
             label: 'Chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.subscriptions,
-                color: _selectedIndex == 2 ? Colors.blue : Colors.grey),
+            icon: Icon(Icons.subscriptions),
             label: 'Subscribe',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school,
-                color: _selectedIndex == 3 ? Colors.blue : Colors.grey),
+            icon: Icon(Icons.school),
             label: 'Guide',
           ),
         ],
         currentIndex: _selectedIndex,
-        onTap: (index) => setState(() {
-          _selectedIndex = index;
-        }),
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         unselectedItemColor: Colors.grey,

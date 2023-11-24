@@ -17,7 +17,7 @@ class _ProfileViewState extends State<ProfileView> {
   final TextEditingController dateOfBirthController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
-  String gender = 'Male'; // Default gender value
+  String gender = 'Male';
   final ImagePicker _picker = ImagePicker();
   String? imagePath;
 
@@ -50,7 +50,6 @@ class _ProfileViewState extends State<ProfileView> {
           IconButton(
             icon: Icon(Icons.edit, color: Colors.black),
             onPressed: () {
-              // Implement your edit logic here
               print('Edit profile');
             },
           ),
@@ -143,7 +142,6 @@ class _ProfileViewState extends State<ProfileView> {
           ],
         ),
       ),
-      // Add BottomNavigationBar or other widgets if needed
     );
   }
 }
