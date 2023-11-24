@@ -5,13 +5,9 @@ import 'package:http/http.dart';
 import 'package:griding/Entity/User.dart';
 import 'package:griding/Entity/ResponseDataUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:griding/constant/url.dart';
 
 class Authentication {
-
-  static const String URL = "192.168.18.238:8000";
-  static const String Endpoint = "api/login";
-  static const String EndpointRegister = "api/register";
 
   var token;
 
@@ -33,7 +29,7 @@ class Authentication {
       'password': password,
     };
 
-    var url = Uri.http(URL, Endpoint);
+    var url = Uri.http(networkUrl.prefix, networkUrl.login);
     var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
     print(response.statusCode);
     if (response.statusCode == 200) {
@@ -60,7 +56,7 @@ class Authentication {
         'gender': gender,
       };
 
-      var url = Uri.http(URL, EndpointRegister);
+      var url = Uri.http(networkUrl.prefix, networkUrl.register);
       var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
 
       print(response.statusCode);
@@ -92,7 +88,7 @@ class Authentication {
   //check connection to the server
   static Future<bool> checkConnection() async {
     try {
-      var url = Uri.http(URL);
+      var url = Uri.http(networkUrl.prefix);
       var response = await get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {

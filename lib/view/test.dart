@@ -57,6 +57,8 @@ class _TestState extends State<test> {
             Text('ID: $id'),
             Text('User Name: ${userData.fullname}'),
             Text('Email: ${userData.email}'),
+            Text('birthdate : ${userData.birthdate}'),
+
             // Add more widgets to display other user data as needed
           ],
         ),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:griding/constant/color.dart';
+import 'package:griding/dataBaseQuery/Auth.dart';
 import 'package:griding/view/Login.dart';
+import 'package:griding/constant/url.dart';
+import 'package:griding/dataBaseQuery/Query.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPassword extends StatefulWidget {
   const NewPassword({super.key});
@@ -14,6 +18,22 @@ class _NewPasswordState extends State<NewPassword> {
   TextEditingController ConfirmationController = TextEditingController();
   bool isPasswordVisible = false;
   final formKey = GlobalKey<FormState>();
+  late String email = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadEmail();
+  }
+
+  void loadEmail() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    setState(() {
+      email = localStorage.getString('email')!;
+      print(email);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +149,8 @@ class _NewPasswordState extends State<NewPassword> {
                           if (formKey.currentState!.validate()) {
                             if (passwordController.text ==
                                 ConfirmationController.text) {
+
+                              resetPassword();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -175,5 +197,32 @@ class _NewPasswordState extends State<NewPassword> {
         ),
       ),
     );
+  }
+
+  void resetPassword() {
+    Query().resetPassword(email, passwordController.text);
+
+    if (passwordController.text == ConfirmationController.text) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Login()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Row(
+            children: [
+              Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              SizedBox(width: 5),
+              Text(
+                "Password doesn't match",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          )));
+    }
   }
 }

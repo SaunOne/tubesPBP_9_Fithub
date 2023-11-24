@@ -21,9 +21,10 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController EmailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
+
   late String data;
 
   @override
@@ -171,7 +172,7 @@ class _LoginState extends State<Login> {
                               .of(context)
                               .viewInsets
                               .bottom + 30),
-                      controller: usernameController,
+                      controller: EmailController,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
                         labelText: 'Username',
@@ -222,8 +223,11 @@ class _LoginState extends State<Login> {
                   TextButton(
                     onPressed: () {
                       if (passwordController.text == "" &&
-                          usernameController.text.isNotEmpty ||
+                          EmailController.text.isNotEmpty ||
                           formKey.currentState!.validate()) {
+
+                        saveEmail();
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -245,7 +249,7 @@ class _LoginState extends State<Login> {
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        handleLogin(usernameController.text, passwordController.text);
+                        handleLogin(EmailController.text, passwordController.text);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -316,5 +320,9 @@ class _LoginState extends State<Login> {
     });
   }
 
+  void saveEmail() async{
+    SharedPreferences emailStorage = await SharedPreferences.getInstance();
+    emailStorage.setString('email', EmailController.text);
+  }
 
 }
