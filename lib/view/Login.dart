@@ -6,6 +6,7 @@ import 'package:griding/constant/color.dart';
 import 'package:griding/view/NewPassword.dart';
 import 'package:griding/dataBaseQuery/Auth.dart';
 import 'package:griding/dataBaseQuery/Auth.dart';
+import 'package:griding/view/profileView.dart';
 import 'package:griding/view/test.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +47,7 @@ class _LoginState extends State<Login> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => test()),
+            builder: (context) => ProfileView()),
       );
     }
     else{

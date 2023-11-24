@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Query {
-  static const String URL = "192.168.18.238:8000";
+  static const String URL = "10.0.2.2:8000";
   static const String Endpoint = "api/user";
   String token = '';
 

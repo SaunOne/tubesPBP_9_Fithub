@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication {
 
-  static const String URL = "192.168.18.238:8000";
+  static const String URL = "10.0.2.2:8000";
   static const String Endpoint = "api/login";
   static const String EndpointRegister = "api/register";
 
@@ -85,10 +85,7 @@ class Authentication {
       throw Exception('Failed to register. Check your internet connection.');
     }
   }
-
-
-
-
+  
   //check connection to the server
   static Future<bool> checkConnection() async {
     try {
@@ -104,9 +101,6 @@ class Authentication {
       return false;
     }
   }
-
-
-
 }
 
 
