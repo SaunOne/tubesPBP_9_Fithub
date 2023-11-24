@@ -18,6 +18,7 @@ use App\Http\Controllers\UserController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::put('/userReset/{email}', [UserController::class, 'ResetPassword']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user/{id}', [UserController::class, 'getUserById']);
