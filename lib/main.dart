@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd6_b_9/view/PreLogin.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
+import 'package:ugd6_b_9/view/content/detailTrainer.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
-import 'package:ugd6_b_9/timer.dart';
+import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/notificationView.dart';
 import 'package:ugd6_b_9/view/content/trainerView.dart';
 import 'package:ugd6_b_9/view/feature/calender.dart';
@@ -24,7 +26,7 @@ void main(){
   runApp(
     ResponsiveSizer(builder: (context,orientation,screenType){
       return MaterialApp(
-      initialRoute: Routes.homePage,
+      initialRoute: Routes.preLogin,
       routes: {
         // Routes.trackPage: (context) => TrackPage(),
         Routes.login: (context) => const Login(),
@@ -40,7 +42,10 @@ void main(){
         Routes.generateQr: (context) => const GenerateQRPage(), 
         Routes.calendarScreen: (context) =>  CalendarScreen(),   
         Routes.trainerView: (context) => const TrainerView(), 
-        Routes.notificationView: (context) => const NotificationView()
+        Routes.notificationView: (context) => const NotificationView(),
+        Routes.detailTrainer: (context) => const DetailTrainer(),
+        Routes.preLogin: (context) => const PreLogin(),
+        
       });
     })
   );

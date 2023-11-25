@@ -4,6 +4,7 @@ import 'package:ugd6_b_9/view/feature/camera.dart';
 class Routes {
   static const String home = '/';
   static const String login = '/login';
+  static const String preLogin = '/preLogin';
   static const String register = '/register';
   static const String homePage = '/homePage';
   static const String previewPage = '/previewPage';
@@ -19,4 +20,5 @@ class Routes {
   static const String calendarScreen= '/calenderScreen';
   static const String trainerView = '/trainerView';
   static const String notificationView = '/notificationView';
+  static const String detailTrainer = '/detailTrainer';
 }

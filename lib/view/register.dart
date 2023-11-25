@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
 import 'package:ugd6_b_9/constant/color.dart';
-import 'package:ugd6_b_9/database/sql_helperUser.dart';
-import 'package:ugd6_b_9/view/login.dart';
+import 'package:ugd6_b_9/database/Auth.dart';
+import 'package:ugd6_b_9/view/Login.dart';
 
-import '../routes/routes.dart';
+import '../route/Routes.dart';
+
 
 // String? name, email, gender, password, tanggalLahir;
 
@@ -41,7 +43,7 @@ class _RegisterState extends State<Register> {
             key: formKey,
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
+              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +71,7 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(50),
                         )),
                     validator: (value) =>
-                        value == '' ? 'Please enter your username' : null,
+                    value == '' ? 'Please enter your username' : null,
                   ),
                   SizedBox(
                     height: 21,
@@ -83,7 +85,7 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(50.5),
                         )),
                     validator: (value) =>
-                        value == '' ? 'Please enter your username' : null,
+                    value == '' ? 'Please enter your username' : null,
                   ),
                   SizedBox(height: 21.0),
                   TextFormField(
@@ -94,12 +96,12 @@ class _RegisterState extends State<Register> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(50.5),
                           )),
-                      onChanged: (value) async {
-                        isExist = await isEmail(value);
-                        setState(() {
-                          isExist;
-                        });
-                      },
+                      // onChanged: (value) async {
+                      //   isExist = await isEmail(value);
+                      //   setState(() {
+                      //     isExist;
+                      //   });
+                      // },
                       validator: (value) {
                         if (value == '') {
                           return 'Please enter your email';
@@ -131,7 +133,7 @@ class _RegisterState extends State<Register> {
                     ),
                     obscureText: !isVisible,
                     validator: (value) =>
-                        value == '' ? 'Please enter your password' : null,
+                    value == '' ? 'Please enter your password' : null,
                   ),
                   SizedBox(height: 21.0),
                   GestureDetector(
@@ -143,7 +145,7 @@ class _RegisterState extends State<Register> {
                         lastDate: DateTime.now(),
                       );
                       tanggal_lahirController.text =
-                          '${date!.day}/${date.month}/${date.year}';
+                      '${date!.day}/${date.month}/${date.year}';
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
@@ -163,13 +165,13 @@ class _RegisterState extends State<Register> {
                                 lastDate: DateTime.now(),
                               );
                               tanggal_lahirController.text =
-                                  '${date!.day}/${date.month}/${date.year}';
+                              '${date!.day}/${date.month}/${date.year}';
                             },
                             icon: Icon(Icons.date_range),
                           ),
                         ),
                         validator: (value) =>
-                            value == '' ? 'Please select a birth date' : null,
+                        value == '' ? 'Please select a birth date' : null,
                         onTap: () {
                           // Ini mencegah keyboard dari muncul saat menekan TextFormField
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -190,7 +192,7 @@ class _RegisterState extends State<Register> {
                   Row(
                     children: [
                       Radio<Gender>(
-                        activeColor: primaryColor,
+                        activeColor: ColorPallete.primaryColor,
                         value: Gender.male,
                         groupValue: selectedGender,
                         onChanged: (Gender? value) {
@@ -205,7 +207,7 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(fontSize: 18),
                       ),
                       Radio<Gender>(
-                        activeColor: primaryColor,
+                        activeColor: ColorPallete.primaryColor,
                         value: Gender.female,
                         groupValue: selectedGender,
                         onChanged: (Gender? value) {
@@ -226,7 +228,7 @@ class _RegisterState extends State<Register> {
                     children: [
                       Checkbox(
                         value: isChecked,
-                        activeColor: primaryColor,
+                        activeColor: ColorPallete.primaryColor,
                         onChanged: (bool? value) {
                           setState(() {
                             isChecked = value!;
@@ -240,11 +242,11 @@ class _RegisterState extends State<Register> {
                           color: Color.fromARGB(255, 100, 100, 100),
                         ),
                       ),
-                      const Text(
+                      Text(
                         'terms of service',
                         style: TextStyle(
                             fontSize: 16,
-                            color: primaryColor,
+                            color: ColorPallete.primaryColor,
                             decoration: TextDecoration.underline),
                       ),
                     ],
@@ -256,7 +258,7 @@ class _RegisterState extends State<Register> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
+                          backgroundColor: ColorPallete.primaryColor,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(50),
@@ -265,26 +267,12 @@ class _RegisterState extends State<Register> {
                       onPressed: () async {
                         print('masuk sebelum validate');
                         if (formKey.currentState!.validate()) {
-                          await addEmployee();
-                          Navigator.pushNamed(context, Routes.login);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              backgroundColor: primaryColor,
-                              content: Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Register Success',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          handleRegister(fullnameController.text,
+                          nameController.text,
+                          emailController.text,
+                          passwordController.text,
+                          tanggal_lahirController.text,
+                          genderController.text);
                         }
                       },
                       child: Container(
@@ -309,10 +297,10 @@ class _RegisterState extends State<Register> {
                         ),
                       );
                     },
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           'Have an account?',
                           style: TextStyle(
                               fontSize: 18,
@@ -323,7 +311,7 @@ class _RegisterState extends State<Register> {
                           'Login',
                           style: TextStyle(
                               fontSize: 18,
-                              color: primaryColor,
+                              color: ColorPallete.primaryColor,
                               fontWeight: FontWeight.normal),
                         )
                       ],
@@ -338,22 +326,33 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Future<void> addEmployee() async {
-    // String name, String email, String gender, String password, String tanggal_lahir
-    await SQLHelper.addUser(
-        fullnameController.text,
-        nameController.text,
-        emailController.text,
-        genderController.text,
-        passwordController.text,
-        tanggal_lahirController.text);
-  }
+  void handleRegister(String fullname, String username,String email, String password, String birthdate, String gender) async
+  {
+    ResponseDataUser data = await Authentication().Register(fullname, username, email, password, birthdate, gender);
 
-  Future<bool> isEmail(String email) async {
-    final data = await SQLHelper.isEmailExist(email);
-    return data.isNotEmpty;
-  }
-}
+    if(data.message == 'success')
+    {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(data.message),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    }
+    else
+    {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(data.message),
+          backgroundColor: Colors.red,
+        ),
+      );
+      
+    }
+
+}}
 
 class CustomDropdownFormField extends StatefulWidget {
   final String labelText;
@@ -407,4 +406,8 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
       ],
     );
   }
+
+
+
+
 }

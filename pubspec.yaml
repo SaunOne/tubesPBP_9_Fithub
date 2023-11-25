@@ -68,6 +68,9 @@ dependencies:
   numberpicker: ^2.1.2
   duration_picker: ^1.1.1
   dialogs: ^0.0.7
+  flutter_rating_bar: ^4.0.1
+  http: ^1.1.0
+  flutter_riverpod: ^2.3.7
 
 dev_dependencies:
   flutter_test:
@@ -96,6 +99,7 @@ flutter:
     - assets/
     - assets/audio/
     - assets/images/
+    - assets/images/logo/
     - assets/logo.png
   #   - images/a_dot_ham.jpeg
 

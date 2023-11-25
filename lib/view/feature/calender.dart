@@ -10,7 +10,9 @@ import 'package:ugd6_b_9/constant/app_constant.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd6_b_9/database/ScheduleGym.dart';
 import 'package:ugd6_b_9/dummy/dummyAll.dart';
+import 'package:ugd6_b_9/entity/scheduleGym.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:dialogs/dialogs.dart';
 
@@ -111,9 +113,36 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Duration duration = Duration.zero;
   String? exercise;
   String? note;
+  DateTime? tanggal;
+  int id = 0;
   TextEditingController noteController = new TextEditingController();
   bool isDuration = false;
   bool isInput = true;
+
+  void inputSchedule(index) {
+    var respon = ScheduleClient().create(
+        tanggal: tanggal.toString(),
+        durasi: duration.toString(),
+        note: noteController.text,
+        scheduleName: exercise);
+    // print('INI VALUE YANG MAU DI CREATE tanggal : ${tanggal.toString()}, duration : ${duration.toString()}, note: ${noteController.text}, shceduleName : ${exercise}');
+    changeContent(index);
+  }
+
+  void updateSchedule(index) {
+    if (id == 0) {
+      print('Id Kosong');
+    }
+    {
+      var respon = ScheduleClient().update(
+          id: id,
+          tanggal: tanggal.toString(),
+          durasi: duration.toString(),
+          note: noteController.text,
+          scheduleName: exercise);
+    } 
+    changeContent(index);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +184,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: Icon(FontAwesomeIcons.chevronLeft,color: Colors.white,weight: 300,)),
+                              icon: Icon(
+                                FontAwesomeIcons.chevronLeft,
+                                color: Colors.white,
+                                weight: 300,
+                              )),
                           Text(
                             'Training Schedule',
                             style: StyleText(color: Colors.white)
@@ -163,10 +196,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           ),
                         ],
                       ),
-                      if (isInput == true)
+                      if (isInput ==
+                          true) //menghasus data di var penampung ketika add
                         IconButton(
                           onPressed: () {
-                            isInput = false;
                             noteController.text = '';
                             exercise = null;
                             duration = Duration.zero;
@@ -212,7 +245,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           startOnMonday: true,
                           weekDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
                           // eventsList: _eventList,
-                          isExpandable: true,
+                          isExpandable: false,
                           eventDoneColor: Colors.green,
                           selectedColor: Colors.pink,
                           selectedTodayColor: Colors.green,
@@ -225,7 +258,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           isExpanded: true,
                           expandableDateFormat: 'EEEE, dd. MMMM yyyy',
                           onEventSelected: (value) {
+                            print('sembarang');
                             print('Event selected ${value.summary}');
+                          },
+                          onDateSelected: (value) {
+                            tanggal = value;
                           },
                           onEventLongPressed: (value) {
                             print('Event long pressed ${value.summary}');
@@ -253,142 +290,171 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     //Isi Schedule
                     if (index == 0)
                       Flexible(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < 4; i++)
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 6),
-                                  child: Slideable(
-                                    items: [
-                                      ActionItems(
-                                        backgroudColor: Colors.transparent,
-                                        radius: BorderRadius.circular(10),
-                                        icon:
-                                            Icon(FontAwesomeIcons.penToSquare),
-                                        onPress: () {
-                                          isInput = false;
-                                          changeContent(1);
-                                        },
-                                      ),
-                                      ActionItems(
-                                        backgroudColor: Colors.transparent,
-                                        icon: Icon(FontAwesomeIcons.trash),
-                                        onPress: () {
-                                          showDialog(
+                        child: FutureBuilder<List<ScheduleGym>>(
+                          future: ScheduleClient().showAll(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
+                            } else if (snapshot.hasError) {
+                              print(snapshot);
+                              return Text('Error: ${snapshot.error}');
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return Text('Tidak ada data.');
+                            } else {
+                              List<ScheduleGym> scheduleList = snapshot.data!;
+                              return ListView.builder(
+                                itemCount: scheduleList.length,
+                                itemBuilder: (context, index) {
+                                  ScheduleGym schedule = scheduleList[index];
+                                  return Container(
+                                    margin: EdgeInsets.only(bottom: 6),
+                                    child: Slideable(
+                                      items: [
+                                        ActionItems(
+                                          backgroudColor: Colors.transparent,
+                                          radius: BorderRadius.circular(10),
+                                          icon: Icon(
+                                              FontAwesomeIcons.penToSquare),
+                                          onPress: () {
+                                            isInput = false; //update
+                                            _handleNewDate(tanggal);
+                                            id = schedule.id;
+                                            tanggal = DateTime.tryParse(schedule.tanggal);
+                                            noteController.text = schedule.note;
+                                            exercise = schedule.scheduleName;
+                                            duration = convetDuration(schedule.durasi);
+                                            changeContent(1);
+                                          },
+                                        ),
+                                        ActionItems(
+                                          backgroudColor: Colors.transparent,
+                                          icon: Icon(FontAwesomeIcons.trash),
+                                          onPress: () {
+                                            showDialog(
                                               context: context,
                                               builder: (_) =>
                                                   CupertinoAlertDialog(
-                                                    title:
-                                                        Text('Confirmation '),
-                                                    content: Text(
-                                                        'Are your sure want to Delete this schedule?'),
-                                                    actions: [
-                                                      CupertinoDialogAction(
-                                                        onPressed: () {
-                                                          print('masuk delete');
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text('NO'),
-                                                      ),
-                                                      CupertinoDialogAction(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text('Yes'),
-                                                      ),
-                                                    ],
-                                                  ));
-                                        },
-                                      ),
-                                    ],
-                                    child: Container(
-                                      padding: EdgeInsets.all(15),
-                                      margin: EdgeInsets.all(3),
-                                      width: double.infinity,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.grey, // Warna bayangan
-                                            offset: Offset(
-                                                0, 1), // Posisi bayangan (x, y)
-                                            blurRadius: 3, // Radius blur
-                                            spreadRadius:
-                                                0.5, // Radius penyebaran
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Latihan ke-2',
-                                                style: StyleText().stylePl,
-                                              ),
-                                              Text('Tommorow',
-                                                  style: StyleText().stylePl),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'Chest Workout',
-                                                style: StyleText(
-                                                        color: ColorC()
-                                                            .primaryColor1)
-                                                    .styleH3b,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 4),
-                                                    child: Text(
-                                                      '21 Oct 2023',
-                                                      style: StyleText(
-                                                              color: ColorC()
-                                                                  .primaryColor1)
-                                                          .styleH4lWithColor,
-                                                    ),
+                                                title: Text('Confirmation '),
+                                                content: Text(
+                                                    'Are your sure want to Delete ${schedule.scheduleName} schedule?'),
+                                                actions: [
+                                                  CupertinoDialogAction(
+                                                    onPressed: () {
+                                                      print('masuk delete');
+                                                      isInput = false;
+                                                      id = schedule.id;
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text('No'),
                                                   ),
-                                                  SizedBox(
-                                                    width: 10,
+                                                  CupertinoDialogAction(
+                                                    onPressed: () {
+                                                      print('ini idnya');
+                                                      ScheduleClient()
+                                                          .destroy(schedule.id);
+                                                      setState(() {});
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text('Yes'),
                                                   ),
-                                                  Icon(
-                                                    FontAwesomeIcons.calendar,
-                                                    size: 20,
-                                                    color:
-                                                        ColorC().primaryColor1,
-                                                  )
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                        ],
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                      child: Container(
+                                        padding: EdgeInsets.all(15),
+                                        margin: EdgeInsets.all(3),
+                                        width: double.infinity,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey, // Warna bayangan
+                                              offset: Offset(0,
+                                                  1), // Posisi bayangan (x, y)
+                                              blurRadius: 3, // Radius blur
+                                              spreadRadius:
+                                                  0.5, // Radius penyebaran
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  schedule.note,
+                                                  style: StyleText().stylePl,
+                                                ),
+                                                Text(schedule.durasi,
+                                                    style: StyleText().stylePl),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  schedule.scheduleName,
+                                                  style: StyleText(
+                                                          color: ColorC()
+                                                              .primaryColor1)
+                                                      .styleH3b,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 4),
+                                                      child: Text(
+                                                        schedule.tanggal,
+                                                        style: StyleText(
+                                                                color: ColorC()
+                                                                    .primaryColor1)
+                                                            .styleH4lWithColor,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Icon(
+                                                      FontAwesomeIcons.calendar,
+                                                      size: 20,
+                                                      color: ColorC()
+                                                          .primaryColor1,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                                  );
+                                },
+                              );
+                            }
+                          },
                         ),
                       ),
 
@@ -460,8 +526,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                           value: exercise,
                                           onChanged: (String? value) {
                                             setState(() {
-                                              exercise =
-                                                  value; // Perbarui nilai selectedValues
+                                              exercise = value;
+                                              print(
+                                                  exercise); // Perbarui nilai selectedValues
                                             });
                                           },
                                           buttonStyleData: ButtonStyleData(
@@ -586,7 +653,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     labelText: 'Note',
-                                    hintText: 'Enter your email',
+                                    hintText: 'Enter your Note',
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
@@ -615,28 +682,58 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   ),
                                 ),
                               ),
-                              Container(
-                                alignment: Alignment.bottomRight,
-                                margin: EdgeInsets.only(bottom: 30),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    isInput = true;
-                                    changeContent(0);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        top: 5, bottom: 5, left: 20, right: 20),
-                                    decoration: BoxDecoration(
-                                      color: ColorC().primaryColor1,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      'Save',
-                                      style: StyleText(color: Colors.white)
-                                          .styleH4bWithColor,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    margin: EdgeInsets.only(bottom: 30),
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        changeContent(0);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            top: 5, bottom: 5, left: 20, right: 20),
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(255, 171, 24, 13),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: Text(
+                                          'Cancel',
+                                          style: StyleText(color: Colors.white)
+                                              .styleH4bWithColor,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    margin: EdgeInsets.only(bottom: 30),
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        print(isInput);
+                                        isInput == true
+                                            ? inputSchedule(0)
+                                            : updateSchedule(0);
+                                        isInput = true;
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            top: 5, bottom: 5, left: 20, right: 20),
+                                        decoration: BoxDecoration(
+                                          color: ColorC().primaryColor1,
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: Text(
+                                          'Save',
+                                          style: StyleText(color: Colors.white)
+                                              .styleH4bWithColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -712,5 +809,19 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void _handleNewDate(date) {
     print('Date selected: $date');
+  }
+
+  Duration convetDuration(String durasi){
+    print('durasi : ${durasi}');
+    List<String> waktuParts = durasi.split(':');
+
+    int jam = int.parse(waktuParts[0]);
+    int menit = int.parse(waktuParts[1]);
+    int detik = int.parse(waktuParts[2]);
+
+    
+    Duration waktuDuration = Duration(hours: jam, minutes: menit, seconds: detik);
+    print('hasil : ${waktuDuration}');
+    return waktuDuration;
   }
 }

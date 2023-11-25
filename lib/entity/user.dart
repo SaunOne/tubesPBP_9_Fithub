@@ -1,12 +1,39 @@
-import 'package:ugd6_b_9/entity/photo.dart';
+import 'package:flutter/material.dart';
 
 class User {
-  final int? id;
-  final String PathPhoto;
+  int id;
+  String fullname;
+  String username;
+  String email;
+  String password;
+  String birthdate;
+  String gender;
 
 
-  String? name, email, gender,password, tanggalLahir;
+  User({required this.id,required this.fullname,required this.username,required this.email,required this.password,
+    required this.birthdate,required this.gender});
 
-  User(this.id, this.PathPhoto, this.name, this.email, this.gender,
-      this.password, this.tanggalLahir);
+  User.empty()
+      : id = 0,
+        fullname = '',
+        username = '',
+        email = '',
+        password = '',
+        birthdate = '',
+        gender = '';
+
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    json = json['user'] ?? json;
+
+    return User(
+      id: json['id'] ?? 0,
+      fullname: json['fullname'] ?? '',
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      password: json['password'] ?? '',
+      birthdate: json['birthdate'] ?? '',
+      gender: json['gender'] ?? '',
+    );
+  }
 }

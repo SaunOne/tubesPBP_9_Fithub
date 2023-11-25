@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/timer.dart';
+import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 
@@ -245,6 +245,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
+                        Navigator.pushNamed(context, Routes.trainerView);
                       },
                       child: Row(
                         children: [

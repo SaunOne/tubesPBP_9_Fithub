@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
-import 'package:ugd6_b_9/timer.dart';
+import 'package:ugd6_b_9/view/feature/timer.dart';
 
 class Guide extends StatefulWidget {
   const Guide({super.key});

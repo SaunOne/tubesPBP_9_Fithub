@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ugd6_b_9/constant/color.dart';
+import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:sensors/sensors.dart';
 import 'dart:async';
+
+import 'package:ugd6_b_9/constant/colorCons.dart';
 
 class TrackPage extends StatefulWidget {
   const TrackPage({super.key});
@@ -85,7 +87,7 @@ class _TrackPageState extends State<TrackPage> {
             Container(
               height: 270,
               decoration: const BoxDecoration(
-                color: primaryColor,
+                color: Colors.blue,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
