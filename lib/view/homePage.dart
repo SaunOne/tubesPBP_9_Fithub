@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 width: 20,
               ),
-            ],
+            ],  
             toolbarHeight: 60,
           ),
           body: content[indexContent],

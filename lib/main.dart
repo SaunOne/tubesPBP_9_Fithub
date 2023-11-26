@@ -20,6 +20,8 @@ import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
 import 'package:ugd6_b_9/view/showGym.dart';
+import 'package:ugd6_b_9/view/PembayaranSubs.dart';
+import 'package:ugd6_b_9/view/Subcribe.dart';
 
 void main(){  
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +47,8 @@ void main(){
         Routes.notificationView: (context) => const NotificationView(),
         Routes.detailTrainer: (context) => const DetailTrainer(),
         Routes.preLogin: (context) => const PreLogin(),
-        
+        Routes.pembayaranSubs: (context) => PembayaranSubsPage(),
+        Routes.subcribe: (context) => SubscribePage(),
       });
     })
   );
