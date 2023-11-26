@@ -44,7 +44,8 @@ class Authentication {
 
   Future<ResponseDataUser> Register(
       String fullname, String username, String email,
-      String password, String birthdate, String gender
+      String password, String birthdate, String gender,
+      String phone, double weight, double height,
       ) async {
     try {
       var data = {
@@ -54,6 +55,9 @@ class Authentication {
         'password': password,
         'birthdate': birthdate, 
         'gender': gender,
+        'phone' : phone,
+        'weight': weight,  
+        'height': height,
       };
 
       var url = Uri.http(networkUrl.prefix, networkUrl.register);

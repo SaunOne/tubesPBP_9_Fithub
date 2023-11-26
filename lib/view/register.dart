@@ -6,7 +6,6 @@ import 'package:ugd6_b_9/view/Login.dart';
 
 import '../route/Routes.dart';
 
-
 // String? name, email, gender, password, tanggalLahir;
 
 enum Gender { male, female }
@@ -26,6 +25,9 @@ class _RegisterState extends State<Register> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController tanggal_lahirController = TextEditingController();
   TextEditingController fullnameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
   Gender? selectedGender;
 
   bool isVisible = false;
@@ -43,7 +45,7 @@ class _RegisterState extends State<Register> {
             key: formKey,
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +73,7 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(50),
                         )),
                     validator: (value) =>
-                    value == '' ? 'Please enter your username' : null,
+                        value == '' ? 'Please enter your username' : null,
                   ),
                   SizedBox(
                     height: 21,
@@ -85,7 +87,7 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(50.5),
                         )),
                     validator: (value) =>
-                    value == '' ? 'Please enter your username' : null,
+                        value == '' ? 'Please enter your username' : null,
                   ),
                   SizedBox(height: 21.0),
                   TextFormField(
@@ -133,7 +135,7 @@ class _RegisterState extends State<Register> {
                     ),
                     obscureText: !isVisible,
                     validator: (value) =>
-                    value == '' ? 'Please enter your password' : null,
+                        value == '' ? 'Please enter your password' : null,
                   ),
                   SizedBox(height: 21.0),
                   GestureDetector(
@@ -145,7 +147,7 @@ class _RegisterState extends State<Register> {
                         lastDate: DateTime.now(),
                       );
                       tanggal_lahirController.text =
-                      '${date!.day}/${date.month}/${date.year}';
+                          '${date!.day}/${date.month}/${date.year}';
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
@@ -165,13 +167,13 @@ class _RegisterState extends State<Register> {
                                 lastDate: DateTime.now(),
                               );
                               tanggal_lahirController.text =
-                              '${date!.day}/${date.month}/${date.year}';
+                                  '${date!.day}/${date.month}/${date.year}';
                             },
                             icon: Icon(Icons.date_range),
                           ),
                         ),
                         validator: (value) =>
-                        value == '' ? 'Please select a birth date' : null,
+                            value == '' ? 'Please select a birth date' : null,
                         onTap: () {
                           // Ini mencegah keyboard dari muncul saat menekan TextFormField
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -267,12 +269,24 @@ class _RegisterState extends State<Register> {
                       onPressed: () async {
                         print('masuk sebelum validate');
                         if (formKey.currentState!.validate()) {
-                          handleRegister(fullnameController.text,
-                          nameController.text,
-                          emailController.text,
-                          passwordController.text,
-                          tanggal_lahirController.text,
-                          genderController.text);
+                          double weight = weightController.text.isNotEmpty
+                              ? double.parse(weightController.text)
+                              : 0.0;
+                          double height = heightController.text.isNotEmpty
+                              ? double.parse(heightController.text)
+                              : 0.0;
+                          handleRegister(
+                              fullnameController.text,
+                              nameController.text,
+                              emailController.text,
+                              passwordController.text,
+                              tanggal_lahirController.text,
+                              genderController.text,
+                              phoneController.text.isNotEmpty
+                                  ? phoneController.text
+                                  : '',
+                              weight,
+                              height);
                         }
                       },
                       child: Container(
@@ -326,13 +340,20 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void handleRegister(String fullname, String username,String email, String password, String birthdate, String gender) async
-  {
-    ResponseDataUser data = await Authentication().Register(fullname, username, email, password, birthdate, gender);
+  void handleRegister(
+      String fullname,
+      String username,
+      String email,
+      String password,
+      String birthdate,
+      String gender,
+      String phone,
+      double weight,
+      double height) async {
+    ResponseDataUser data = await Authentication().Register(fullname, username,
+        email, password, birthdate, gender, phone, weight, height);
 
-    if(data.message == 'success')
-    {
-
+    if (data.message == 'success') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(data.message),
@@ -340,19 +361,16 @@ class _RegisterState extends State<Register> {
         ),
       );
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-    }
-    else
-    {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(data.message),
           backgroundColor: Colors.red,
         ),
       );
-      
     }
-
-}}
+  }
+}
 
 class CustomDropdownFormField extends StatefulWidget {
   final String labelText;
@@ -406,8 +424,4 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
       ],
     );
   }
-
-
-
-
 }
