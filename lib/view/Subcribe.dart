@@ -15,10 +15,7 @@ class _SubscribePageState extends State<SubscribePage> {
       'type': 'Basic',
       'price': 'IDR 750.000,00',
       'features': ['+ Gym conventional', '+ Sauna'],
-      'images': [
-        'assets/img7.jpg',
-        'assets/img6.jpg'
-      ],
+      'images': ['assets/img7.jpg', 'assets/img6.jpg'],
     },
     {
       'type': 'Premium',
@@ -30,11 +27,7 @@ class _SubscribePageState extends State<SubscribePage> {
         '+ Weightlifting room',
         '+ Free refill water'
       ],
-      'images': [
-        'assets/img7.jpg',
-        'assets/img6.jpg',
-        'assets/img5.jpg'
-      ],
+      'images': ['assets/img7.jpg', 'assets/img6.jpg', 'assets/img5.jpg'],
     },
   ];
 
@@ -42,60 +35,65 @@ class _SubscribePageState extends State<SubscribePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Subscribe'),
+        title: const Text('Subscribe'),
       ),
       body: Column(
         children: <Widget>[
-          CarouselSlider(
-            carouselController: _controller,
-            options: CarouselOptions(
-              height: 400.0,
-              enlargeCenterPage: true,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              },
-            ),
-            items: subscriptionOptions.map((subscription) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        child: CarouselSlider(
-                          items: subscription['images'].map<Widget>((image) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Image.asset(image, fit: BoxFit.cover),
-                            );
-                          }).toList(),
-                          options: CarouselOptions(
-                            aspectRatio: 2.0,
-                            enlargeCenterPage: true,
-                            autoPlay: false,
+          Expanded(
+            child: CarouselSlider(
+              carouselController: _controller,
+              options: CarouselOptions(
+                height: 400.0,
+                enlargeCenterPage: true,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+              ),
+              items: subscriptionOptions.map((subscription) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          child: CarouselSlider(
+                            items: subscription['images'].map<Widget>((image) {
+                              return Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Image.asset(image, fit: BoxFit.cover),
+                              );
+                            }).toList(),
+                            options: CarouselOptions(
+                              aspectRatio: 2.0,
+                              enlargeCenterPage: true,
+                              autoPlay: false,
+                            ),
                           ),
                         ),
-                      ),
-                      Text(subscription['type'],
-                          style: TextStyle(fontSize: 24)),
-                      Text(subscription['price'],
-                          style: TextStyle(fontSize: 20)),
-                      ...subscription['features']
-                          .map((feature) => Text(feature))
-                          .toList(),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Logika untuk berlangganan
-                        },
-                        child: Text('Subscribe'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }).toList(),
+                        Text(subscription['type'],
+                            style: const TextStyle(fontSize: 24)),
+                        Text(subscription['price'],
+                            style: const TextStyle(fontSize: 20)),
+                        Column(
+                          children: subscription['features'].map((feature) {
+                            return Text(feature);
+                          }).toList(),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Logika untuk berlangganan
+                          },
+                          child: const Text('Subscribe'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }).toList(),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -104,11 +102,12 @@ class _SubscribePageState extends State<SubscribePage> {
                 .entries
                 .map((entry) {
               return GestureDetector(
-                onTap: () => _controller.animateToPage(_current),
+                onTap: () => _controller.animateToPage(entry.key),
                 child: Container(
                   width: 12.0,
                   height: 12.0,
-                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 2.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _current == entry.key

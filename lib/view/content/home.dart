@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/route/Routes.dart';
+import 'package:ugd6_b_9/routes/routes.dart';
+import 'package:ugd6_b_9/routes/routes.dart' as app_routes;
+
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -416,16 +421,22 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Promo Subcriptiion',
+                'Promo Subscription',
                 style: StyleText().styleH4b,
               ),
-              Text(
-                'See All',
-                style: StyleText(color: Color.fromARGB(255, 2, 81, 228))
-                    .styleH4lWithColor,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, app_routes.Routes.subcribe);
+                },
+                child: Text(
+                  'See All',
+                  style: StyleText(color: Color.fromARGB(255, 2, 81, 228))
+                      .styleH4lWithColor,
+                ),
               ),
             ],
           ),
+
           Container(
             width: double.infinity,
             height: 290,

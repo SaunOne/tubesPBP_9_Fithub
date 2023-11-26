@@ -28,7 +28,7 @@ void main(){
   runApp(
     ResponsiveSizer(builder: (context,orientation,screenType){
       return MaterialApp(
-      initialRoute: Routes.preLogin,
+      initialRoute: Routes.homePage,
       routes: {
         // Routes.trackPage: (context) => TrackPage(),
         Routes.login: (context) => const Login(),
