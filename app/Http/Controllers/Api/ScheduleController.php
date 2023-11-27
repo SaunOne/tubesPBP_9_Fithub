@@ -11,7 +11,8 @@ class ScheduleController extends Controller
      public function index()
     {
         try {
-            $schedule = Schedule::all();
+            
+            $schedule = Schedule::select('schedules.*')->where('id_user', auth()->id())->get();
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil ambil data',
