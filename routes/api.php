@@ -25,6 +25,7 @@ Route::put('/userReset/{email}', [UserController::class, 'ResetPassword']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user/{id}', [UserController::class, 'getUserById']);
+    Route::put('/update/{id}', [UserController::class, 'updateProfile']);
 
     Route::get('/schedule',[ScheduleController::class,'index']);
     Route::post('/schedule',[ScheduleController::class,'store']);

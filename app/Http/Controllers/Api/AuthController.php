@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Validator;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string',
             'username' => 'required|string',
@@ -20,23 +22,28 @@ class AuthController extends Controller
             'birthdate' => 'required|string',
             'gender' => 'required|string',
         ]);
+        $weight = $request->input('weight', 0);
+        $height = $request->input('height', 0);
+        $phone = $request->input('phone', '');
 
-        try{
+        try {
             $user = User::create([
-                'username'=> $request->username,
-                'fullname'=> $request->fullname,
-                'email'=> $request->email,
-                'password'=> Hash::make($request->password),
+                'username' => $request->username,
+                'fullname' => $request->fullname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
                 'gender' => $request->gender,
                 'birthdate' => $request->birthdate,
+                'weight' => $weight,
+                'height' => $height,
+                'phone' => $phone
             ]);
 
             return response()->json([
                 'message' => 'success',
                 'user' => $user
             ], 201);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'failed registration',
                 'error' => $e
@@ -44,50 +51,51 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
-        if(!Auth::attempt($request->only('email', 'password'))){
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Invalid Login'
             ], 401);
         }
 
-       try{
+        try {
 
-        $user = User::where('email', $request->email)->firstOrFail();
+            $user = User::where('email', $request->email)->firstOrFail();
 
-        if(!Hash::check($request->password, $user->password)){
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'message' => 'Password mismatch',
+                ], 401);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
             return response()->json([
-                'message' => 'Password mismatch',
-            ], 401);
+                'message' => 'Login Success',
+                'data' => $user,
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Login failed',
+                'error' => $e
+            ], 409);
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message'=> 'Login Success',
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
-
-       }catch (Exception $e){
-        return response()->json([
-            'message' => 'Login failed',
-            'error' => $e
-        ], 409);
-       }
-
     }
 
-    public function getAllUser(){
-        try{
+    public function getAllUser()
+    {
+        try {
             $users = User::all();
             return response()->json([
                 'message' => 'Get all user success',
                 'data' => $users
             ]);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Get all user failed',
                 'error' => $e
