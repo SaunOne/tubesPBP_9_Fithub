@@ -328,6 +328,7 @@ class _RegisterState extends State<Register> {
 
   void handleRegister(String fullname, String username,String email, String password, String birthdate, String gender) async
   {
+    print('ini email : ${email}');
     ResponseDataUser data = await Authentication().Register(fullname, username, email, password, birthdate, gender);
 
     if(data.message == 'success')

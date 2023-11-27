@@ -27,6 +27,7 @@ class ScheduleClient {
 
   Future<List<ScheduleGym>> showAll() async {
     token = await getToken();
+    print('token : ${token}');
     try{
       var response = await get(
         Uri.http(url,endpoint),
@@ -34,10 +35,10 @@ class ScheduleClient {
       );
       
       if(response.statusCode != 200) throw Exception(response.reasonPhrase);
-
+      print('ini body : ${response.body}');
       Iterable list = json.decode(response.body)['data'];
-      // print('ini hasilnya');
-      // print(list);
+      print('ini hasilnya');
+      print(list);  
       return list.map((e) => ScheduleGym.fromJson(e)).toList();
     } catch (e) {
       return Future.error(e.toString());
@@ -70,7 +71,7 @@ class ScheduleClient {
         'note' : note,
         'schedule_name' : scheduleName
       };
-      print('data : ${data}');
+      
       var response = await post(Uri.http(url,endpoint),
       headers: _setHeaders(),
       body: jsonEncode(data),

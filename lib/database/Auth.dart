@@ -68,7 +68,7 @@ class Authentication {
       } else if (response.statusCode == 409) {
         // Bad Request. The server rejected the registration data.
         print('Bad Request: ${response.body}');
-
+ 
        return ResponseDataUser.fromJson(jsonDecode(response.body));
       } else {
         // Registration failed

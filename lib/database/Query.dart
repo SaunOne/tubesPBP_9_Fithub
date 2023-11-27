@@ -75,4 +75,48 @@ class Query {
       throw Exception('Failed to authenticate');
     }
   }
+
+  Future<User> updateProfile(int id, String fullname, String username, String email, String birthdate, String gender, String phone, double weight, double height) async {
+    String URL = networkUrl.prefix;
+    String EndpointUpdate = networkUrl.updateProfile;
+    String token = await getToken();
+    
+
+    var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
+
+    try {
+      var data = {
+        'fullname': fullname,
+        'username': username,
+        'email': email,
+        'birthdate': birthdate,
+        'gender': gender,
+        'phone' : phone,
+        'weight': weight,  
+        'height': height,
+      };
+      var response = await put(url, headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+      );
+      
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        User user = User.fromJson(jsonDecode(response.body));
+        return user;
+      } else {
+        print(response.body);
+        throw Exception('Failed to update user data');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to authenticate');
+    }
+  }
 }

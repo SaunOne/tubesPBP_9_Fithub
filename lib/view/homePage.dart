@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   int indexContent = 0;
   bool isPop = false;
 
-  List<Widget> content = [Home(), ProfileView(), Timer(), GridGuide()];
+  List<Widget> content = [Home(), ProfileView(), SubcriptionView(), GridGuide()];
 
   void onChange(index) {
     setState(
@@ -47,9 +48,9 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.notification_add,size: 25),
+                icon: Icon(Icons.notification_add, size: 25),
                 color: Color.fromARGB(255, 0, 68, 170),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pushNamed(context, Routes.notificationView);
                 },
               ),
@@ -123,7 +124,8 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             child: Icon(
               FontAwesomeIcons.qrcode,
@@ -209,7 +211,6 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         isPop = false;
                         Navigator.pushNamed(context, Routes.profilePage);
-                        
                       },
                       child: Row(
                         children: [
@@ -238,7 +239,8 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Schedule', style: StyleText().styleH4bWithColor),
+                          Text('Schedule',
+                              style: StyleText().styleH4bWithColor),
                         ],
                       ),
                     ),
@@ -263,7 +265,6 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
-                        
                       },
                       child: Row(
                         children: [
@@ -274,7 +275,8 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Generate Qr', style: StyleText().styleH4bWithColor),
+                          Text('Generate Qr',
+                              style: StyleText().styleH4bWithColor),
                         ],
                       ),
                     ),

@@ -6,6 +6,7 @@ import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
+import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/notificationView.dart';
 import 'package:ugd6_b_9/view/content/trainerView.dart';
@@ -45,6 +46,7 @@ void main(){
         Routes.notificationView: (context) => const NotificationView(),
         Routes.detailTrainer: (context) => const DetailTrainer(),
         Routes.preLogin: (context) => const PreLogin(),
+        Routes.subcriptionView: (context) => const SubcriptionView(),
         
       });
     })

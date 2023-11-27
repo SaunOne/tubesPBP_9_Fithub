@@ -101,6 +101,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     // Force selection of today on first load, so that the list of today's events gets shown.
     _handleNewDate(DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day));
+        tanggal = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        print('tanggal sekarang : ${tanggal}');
   }
 
   void changeContent(index) {

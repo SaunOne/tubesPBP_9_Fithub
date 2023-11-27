@@ -5,5 +5,5 @@ class networkUrl {
   static String getUser = "api/user";
   static String reset = "api/userReset";
   static String schedule = "api/schedule";
-  
+  static String updateProfile = "api/update";
 }

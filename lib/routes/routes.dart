@@ -21,4 +21,5 @@ class Routes {
   static const String trainerView = '/trainerView';
   static const String notificationView = '/notificationView';
   static const String detailTrainer = '/detailTrainer';
+  static const String subcriptionView = '/subcroptionView';
 }

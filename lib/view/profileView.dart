@@ -1,9 +1,16 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugd6_b_9/database/Query.dart';
+import 'dart:io';
 import 'package:ugd6_b_9/Entity/User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
+import 'package:ugd6_b_9/constant/colorCons.dart';
+import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/database/Query.dart';
+import 'package:ugd6_b_9/constant/color.dart';
+
+enum Gender { male, female }
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -21,8 +28,13 @@ class _ProfileViewState extends State<ProfileView> {
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
+  final TextEditingController fullnameController = TextEditingController();
 
-  String gender = 'Male'; // Default gender value
+  bool isEditMode = false;
+
+  Gender? selectedGender;
+
+  // String gender = 'Male'; // Default gender value
   final ImagePicker _picker = ImagePicker();
   String? imagePath;
 
@@ -56,7 +68,12 @@ class _ProfileViewState extends State<ProfileView> {
         emailController.text = userData.email;
         dateOfBirthController.text = userData.birthdate;
         passwordController.text = userData.password;
-        genderController.text = userData.gender;
+        selectedGender =
+            userData.gender == 'Male' ? Gender.male : Gender.female;
+        fullnameController.text = userData.fullname;
+        phoneController.text = userData.phone;
+        weightController.text = userData.weight.toString();
+        heightController.text = userData.height.toString();
       });
     } catch (e) {
       print("Error getting user data: $e");
@@ -73,8 +90,29 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
-  void _saveProfile() {
-    // Implement your save logic here
+  void _saveProfile() async {
+    if (!isEditMode) {
+      return;
+    }
+    await Query().updateProfile(
+        id,
+        fullnameController.text,
+        usernameController.text,
+        emailController.text,
+        dateOfBirthController.text,
+        selectedGender == Gender.male ? 'Male' : 'Female',
+        phoneController.text,
+        double.parse(weightController.text),
+        double.parse(heightController.text));
+
+    final snackBar = SnackBar(
+      content: Text('Profile updated successfully'),
+      backgroundColor: Colors.green,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    isEditMode = false;
+    getUserDataById();
     print('Save profile data');
   }
 
@@ -92,10 +130,7 @@ class _ProfileViewState extends State<ProfileView> {
         actions: [
           IconButton(
             icon: Icon(Icons.edit, color: Colors.black),
-            onPressed: () {
-              // Implement your edit logic here
-              print('Edit profile');
-            },
+            onPressed: _toggleEditMode,
           ),
         ],
       ),
@@ -115,75 +150,113 @@ class _ProfileViewState extends State<ProfileView> {
             //         : null,
             //   ),
             // ),
+            SizedBox(height: 10),
             Text(
-              'Hello, ${userData.fullname}',
+              'Hello! ${fullnameController.text}',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 10),
+            Divider(color: Colors.black),
+            SizedBox(height: 10),
+            _ProfileTextField(
+              controller: fullnameController,
+              label: "Username",
+              icon: Icons.badge,
+              isEditMode: isEditMode,
+            ),
             _ProfileTextField(
               controller: usernameController,
               label: "Username",
               icon: Icons.person_outline,
+              isEditMode: isEditMode,
             ),
-            // _ProfileTextField(
-            //   controller: phoneController,
-            //   label: "No Telephone",
-            //   icon: Icons.phone_android_outlined,
-            // ),
+            _ProfileTextField(
+              controller: phoneController,
+              label: "No Telephone",
+              icon: Icons.phone_android_outlined,
+              isEditMode: isEditMode,
+            ),
             _ProfileTextField(
               controller: emailController,
               label: "Email",
               icon: Icons.email_outlined,
-            ),
-            _ProfileTextField(
-              controller: passwordController,
-              label: "Password",
-              icon: Icons.lock_outline,
-              isPassword: true,
+              isEditMode: isEditMode,
             ),
             _ProfileDateField(
               controller: dateOfBirthController,
               label: "Date of Birth",
               icon: Icons.calendar_today_outlined,
+              isEditMode: isEditMode,
             ),
-            _ProfileDateField(
-                controller: genderController,
-                label: "Gender",
-                icon: Icons.male),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Expanded(
-            //       child: _ProfileMetricField(
-            //         controller: heightController,
-            //         label: "Height",
-            //         icon: Icons.straighten,
-            //       ),
-            //     ),
-            //     SizedBox(width: 10),
-            //     Expanded(
-            //       child: _ProfileMetricField(
-            //         controller: weightController,
-            //         label: "Weight",
-            //         icon: Icons.monitor_weight,
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // _GenderSelector(
-            //   gender: gender,
-            //   onGenderChanged: (newGender) {
-            //     setState(() {
-            //       gender = newGender;
-            //     });
-            //   },
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: _ProfileMetricField(
+                    controller: heightController,
+                    label: "Height",
+                    icon: Icons.straighten,
+                    isEditMode: isEditMode,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: _ProfileMetricField(
+                    controller: weightController,
+                    label: "Weight",
+                    icon: Icons.monitor_weight,
+                    isEditMode: isEditMode,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Radio<Gender>(
+                  activeColor: ColorPallete.primaryColor,
+                  value: Gender.male,
+                  groupValue: selectedGender,
+                  onChanged: isEditMode
+                      ? (Gender? value) {
+                          setState(() {
+                            selectedGender = value;
+                          });
+                        }
+                      : null,
+                ),
+                const Text(
+                  'Male',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Radio<Gender>(
+                  activeColor: ColorPallete.primaryColor,
+                  value: Gender.female,
+                  groupValue: selectedGender,
+                  onChanged: isEditMode
+                      ? (Gender? value) {
+                          setState(() {
+                            selectedGender = value;
+                          });
+                        }
+                      : null,
+                ),
+                const Text(
+                  'Female',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
             SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _saveProfile,
-              child: Text('Save'),
+              onPressed: () {
+                _saveProfile();
+              },
+              child: Text(
+                'Save',
+                style: StyleText().styleH4bWithColor,
+              ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                primary: ColorC().primaryColor1,
                 onPrimary: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -197,6 +270,12 @@ class _ProfileViewState extends State<ProfileView> {
       // Add BottomNavigationBar or other widgets if needed
     );
   }
+
+  void _toggleEditMode() {
+    setState(() {
+      isEditMode = !isEditMode;
+    });
+  }
 }
 
 class _ProfileTextField extends StatelessWidget {
@@ -204,14 +283,16 @@ class _ProfileTextField extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool isPassword;
+  final bool isEditMode;
 
-  const _ProfileTextField({
-    Key? key,
-    required this.controller,
-    required this.label,
-    required this.icon,
-    this.isPassword = false,
-  }) : super(key: key);
+  const _ProfileTextField(
+      {Key? key,
+      required this.controller,
+      required this.label,
+      required this.icon,
+      this.isPassword = false,
+      required this.isEditMode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -231,6 +312,7 @@ class _ProfileTextField extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         ),
         obscureText: isPassword,
+        enabled: isEditMode,
       ),
     );
   }
@@ -240,12 +322,14 @@ class _ProfileMetricField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
+  final bool isEditMode;
 
   const _ProfileMetricField({
     Key? key,
     required this.controller,
     required this.label,
     required this.icon,
+    required this.isEditMode,
   }) : super(key: key);
 
   @override
@@ -266,6 +350,8 @@ class _ProfileMetricField extends StatelessWidget {
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         ),
+        enabled:
+            isEditMode, // Tambahkan baris ini untuk mengatur status enabled
       ),
     );
   }
@@ -275,12 +361,14 @@ class _ProfileDateField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
+  final bool isEditMode;
 
   const _ProfileDateField({
     Key? key,
     required this.controller,
     required this.label,
     required this.icon,
+    required this.isEditMode,
   }) : super(key: key);
 
   @override
@@ -302,18 +390,21 @@ class _ProfileDateField extends StatelessWidget {
         ),
         readOnly: true,
         onTap: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2100),
-          );
-          if (pickedDate != null) {
-            String formattedDate =
-                "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-            controller.text = formattedDate;
+          if (isEditMode) {
+            DateTime? pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100),
+            );
+            if (pickedDate != null) {
+              String formattedDate =
+                  "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+              controller.text = formattedDate;
+            }
           }
         },
+        enabled: isEditMode,
       ),
     );
   }
