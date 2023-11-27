@@ -9,6 +9,7 @@ import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Query.dart';
 import 'package:ugd6_b_9/constant/color.dart';
+import 'package:ugd6_b_9/view/homePage.dart';
 
 enum Gender { male, female }
 
@@ -122,7 +123,7 @@ class _ProfileViewState extends State<ProfileView> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
         ),
         title: Text('Profile', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
@@ -138,18 +139,6 @@ class _ProfileViewState extends State<ProfileView> {
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // GestureDetector(
-            //   onTap: _changeProfilePicture,
-            //   child: CircleAvatar(
-            //     radius: 50,
-            //     backgroundColor: Colors.grey.shade300,
-            //     backgroundImage:
-            //         imagePath != null ? FileImage(File(imagePath!)) : null,
-            //     child: imagePath == null
-            //         ? Icon(Icons.camera_alt, color: Colors.grey.shade800)
-            //         : null,
-            //   ),
-            // ),
             SizedBox(height: 10),
             Text(
               'Hello! ${fullnameController.text}',
@@ -160,7 +149,7 @@ class _ProfileViewState extends State<ProfileView> {
             SizedBox(height: 10),
             _ProfileTextField(
               controller: fullnameController,
-              label: "Username",
+              label: "Fullname",
               icon: Icons.badge,
               isEditMode: isEditMode,
             ),

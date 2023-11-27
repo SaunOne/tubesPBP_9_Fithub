@@ -119,4 +119,38 @@ class Query {
       throw Exception('Failed to authenticate');
     }
   }
+
+  Future<User> Logout(int id) async {
+    String URL = networkUrl.prefix;
+    String EndpointLogout = networkUrl.logout;
+    String token = await getToken();
+
+    var url = Uri.parse('http://$URL/$EndpointLogout/$id');
+
+    try{
+      var data = {
+        'id' : id,
+      };
+
+      var response = await post(url,headers: {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+      }, body: jsonEncode(data));
+
+      if(response.statusCode == 200){
+        print(response.body);
+        User user = User.fromJson(jsonDecode(response.body));
+        return user;
+      } else {
+        print(response.body);
+        throw Exception('Failed to logout');
+      }
+    }catch(e){
+      print(e);
+      throw Exception('Failed to authenticate');
+    }
+
+
+  }
 }

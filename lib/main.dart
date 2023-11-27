@@ -13,7 +13,6 @@ import 'package:ugd6_b_9/view/content/trainerView.dart';
 import 'package:ugd6_b_9/view/feature/calender.dart';
 import 'package:ugd6_b_9/view/feature/camera.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
-import 'package:ugd6_b_9/view/content/inputGerakanGym.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:ugd6_b_9/routes/routes.dart';

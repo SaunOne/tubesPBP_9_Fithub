@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/database/Query.dart';
+
+import '../../Entity/User.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,7 +15,41 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+
+
+
+
 class _HomeState extends State<Home> {
+  User user = User.empty();
+
+  void getUser() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+
+    User user = await Query().getByUserId(localStorage.getInt('id')!);
+
+    setState(() {
+      this.user = user;
+    });
+  }
+
+
+  String greeting() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 18) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -21,7 +60,7 @@ class _HomeState extends State<Home> {
           SizedBox(
             height: 40,
           ),
-          Text('Morning, Yosa Bagas',style: StyleText().styleH2bWithColor,),
+          Text(greeting() + ',' + user.fullname,style: StyleText().styleH2bWithColor,),
           SizedBox(
             height: 10,
           ),

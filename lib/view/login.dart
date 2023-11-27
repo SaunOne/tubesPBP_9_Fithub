@@ -44,10 +44,13 @@ class _LoginState extends State<Login> {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       localStorage.setInt('id', responseDataUser.Data.id);
       localStorage.setString('token', responseDataUser.access_token);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => HomePage()),
+      Navigator.of(context).pop();
+      Navigator
+          .of(context)
+          .pushReplacement(
+          MaterialPageRoute(
+              builder: (BuildContext context) => HomePage()
+          )
       );
     }
     else{

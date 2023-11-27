@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugd6_b_9/database/sql_helperUser.dart';
+// import 'package:ugd6_b_9/database/sql_helperUser.dart';
 import 'dart:convert';
 import 'package:ugd6_b_9/utils/imageUtility.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,7 +52,7 @@ class _PreviewPageState extends State<PreviewPage> {
   }
 
   Future<Map<String, dynamic>?> userId(String username, String password) async {
-    return await SQLHelper.getUserIdByUsernamePassword(username, password);
+    // return await SQLHelper.getUserIdByUsernamePassword(username, password);
   }
 
   @override
@@ -67,7 +67,7 @@ class _PreviewPageState extends State<PreviewPage> {
     // Convert the photo bytes to a base64 string.
     final String photoString = Utility.base64String(photoBytes);
     // Save the photo to the database.
-    await SQLHelper.addPhoto(photoString, id);
+    // await SQLHelper.addPhoto(photoString, id);
   }
 
 

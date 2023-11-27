@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/database/Query.dart';
+import 'package:ugd6_b_9/view/Login.dart';
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
@@ -12,6 +15,9 @@ import 'package:ugd6_b_9/test_audio.dart';
 import 'package:ugd6_b_9/view/content/home.dart';
 import 'package:ugd6_b_9/view/popUpMenu.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
+import 'package:ugd6_b_9/database/Auth.dart';
+
+import '../Entity/User.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +29,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int indexContent = 0;
   bool isPop = false;
+  late int id = 0;
+  late User user = User.empty();
 
   List<Widget> content = [Home(), ProfileView(), SubcriptionView(), GridGuide()];
 
@@ -32,6 +40,24 @@ class _HomePageState extends State<HomePage> {
         indexContent = index;
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
+  void loadUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    User user = await Query().getByUserId(prefs.getInt('id')!);
+
+
+    setState(() {
+      id = prefs.getInt('id')!;
+      this.user = user;
+      print(user);
+    });
   }
 
   @override
@@ -192,11 +218,11 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Yosa Bagas Brawijaya',
+                                user.fullname,
                                 style: StyleText(color: Colors.black)
                                     .stylePbWithColor,
                               ),
-                              Text('yosabagasya@gmail.com',
+                              Text(user.email,
                                   style: StyleText(color: Colors.black)
                                       .styleP2lWithColor),
                             ],
@@ -285,8 +311,7 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.bottomLeft,
                         child: MaterialButton(
                           onPressed: () {
-                            Navigator.pop(context);
-                            isPop = false;
+                            logout();
                           },
                           child: Row(
                             children: [
@@ -314,4 +339,14 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
+
+  void logout() {
+    Query().Logout(id);
+    SharedPreferences.getInstance().then((value) {
+      value.clear();
+    });
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+
+  }
+
 }
