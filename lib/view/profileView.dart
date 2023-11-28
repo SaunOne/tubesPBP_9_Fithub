@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -10,6 +12,9 @@ import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Query.dart';
 import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
+import 'package:ugd6_b_9/utils/imageUtility.dart';
+import 'package:ugd6_b_9/entity/image.dart';
+
 
 enum Gender { male, female }
 
@@ -30,35 +35,62 @@ class _ProfileViewState extends State<ProfileView> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
   final TextEditingController fullnameController = TextEditingController();
-
+  late String pathPhoto = '';
   bool isEditMode = false;
+  late ImageUser image;
 
   Gender? selectedGender;
 
   // String gender = 'Male'; // Default gender value
   final ImagePicker _picker = ImagePicker();
-  String? imagePath;
+  File? imageFile;
 
-  late int id = 0;
+  late int id;
   late User userData = User.empty(); // Initialize with an empty user object
 
   @override
   void initState() {
     super.initState();
     loadStoredData();
+
   }
+
+
+
+  Future pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        imageFile = File(image.path);
+        Uint8List bytes = File(image.path).readAsBytesSync();
+        String img64 = base64Encode(bytes);
+        pathPhoto = img64;
+
+      });
+    }else {
+      print('No image selected.');
+    }
+  }
+
+  LoadImage(){
+    try {
+      return imageFromBase64String(pathPhoto);
+    } catch (e) {
+      print(e);
+      return Image.asset('assets/logo.png');
+    }
+  }
+
 
   void loadStoredData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-
+    id = localStorage.getInt('id')!;
     setState(() {
-      id = localStorage.getInt('id')!;
-      // Load user data when id is available
-      if (id != 0) {
         getUserDataById();
-      }
     });
   }
+
+
 
   void getUserDataById() async {
     try {
@@ -75,6 +107,7 @@ class _ProfileViewState extends State<ProfileView> {
         phoneController.text = userData.phone;
         weightController.text = userData.weight.toString();
         heightController.text = userData.height.toString();
+        pathPhoto = userData.photo;
       });
     } catch (e) {
       print("Error getting user data: $e");
@@ -82,14 +115,7 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
-  Future<void> _changeProfilePicture() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        imagePath = image.path;
-      });
-    }
-  }
+
 
   void _saveProfile() async {
     if (!isEditMode) {
@@ -104,7 +130,9 @@ class _ProfileViewState extends State<ProfileView> {
         selectedGender == Gender.male ? 'Male' : 'Female',
         phoneController.text,
         double.parse(weightController.text),
-        double.parse(heightController.text));
+        double.parse(heightController.text),
+        pathPhoto);
+
 
     final snackBar = SnackBar(
       content: Text('Profile updated successfully'),
@@ -117,13 +145,33 @@ class _ProfileViewState extends State<ProfileView> {
     print('Save profile data');
   }
 
+  //
+  Uint8List decodeImage(String pathPhoto){
+    List<int> imageBytes = base64Decode(pathPhoto);
+    return Uint8List.fromList(imageBytes);
+  }
+
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(
+      base64Decode(base64String),
+      fit: BoxFit.cover,
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          ),
         ),
         title: Text('Profile', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
@@ -140,6 +188,36 @@ class _ProfileViewState extends State<ProfileView> {
         child: Column(
           children: [
             SizedBox(height: 10),
+            GestureDetector(
+              onTap: () {
+                pickImage();
+              },
+              child: CircleAvatar
+                (
+                radius: 50,
+                child: imageFile != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image.file(
+                          imageFile!,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(50),
+
+                        ),
+                        width: 100,
+                        height: 100,
+                        child: LoadImage(),
+
+                      ),
+              ),
+            ),SizedBox(height: 10),
             Text(
               'Hello! ${fullnameController.text}',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ugd6_b_9/Component/EllipsShape.dart';
 import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/view/NewPassword.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 
 import '../Entity/ResponseDataUser.dart';
+import '../routes/routes.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -77,6 +79,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+
     double height = MediaQuery
         .of(context)
         .size
@@ -230,12 +233,8 @@ class _LoginState extends State<Login> {
                           formKey.currentState!.validate()) {
 
                         saveEmail();
+                        Navigator.pushNamed(context, Routes.newPass);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NewPassword()),
-                        );
                       }
                     },
                     style: TextButton.styleFrom(

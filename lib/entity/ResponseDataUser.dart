@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:ugd6_b_9/Entity/User.dart';
+
 
 class ResponseDataUser {
   String message;

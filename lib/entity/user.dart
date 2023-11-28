@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+@riverpod
 class User {
   int id;
   String fullname;
@@ -11,6 +13,7 @@ class User {
   String phone;
   double weight;
   double height;
+  String photo;
 
   User(
       {required this.id,
@@ -22,7 +25,8 @@ class User {
       required this.gender,
       required this.phone,
       required this.weight,
-      required this.height});
+      required this.height,
+      required this.photo});
 
   User.empty()
       : id = 0,
@@ -34,7 +38,9 @@ class User {
         gender = '',
         phone = '',
         weight = 0.0,
-        height = 0.0;
+        height = 0.0,
+        photo = '';
+
 
   factory User.fromJson(Map<String, dynamic> json) {
     json = json['user'] ?? json;
@@ -50,6 +56,7 @@ class User {
       phone: json['phone'] ?? '',
       weight: (json['weight'] ?? 0).toDouble(),
       height: (json['height'] ?? 0).toDouble(),
+      photo: json['photo'] ?? '',
     );
   }
 }

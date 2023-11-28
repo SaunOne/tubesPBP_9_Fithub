@@ -4,7 +4,6 @@ import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/database/Auth.dart';
 import 'package:ugd6_b_9/view/Login.dart';
 
-import '../route/Routes.dart';
 
 
 // String? name, email, gender, password, tanggalLahir;

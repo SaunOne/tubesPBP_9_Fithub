@@ -20,37 +20,32 @@ import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
 import 'package:ugd6_b_9/view/showGym.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ugd6_b_9/routes/GeneratorRoutes.dart';
 
-void main(){  
+
+import 'package:flutter/material.dart';
+import 'package:riverpod/riverpod.dart';
+
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    ResponsiveSizer(builder: (context,orientation,screenType){
-      return MaterialApp(
-      initialRoute: Routes.preLogin,
-      routes: {
-        // Routes.trackPage: (context) => TrackPage(),
-        Routes.login: (context) => const Login(),
-        Routes.register: (context) => Register(),
-        Routes.homePage: (context) => const HomePage(),
-        Routes.previewPage: (context) => const ProfileView(),
-        Routes.profilePage: (context) => const ProfileView(),
-        Routes.trackPage: (context) => const TrackPage(),
-        Routes.timerPage: (context) => const Timer(), 
-        Routes.gridGuidePage: (context) => const GridGuide(),
-        Routes.detailGuidePage: (context) => const Guide(),
-        Routes.scanPage:(context) => const BarcodeScannerPageView(),
-        Routes.generateQr: (context) => const GenerateQRPage(), 
-        Routes.calendarScreen: (context) =>  CalendarScreen(),   
-        Routes.trainerView: (context) => const TrainerView(), 
-        Routes.notificationView: (context) => const NotificationView(),
-        Routes.detailTrainer: (context) => const DetailTrainer(),
-        Routes.preLogin: (context) => const PreLogin(),
-        Routes.subcriptionView: (context) => const SubcriptionView(),
-        
-      });
-    })
-  );
+  runApp(MyApp());
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      child: ResponsiveSizer(
+        builder: (context, orientation, screenType) {
+          return const MaterialApp(
+            initialRoute: Routes.preLogin,
+            onGenerateRoute: RouteGenerator.generateRoute,
+          );
+        },
+      ),
+    );
+  }
+}
 
 

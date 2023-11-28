@@ -4,6 +4,7 @@ import 'package:ugd6_b_9/Entity/User.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
+import 'package:ugd6_b_9/entity/image.dart';
 
 class Query {
   String token = '';
@@ -76,7 +77,7 @@ class Query {
     }
   }
 
-  Future<User> updateProfile(int id, String fullname, String username, String email, String birthdate, String gender, String phone, double weight, double height) async {
+  Future<User> updateProfile(int id, String fullname, String username, String email, String birthdate, String gender, String phone, double weight, double height, String photo) async {
     String URL = networkUrl.prefix;
     String EndpointUpdate = networkUrl.updateProfile;
     String token = await getToken();
@@ -94,6 +95,7 @@ class Query {
         'phone' : phone,
         'weight': weight,  
         'height': height,
+        'photo': photo ?? '',
       };
       var response = await put(url, headers: {
         'Content-type': 'application/json',
@@ -152,5 +154,35 @@ class Query {
     }
 
 
+  }
+
+  Future<ImageUser> getPhoto(int id) async {
+    String URL = networkUrl.prefix;
+    String Endpoint = networkUrl.getPhoto;
+    String token = await getToken();
+
+    var url = Uri.parse('http://$URL/$Endpoint/$id');
+
+    try {
+      var response = await get(url, headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        ImageUser image = ImageUser.fromJson(jsonDecode(response.body));
+        return image;
+      } else {
+        print(response.body);
+        throw Exception('Failed to get user data');
+      }
+    } catch (e) {
+      print(e);
+      return ImageUser.empty();
+    }
   }
 }

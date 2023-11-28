@@ -22,4 +22,5 @@ class Routes {
   static const String notificationView = '/notificationView';
   static const String detailTrainer = '/detailTrainer';
   static const String subcriptionView = '/subcroptionView';
+  static const String newPass = '/newPass';
 }

@@ -66,6 +66,22 @@ class _HomePageState extends State<HomePage> {
       children: [
         Scaffold(
           appBar: AppBar(
+            // how to remove back button in appbar
+            leading: Container(
+              padding: EdgeInsets.only(left: 20),
+              child: IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  size: 30,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPop = true;
+                  });
+                },
+                color: Color.fromARGB(255, 0, 68, 170),
+              ),
+            ),
             foregroundColor: Colors.black,
             backgroundColor: Colors.white,
             title: Text(
@@ -82,18 +98,6 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(
                 width: 25,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  size: 30,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isPop = true;
-                  });
-                },
-                color: Color.fromARGB(255, 0, 68, 170),
               ),
               SizedBox(
                 width: 20,
