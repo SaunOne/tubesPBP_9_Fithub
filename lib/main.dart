@@ -17,6 +17,7 @@ import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
+import 'package:ugd6_b_9/view/searchGym.dart';
 import 'package:ugd6_b_9/view/showGym.dart';
 
 void main(){  
@@ -24,7 +25,7 @@ void main(){
   runApp(
     ResponsiveSizer(builder: (context,orientation,screenType){
       return MaterialApp(
-      initialRoute: Routes.homePage,
+      initialRoute: Routes.searchGymPage,
       routes: {
         // Routes.trackPage: (context) => TrackPage(),
         Routes.login: (context) => const Login(),
@@ -40,7 +41,8 @@ void main(){
         Routes.generateQr: (context) => const GenerateQRPage(), 
         Routes.calendarScreen: (context) =>  CalendarScreen(),   
         Routes.trainerView: (context) => const TrainerView(), 
-        Routes.notificationView: (context) => const NotificationView()
+        Routes.notificationView: (context) => const NotificationView(),
+        Routes.searchGymPage:(context) => const SearchGym()
       });
     })
   );

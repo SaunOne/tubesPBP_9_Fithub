@@ -41,6 +41,11 @@ class StyleText {
     fontSize: 14, // Atur ukuran font sesuai kebutuhan Anda.
     fontWeight: FontWeight.w700, // Atur berat font sesuai kebutuhan Anda.;
   );
+  TextStyle styleM4b = GoogleFonts.poppins(
+    fontSize: 14, // Atur ukuran font sesuai kebutuhan Anda.
+    fontWeight: FontWeight.w500,
+     // Atur berat font sesuai kebutuhan Anda.;
+  );
   TextStyle styleH4l = GoogleFonts.poppins(
     fontSize: 14, // Atur ukuran font sesuai kebutuhan Anda.
     fontWeight: FontWeight.w400, // Atur berat font sesuai kebutuhan Anda.;
@@ -48,6 +53,11 @@ class StyleText {
   TextStyle stylePb = GoogleFonts.poppins(
     fontSize: 12, // Atur ukuran font sesuai kebutuhan Anda.
     fontWeight: FontWeight.w700,
+     // Atur berat font sesuai kebutuhan Anda.;
+  );
+  TextStyle styleMpb = GoogleFonts.poppins(
+    fontSize: 12, // Atur ukuran font sesuai kebutuhan Anda.
+    fontWeight: FontWeight.w500,
      // Atur berat font sesuai kebutuhan Anda.;
   );
   TextStyle stylePl = GoogleFonts.poppins(
@@ -82,7 +92,9 @@ class StyleText {
   TextStyle get styleH3lWithColor => styleH3l.copyWith(color: color);
   TextStyle get styleH4bWithColor => styleH4b.copyWith(color: color);
   TextStyle get styleH4lWithColor => styleH4l.copyWith(color: color);
+  TextStyle get styleM4bWithColor => styleM4b.copyWith(color: color);
   TextStyle get stylePbWithColor => stylePb.copyWith(color: color);
+  TextStyle get styleMpbWithColor => styleMpb.copyWith(color: color);
   TextStyle get stylePlWithColor => stylePl.copyWith(color: color);
   TextStyle get styleP2bWithColor => styleP2b.copyWith(color: color);
   TextStyle get styleP2lWithColor => styleP2l.copyWith(color: color);

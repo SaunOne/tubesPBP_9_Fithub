@@ -19,4 +19,5 @@ class Routes {
   static const String calendarScreen= '/calenderScreen';
   static const String trainerView = '/trainerView';
   static const String notificationView = '/notificationView';
+  static const String searchGymPage = '/searchGym';
 }
