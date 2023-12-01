@@ -23,4 +23,6 @@ class Routes {
   static const String detailTrainer = '/detailTrainer';
   static const String subcriptionView = '/subcroptionView';
   static const String newPass = '/newPass';
+  static const String subcribeBasic = '/subscribeBasic';
+  static const String subcribePremium = '/subscribePremium';
 }

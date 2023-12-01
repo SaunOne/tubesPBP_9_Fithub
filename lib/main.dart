@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       child: ResponsiveSizer(
         builder: (context, orientation, screenType) {
           return const MaterialApp(
-            initialRoute: Routes.preLogin,
+            initialRoute: Routes.homePage,
             onGenerateRoute: RouteGenerator.generateRoute,
           );
         },
