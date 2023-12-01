@@ -14,6 +14,8 @@ import 'package:ugd6_b_9/view/homePage.dart';
 import '../Entity/ResponseDataUser.dart';
 import '../routes/routes.dart';
 
+import 'package:ugd6_b_9/Testing/Testing_function.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -32,30 +34,39 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    checkConnection();
+    // checkConnection();
   }
 
-  void handleLogin(String Email, String Password) async {
-    ResponseDataUser? responseDataUser = await Authentication().authenticate(Email, Password);
-    if (responseDataUser.message == "Login Success") {
-      print(responseDataUser.message);
-      print(responseDataUser.Data.gender);
-      print(responseDataUser.access_token);
-      print(responseDataUser.token_type);
 
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.setInt('id', responseDataUser.Data.id);
-      localStorage.setString('token', responseDataUser.access_token);
-      Navigator.of(context).pop();
-      Navigator
-          .of(context)
-          .pushReplacement(
-          MaterialPageRoute(
-              builder: (BuildContext context) => HomePage()
-          )
-      );
-    }
-    else{
+  void handleLogin() async {
+    String Email = EmailController.text;
+    String Password = passwordController.text;
+
+    final login = await testing_function.login(Email, Password);
+
+    if(login?.message == 'Login Success'){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        key: Key('snackbar_successLogin'),
+          backgroundColor: Colors.green,
+          content: Row(
+            children: [
+              Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+              SizedBox(width: 5),
+              Text(
+                "Login Success",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          )));
+
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const HomePage()));
+    }else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
           content: Row(
@@ -66,7 +77,7 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(width: 5),
               Text(
-                responseDataUser.message,
+                login?.message ?? '',
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -74,7 +85,51 @@ class _LoginState extends State<Login> {
             ],
           )));
     }
+
   }
+
+  // void handleLogin(String Email, String Password) async {
+  //   ResponseDataUser? responseDataUser = await Authentication().authenticate(Email, Password);
+  //   if (responseDataUser.message == "Login Success") {
+  //     print(responseDataUser.message);
+  //     print(responseDataUser.Data.gender);
+  //     print(responseDataUser.access_token);
+  //     print(responseDataUser.token_type);
+  //
+  //     SharedPreferences localStorage = await SharedPreferences.getInstance();
+  //     localStorage.setInt('id', responseDataUser.Data.id);
+  //     localStorage.setString('token', responseDataUser.access_token);
+  //     localStorage.setString('photo' , responseDataUser.Data.photo);
+  //     print(responseDataUser.Data.photo);
+  //     Navigator.of(context).pop();
+  //     Navigator
+  //         .of(context)
+  //         .pushReplacement(
+  //         MaterialPageRoute(
+  //             builder: (BuildContext context) => HomePage()
+  //         )
+  //     );
+  //   }
+  //   else{
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         backgroundColor: Colors.red,
+  //         content: Row(
+  //           children: [
+  //             Icon(
+  //               Icons.close,
+  //               color: Colors.white,
+  //             ),
+  //             SizedBox(width: 5),
+  //             Text(
+  //               responseDataUser.message,
+  //               style: TextStyle(
+  //                 color: Colors.white,
+  //               ),
+  //             ),
+  //           ],
+  //         )));
+  //   }
+  // }
 
 
   @override
@@ -249,9 +304,11 @@ class _LoginState extends State<Login> {
                     height: 20,
                   ),
                   ElevatedButton(
+                    key: const Key('tap_login'),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        handleLogin(EmailController.text, passwordController.text);
+                        handleLogin();
+
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -273,54 +330,54 @@ class _LoginState extends State<Login> {
   }
 
 
-  void checkConnection() {
-    Authentication.checkConnection().then((value) =>
-    {
-      if (!value)
-        {
-          print("No Internet Connection"),
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: Colors.red,
-              content: Row(
-                children: [
-                  Icon(
-                    Icons.close,
-                    color: Colors.white,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    "No Internet Connection",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              )))
-        }
-      else
-        if(value)
-          {
-            print("Connected"),
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.green,
-                content: Row(
-                  children: [
-                    Icon(
-                      Icons.check,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Connected",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )))
-          }
-    });
-  }
+  // void checkConnection() {
+  //   Authentication.checkConnection().then((value) =>
+  //   {
+  //     if (!value)
+  //       {
+  //         print("No Internet Connection"),
+  //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //             backgroundColor: Colors.red,
+  //             content: Row(
+  //               children: [
+  //                 Icon(
+  //                   Icons.close,
+  //                   color: Colors.white,
+  //                 ),
+  //                 SizedBox(width: 5),
+  //                 Text(
+  //                   "No Internet Connection",
+  //                   style: TextStyle(
+  //                     color: Colors.white,
+  //                   ),
+  //                 ),
+  //               ],
+  //             )))
+  //       }
+  //     else
+  //       if(value)
+  //         {
+  //           print("Connected"),
+  //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //               backgroundColor: Colors.green,
+  //               content: Row(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.check,
+  //                     color: Colors.white,
+  //                   ),
+  //                   SizedBox(width: 5),
+  //                   Text(
+  //                     "Connected",
+  //                     style: TextStyle(
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               )))
+  //         }
+  //   });
+  // }
 
   void saveEmail() async{
     SharedPreferences emailStorage = await SharedPreferences.getInstance();

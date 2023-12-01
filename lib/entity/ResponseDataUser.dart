@@ -11,6 +11,13 @@ class ResponseDataUser {
   String token_type;
 
   ResponseDataUser({required this.message,required this.Data,required this.access_token,required this.token_type});
+  ResponseDataUser.empty()
+      : message = '',
+        Data = User.empty(),
+        access_token = '',
+        token_type = '';
+
+
 
   factory ResponseDataUser.fromJson(Map<String, dynamic> json) {
     return ResponseDataUser(

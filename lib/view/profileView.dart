@@ -74,7 +74,9 @@ class _ProfileViewState extends State<ProfileView> {
 
   LoadImage(){
     try {
-      return imageFromBase64String(pathPhoto);
+      // return imageFromBase64String(pathPhoto);
+      Uint8List bytes = base64Decode(pathPhoto);
+      return Image.memory(bytes);
     } catch (e) {
       print(e);
       return Image.asset('assets/logo.png');
@@ -85,6 +87,7 @@ class _ProfileViewState extends State<ProfileView> {
   void loadStoredData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     id = localStorage.getInt('id')!;
+
     setState(() {
         getUserDataById();
     });
@@ -213,7 +216,8 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                         width: 100,
                         height: 100,
-                        child: LoadImage(),
+                        child:
+                        LoadImage(),
 
                       ),
               ),
