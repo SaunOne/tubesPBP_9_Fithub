@@ -5,6 +5,8 @@ import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ugd6_b_9/view/content/PaymentPage.dart';
+
 
 class SubcriptionView extends StatefulWidget {
   const SubcriptionView({super.key});
@@ -55,7 +57,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 5.h),
+            SizedBox(height: 3.h),
             Expanded(
               flex: 3,
               child: CarouselSlider.builder(
@@ -171,6 +173,10 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         ),
         ElevatedButton(
           onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PaymentPage()),
+            );
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.blue,
