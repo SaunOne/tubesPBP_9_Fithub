@@ -19,11 +19,11 @@ import 'package:dialogs/dialogs.dart';
 class CalendarScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _CalendarScreenState();
+    return CalendarScreenState();
   }
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class CalendarScreenState extends State<CalendarScreen> {
   bool showEvents = true;
 
   List<NeatCleanCalendarEvent> _todaysEvents = [
@@ -58,7 +58,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           DateTime.now().day + 2, 17, 0),
       color: Colors.pink,
       isAllDay: true,
-      icon: 'assets/event1.jpg',
+      // icon: 'assets/event1.jpg',
     ),
     NeatCleanCalendarEvent(
       'Normal Event D',
@@ -68,7 +68,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       endTime: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       color: Colors.indigo,
-      icon: 'assets/events.jpg',
+      // icon: 'assets/events.jpg',
     ),
     NeatCleanCalendarEvent(
       'Normal Event E',
@@ -78,7 +78,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       endTime: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 0),
       color: Colors.indigo,
-      icon: 'assets/profile.jpg',
+      // icon: 'assets/profile01.jpg',
     ),
   ];
 
@@ -121,6 +121,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
   bool isDuration = false;
   bool isInput = true;
 
+  void setDuration(int minute){
+    setState(() {
+      duration = Duration(minutes: minute);
+    });
+  }
+
+  void setTanggal(DateTime tanggal){
+    setState(() {
+      tanggal = tanggal;
+    });
+  }
+
   void inputSchedule(index) {
     var respon = ScheduleClient().create(
         tanggal: tanggal.toString(),
@@ -153,11 +165,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
         color: Colors.white,
         shape: BoxShape.rectangle,
       ),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            //Decoration Backorund blue
+       child: Scaffold(
+         backgroundColor: Colors.white,
+         body: Stack(
+           children: [
+
+      //       //Decoration Backorund blue
             Positioned(
                 child: Container(
               height: 320,
@@ -169,7 +182,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             )),
 
-            //App Content
+      //       //App Content
             Positioned(
               top: 15,
               left: 5,
@@ -201,6 +214,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       if (isInput ==
                           true) //menghasus data di var penampung ketika add
                         IconButton(
+                          key: Key('createButton'),
                           onPressed: () {
                             noteController.text = '';
                             exercise = null;
@@ -219,13 +233,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             ),
 
-            //Calender
-            Positioned(
-              child: Container(
-                padding: EdgeInsets.only(top: 100, left: 30, right: 30),
-                child: Column(
-                  children: [
-                    SizedBox(
+      //       //Calender
+             Positioned(
+               child: Container(
+                 padding: EdgeInsets.only(top: 100, left: 30, right: 30),
+                 child: Column(
+                   children: [
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -233,9 +247,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey, // Warna bayangan
-                            offset: Offset(0, 1), // Posisi bayangan (x, y)
+                          const BoxShadow(
+                            color:  Colors.grey, // Warna bayangan
+                            offset: const Offset(0, 1), // Posisi bayangan (x, y)
                             blurRadius: 6, // Radius blur
                             spreadRadius: 0.5, // Radius penyebaran
                           ),
@@ -259,10 +273,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           multiDayEndText: 'Ende',
                           isExpanded: true,
                           expandableDateFormat: 'EEEE, dd. MMMM yyyy',
-                          onEventSelected: (value) {
-                            print('sembarang');
-                            print('Event selected ${value.summary}');
-                          },
+                          // onEventSelected: (value) {
+                          //   print('sembarang');
+                          //   print('Event selected ${value.summary}');
+                          // },
                           onDateSelected: (value) {
                             tanggal = value;
                           },
@@ -289,7 +303,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       height: 20,
                     ),
 
-                    //Isi Schedule
+      //               //Isi Schedule
                     if (index == 0)
                       Flexible(
                         child: FutureBuilder<List<ScheduleGym>>(
@@ -315,6 +329,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     child: Slideable(
                                       items: [
                                         ActionItems(
+                                        
                                           backgroudColor: Colors.transparent,
                                           radius: BorderRadius.circular(10),
                                           icon: Icon(
@@ -460,7 +475,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         ),
                       ),
 
-                    //Input Jadwal Gym
+      //               //Input Jadwal Gym
                     if (index == 1)
                       Flexible(
                         child: Container(
@@ -796,14 +811,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             ),
                           ),
                         ),
-                      ],
+                       ],
                     ),
-                  ),
-                ),
+                   ),
+                 ),
               ),
-          ],
-        ),
-      ),
+           ],
+         ),
+       ),
     );
   }
 

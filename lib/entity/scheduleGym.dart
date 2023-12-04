@@ -42,7 +42,7 @@ factory ScheduleGym.fromRawJson(String str) => ScheduleGym.fromJson(json.decode(
 
   String toRawJson() => json.encode(toJson());
 
-  Map<String,dynamic> toJson() => {
+  Map<String,dynamic> toJson() => { 
     "id": id,
     "schedule_name": scheduleName,
     "tanggal": tanggal,

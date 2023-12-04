@@ -1,16 +1,14 @@
+import 'package:ugd6_b_9/database/Auth.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ugd6_b_9/Testing/Testing_function.dart';
+import 'package:ugd6_b_9/view/register.dart';
+
 void main() {
-
   group("Login", () {
-
     testWidgets('Login Success', (WidgetTester tester) async {
-
-      tester.binding.window.physicalSizeTestValue = const Size(800, 1280);
-
-
+      tester.binding.window.physicalSizeTestValue = const Size(600, 1480);
 
       await tester.pumpWidget(const MaterialApp(
         home: Login(),
@@ -21,16 +19,13 @@ void main() {
       await tester.tap(find.byKey(const Key('tap_login')));
       await tester.pumpAndSettle();
 
-      testing_function.login('1', '1').then((value) => expect(value!.message, 'Login Success'));
-
+      testing_function
+          .login('1', '1')
+          .then((value) => expect(value!.message, 'Login Success'));
     });
 
-
     testWidgets('Login Failed', (WidgetTester tester) async {
-
       tester.binding.window.physicalSizeTestValue = const Size(800, 1280);
-
-
 
       await tester.pumpWidget(const MaterialApp(
         home: Login(),
@@ -40,10 +35,10 @@ void main() {
       await tester.enterText(find.byType(TextFormField).last, '2');
       await tester.tap(find.byKey(const Key('tap_login')));
       await tester.pumpAndSettle();
-      testing_function.login('2', '2').then((value) => expect(value!.message, 'Login Failed'));
-
-
+      testing_function
+          .login('2', '2')
+          .then((value) => expect(value!.message, 'Login Failed'));
     });
-
   });
+  
 }

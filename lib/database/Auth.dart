@@ -55,19 +55,23 @@ class Authentication {
         'birthdate': birthdate, 
         'gender': gender,
       };
-
-      var url = Uri.http(networkUrl.prefix, networkUrl.register);
+      print('Masuk Register : data = ${data}');
+      var url = Uri.http('127.0.0.1:8000', networkUrl.register);
+      print('ini ${networkUrl.prefix} url : ${url}');
+      print('headers : ${_setHeaders()}');
       var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
+
+      print('respon : ${response}');
 
       print(response.statusCode);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         // Registration successful
         print(response.body);
         return ResponseDataUser.fromJson(jsonDecode(response.body));
-      } else if (response.statusCode == 409) {
+      } else if (response.statusCode == 400) {
         // Bad Request. The server rejected the registration data.
-        print('Bad Request: ${response.body}');
+        print('Bad Request: ${response.body}'); 
  
        return ResponseDataUser.fromJson(jsonDecode(response.body));
       } else {

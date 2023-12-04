@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class networkUrl {
-  static String prefix = "172.17.19.97:8000";
+  static String prefix = "10.0.2.2:8000";
   static String login = "api/login";
   static String register = "api/register";
   static String getUser = "api/user";

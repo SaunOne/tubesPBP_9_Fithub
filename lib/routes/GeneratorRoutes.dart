@@ -12,7 +12,7 @@ import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/notificationView.dart';
 import 'package:ugd6_b_9/view/content/trainerView.dart';
-import 'package:ugd6_b_9/view/feature/calender.dart';
+import 'package:ugd6_b_9/view/feature/scheduleView.dart';
 import 'package:ugd6_b_9/view/feature/camera.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/homePage.dart';

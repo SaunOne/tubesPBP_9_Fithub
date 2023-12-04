@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
+import 'package:ugd6_b_9/Testing/Testing_function.dart';
 import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/database/Auth.dart';
+import 'package:ugd6_b_9/entity/user.dart';
 import 'package:ugd6_b_9/view/Login.dart';
+import 'package:ugd6_b_9/view/homePage.dart';
 
-
-
-// String? name, email, gender, password, tanggalLahir;
+String? name, email, gender, password, tanggalLahir;
 
 enum Gender { male, female }
 
 class Register extends StatefulWidget {
-  Register({super.key});
+  const Register({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Register> createState() => RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class RegisterState extends State<Register> {
   final formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -34,6 +35,14 @@ class _RegisterState extends State<Register> {
   String selectedValue = ''; // Track the selected value
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -42,7 +51,7 @@ class _RegisterState extends State<Register> {
             key: formKey,
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,6 +71,7 @@ class _RegisterState extends State<Register> {
                     height: 30,
                   ),
                   TextFormField(
+                    key: const Key('fullnameField'),
                     controller: fullnameController,
                     decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.badge_outlined),
@@ -70,12 +80,13 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(50),
                         )),
                     validator: (value) =>
-                    value == '' ? 'Please enter your username' : null,
+                        value == '' ? 'Please enter your username' : null,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 21,
                   ),
                   TextFormField(
+                    key: const Key('usernameField'),
                     controller: nameController,
                     decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.person_outline),
@@ -84,10 +95,11 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(50.5),
                         )),
                     validator: (value) =>
-                    value == '' ? 'Please enter your username' : null,
+                        value == '' ? 'Please enter your username' : null,
                   ),
-                  SizedBox(height: 21.0),
+                  const SizedBox(height: 21.0),
                   TextFormField(
+                      key: const Key('emailField'),
                       controller: emailController,
                       decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.mail_outline),
@@ -110,8 +122,9 @@ class _RegisterState extends State<Register> {
                           return null;
                         }
                       }),
-                  SizedBox(height: 21.0),
+                  const SizedBox(height: 21.0),
                   TextFormField(
+                    key: Key('passwordField'),
                     controller: passwordController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock_outline),
@@ -132,9 +145,9 @@ class _RegisterState extends State<Register> {
                     ),
                     obscureText: !isVisible,
                     validator: (value) =>
-                    value == '' ? 'Please enter your password' : null,
+                        value == '' ? 'Please enter your password' : null,
                   ),
-                  SizedBox(height: 21.0),
+                  const SizedBox(height: 21.0),
                   GestureDetector(
                     onTap: () async {
                       final date = await showDatePicker(
@@ -144,10 +157,11 @@ class _RegisterState extends State<Register> {
                         lastDate: DateTime.now(),
                       );
                       tanggal_lahirController.text =
-                      '${date!.day}/${date.month}/${date.year}';
+                          '${date!.day}/${date.month}/${date.year}';
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
+                        key: const Key('dateField'),
                         controller: tanggal_lahirController,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.date_range),
@@ -164,13 +178,13 @@ class _RegisterState extends State<Register> {
                                 lastDate: DateTime.now(),
                               );
                               tanggal_lahirController.text =
-                              '${date!.day}/${date.month}/${date.year}';
+                                  '${date!.day}/${date.month}/${date.year}';
                             },
-                            icon: Icon(Icons.date_range),
+                            icon: const Icon(Icons.date_range),
                           ),
                         ),
                         validator: (value) =>
-                        value == '' ? 'Please select a birth date' : null,
+                            value == '' ? 'Please select a birth date' : null,
                         onTap: () {
                           // Ini mencegah keyboard dari muncul saat menekan TextFormField
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -178,19 +192,10 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                   ),
-                  // TextFormField(
-                  //   controller: genderController,
-                  //   keyboardType: TextInputType.number,
-                  //   decoration: const InputDecoration(
-                  //     prefixIcon: Icon(Icons.person),
-                  //     labelText: 'Gender',
-                  //   ),
-                  //   validator: (value) =>
-                  //       value == '' ? 'Please enter your Gender' : null,
-                  // ),
                   Row(
                     children: [
                       Radio<Gender>(
+                        key: Key('maleTap'),
                         activeColor: ColorPallete.primaryColor,
                         value: Gender.male,
                         groupValue: selectedGender,
@@ -206,6 +211,7 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(fontSize: 18),
                       ),
                       Radio<Gender>(
+                        key: Key('femaleTap'),
                         activeColor: ColorPallete.primaryColor,
                         value: Gender.female,
                         groupValue: selectedGender,
@@ -226,6 +232,7 @@ class _RegisterState extends State<Register> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
+                        key: const Key('termsButton'),
                         value: isChecked,
                         activeColor: ColorPallete.primaryColor,
                         onChanged: (bool? value) {
@@ -256,6 +263,7 @@ class _RegisterState extends State<Register> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                      key: const Key('signUpButton'),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: ColorPallete.primaryColor,
                           shape: const RoundedRectangleBorder(
@@ -266,12 +274,8 @@ class _RegisterState extends State<Register> {
                       onPressed: () async {
                         print('masuk sebelum validate');
                         if (formKey.currentState!.validate()) {
-                          handleRegister(fullnameController.text,
-                          nameController.text,
-                          emailController.text,
-                          passwordController.text,
-                          tanggal_lahirController.text,
-                          genderController.text);
+                          handleTestingRegister(fullname: fullnameController.text,username: 'saun01',email: '12@gmail.com',password: '1232145',birthdate: '12/12/2023',gender: 'Male'
+                              );
                         }
                       },
                       child: Container(
@@ -288,6 +292,7 @@ class _RegisterState extends State<Register> {
                   ),
                   const SizedBox(height: 40),
                   TextButton(
+                    key: Key('loginButton'),
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
@@ -325,34 +330,75 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void handleRegister(String fullname, String username,String email, String password, String birthdate, String gender) async
-  {
+  Future<bool> handleRegister(String fullname, String username, String email,
+      String password, String birthdate, String gender) async {
+    bool success = false;
     print('ini email : ${email}');
-    ResponseDataUser data = await Authentication().Register(fullname, username, email, password, birthdate, gender);
+    print('ini fullname : ${fullname}');
+    print('ini username : ${username}');
 
-    if(data.message == 'success')
-    {
+    ResponseDataUser data = await Authentication()
+        .Register(fullname, username, email, password, birthdate, gender);
 
+    if (data.message == 'success') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          key: Key('registerSuccess'),
           content: Text(data.message),
           backgroundColor: Colors.green,
         ),
       );
+      success = true;
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-    }
-    else
-    {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(data.message),
           backgroundColor: Colors.red,
         ),
       );
-      
+      success = false;
     }
+    return success;
+  }
 
-}}
+  Future<void> handleTestingRegister({required String fullname,required String username,required String email,
+      required String password,required String birthdate,required String gender}) async {
+    bool success = false;
+
+    print('ini fullname : ${fullname}');
+
+    var user = User(
+        id: 1,
+        fullname: email,
+        username: fullname,
+        email: email,
+        password: password,
+        birthdate: birthdate,
+        gender: gender,
+        phone: '1',
+        weight: 200,
+        height: 200,
+        photo: '12');
+
+        // print('masuk : ${user.gender}');
+
+    if (user.fullname == '' ||
+        user.username == '' ||
+        user.email == '' ||
+        user.birthdate == '' ||
+        user.password == '' ||
+        user.gender == '') {
+          print('masuk sini');
+    
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return Login();
+      },),);
+      print('masuk ketempat yang benar');
+    }
+  }
+}
 
 class CustomDropdownFormField extends StatefulWidget {
   final String labelText;
@@ -406,8 +452,4 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
       ],
     );
   }
-
-
-
-
 }
