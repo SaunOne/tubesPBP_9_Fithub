@@ -38,35 +38,30 @@ class _LoginState extends State<Login> {
   }
 
 
-  void handleLogin() async {
-    String Email = EmailController.text;
-    String Password = passwordController.text;
 
-    final login = await testing_function.login(Email, Password);
 
-    if(login?.message == 'Login Success'){
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        key: Key('snackbar_successLogin'),
-          backgroundColor: Colors.green,
-          content: Row(
-            children: [
-              Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
-              SizedBox(width: 5),
-              Text(
-                "Login Success",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          )));
+  void handleLogin(String Email, String Password) async {
+    ResponseDataUser? responseDataUser = await Authentication().authenticate(Email, Password);
+    if (responseDataUser.message == "Login Success") {
+      print(responseDataUser.message);
+      print(responseDataUser.Data.gender);
+      print(responseDataUser.access_token);
+      print(responseDataUser.token_type);
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomePage()));
-    }else {
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.setInt('id', responseDataUser.Data.id);
+      localStorage.setString('token', responseDataUser.access_token);
+      localStorage.setString('photo' , responseDataUser.Data.photo);
+      Navigator.of(context).pop();
+      Navigator
+          .of(context)
+          .pushReplacement(
+          MaterialPageRoute(
+              builder: (BuildContext context) => HomePage()
+          )
+      );
+    }
+    else{
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
           content: Row(
@@ -77,7 +72,7 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(width: 5),
               Text(
-                login?.message ?? '',
+                responseDataUser.message,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -85,51 +80,7 @@ class _LoginState extends State<Login> {
             ],
           )));
     }
-
   }
-
-  // void handleLogin(String Email, String Password) async {
-  //   ResponseDataUser? responseDataUser = await Authentication().authenticate(Email, Password);
-  //   if (responseDataUser.message == "Login Success") {
-  //     print(responseDataUser.message);
-  //     print(responseDataUser.Data.gender);
-  //     print(responseDataUser.access_token);
-  //     print(responseDataUser.token_type);
-  //
-  //     SharedPreferences localStorage = await SharedPreferences.getInstance();
-  //     localStorage.setInt('id', responseDataUser.Data.id);
-  //     localStorage.setString('token', responseDataUser.access_token);
-  //     localStorage.setString('photo' , responseDataUser.Data.photo);
-  //     print(responseDataUser.Data.photo);
-  //     Navigator.of(context).pop();
-  //     Navigator
-  //         .of(context)
-  //         .pushReplacement(
-  //         MaterialPageRoute(
-  //             builder: (BuildContext context) => HomePage()
-  //         )
-  //     );
-  //   }
-  //   else{
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         backgroundColor: Colors.red,
-  //         content: Row(
-  //           children: [
-  //             Icon(
-  //               Icons.close,
-  //               color: Colors.white,
-  //             ),
-  //             SizedBox(width: 5),
-  //             Text(
-  //               responseDataUser.message,
-  //               style: TextStyle(
-  //                 color: Colors.white,
-  //               ),
-  //             ),
-  //           ],
-  //         )));
-  //   }
-  // }
 
 
   @override
@@ -236,14 +187,14 @@ class _LoginState extends State<Login> {
                       controller: EmailController,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
-                        labelText: 'Username',
+                        labelText: 'Email',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(40)),
                         ),
                       ),
                       validator: (value) {
                         if (value == '' || value!.isEmpty) {
-                          return 'please enter your username';
+                          return 'please enter your Email';
                         }
                         return null;
                       }),
@@ -307,7 +258,7 @@ class _LoginState extends State<Login> {
                     key: const Key('tap_login'),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        handleLogin();
+                        handleLogin(EmailController.text, passwordController.text);
 
                       }
                     },

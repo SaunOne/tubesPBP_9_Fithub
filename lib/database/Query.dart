@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
 import 'package:ugd6_b_9/entity/image.dart';
+import 'package:ugd6_b_9/entity/Membership.dart';
 
 class Query {
   String token = '';
@@ -122,6 +123,42 @@ class Query {
     }
   }
 
+  Future<User> updateUserMemberships(int id, int idMember) async{
+    String URL = networkUrl.prefix;
+    String EndpointUpdate = networkUrl.updateProfile;
+    String token = getToken() as String;
+
+    var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
+
+    try{
+      var data = {
+        'member_id': idMember,
+      };
+
+      var response = await put(url, headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      }, body: jsonEncode(data));
+
+
+      print(response.statusCode);
+
+      if(response.statusCode == 200){
+        print(response.body);
+        User user = User.fromJson(jsonDecode(response.body));
+        return user;
+      } else {
+        print(response.body);
+        throw Exception('Failed to update user data');
+      }
+    }catch(e){
+      print(e);
+      throw Exception('Failed to authenticate');
+    }
+  }
+
+
   Future<User> Logout(int id) async {
     String URL = networkUrl.prefix;
     String EndpointLogout = networkUrl.logout;
@@ -183,6 +220,70 @@ class Query {
     } catch (e) {
       print(e);
       return ImageUser.empty();
+    }
+  }
+
+
+  Future<Memberships> MakeMembership(int id) async {
+    String URL = networkUrl.prefix;
+    String Endpoint = networkUrl.getMember;
+    String token = await getToken();
+
+    var url = Uri.parse('http://$URL/$Endpoint/$id');
+
+    var data= {
+      "id_user": id,
+    };
+
+
+    try{
+      var response = await post(url, body: jsonEncode(data), headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+
+      print(response.statusCode);
+      if(response.statusCode == 200){
+        print(response.body);
+        Memberships membership = Memberships.fromJson(jsonDecode(response.body));
+        return membership;
+      } else {
+        print(response.body);
+        throw Exception('Failed to make membership');
+      }
+    }catch(e){
+      print(e);
+      throw Exception('Failed to authenticate');
+    }
+  }
+
+  Future<bool> checkMembership(int id) async {
+    String URL = networkUrl.prefix;
+    String Endpoint = networkUrl.checkMember;
+    String token = await getToken();
+
+    var url = Uri.parse('http://$URL/$Endpoint/$id');
+
+    try{
+      var response = await get(url, headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      print(response.statusCode);
+      if(response.statusCode == 200){
+        print(response.body);
+        return true;
+      } else {
+        print(response.body);
+        return false;
+      }
+    }catch(e){
+      print(e);
+      throw Exception('Failed to authenticate');
     }
   }
 }

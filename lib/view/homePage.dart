@@ -4,20 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Query.dart';
-import 'package:ugd6_b_9/view/Login.dart';
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
-import 'package:ugd6_b_9/view/feature/timer.dart';
-import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
-
 import 'package:ugd6_b_9/routes/routes.dart';
-import 'package:ugd6_b_9/test_audio.dart';
 import 'package:ugd6_b_9/view/content/home.dart';
-import 'package:ugd6_b_9/view/popUpMenu.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
-import 'package:ugd6_b_9/database/Auth.dart';
-
 import '../Entity/User.dart';
+import 'package:ugd6_b_9/entity/Membership.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -48,11 +42,11 @@ class _HomePageState extends State<HomePage> {
     loadUser();
   }
 
+
+
   void loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     User user = await Query().getByUserId(prefs.getInt('id')!);
-
-
     setState(() {
       id = prefs.getInt('id')!;
       this.user = user;
@@ -66,7 +60,6 @@ class _HomePageState extends State<HomePage> {
       children: [
         Scaffold(
           appBar: AppBar(
-            // how to remove back button in appbar
             leading: Container(
               padding: EdgeInsets.only(left: 20),
               child: IconButton(
@@ -315,6 +308,7 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.bottomLeft,
                         child: MaterialButton(
                           onPressed: () {
+                            forcelogout();
                             logout();
                           },
                           child: Row(
@@ -344,13 +338,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void logout() {
-    Query().Logout(id);
-    SharedPreferences.getInstance().then((value) {
-      value.clear();
-    });
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+  Future<void> logout() async {
+    try {
+      User user = await Query().Logout(id);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('token');
+      Navigator.pushNamed(context, Routes.preLogin);
+    } catch (e) {
+      print(e);
+    }
+  }
 
+  void forcelogout(){
+    Navigator.pushNamed(context, Routes.preLogin);
   }
 
 }

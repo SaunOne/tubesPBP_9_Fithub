@@ -14,6 +14,8 @@ class User {
   double weight;
   double height;
   String photo;
+  String trainerId;
+  String memberId;
 
   User(
       {required this.id,
@@ -26,7 +28,9 @@ class User {
       required this.phone,
       required this.weight,
       required this.height,
-      required this.photo});
+      required this.photo,
+      required this.trainerId,
+      required this.memberId});
 
   User.empty()
       : id = 0,
@@ -39,7 +43,9 @@ class User {
         phone = '',
         weight = 0.0,
         height = 0.0,
-        photo = '';
+        photo = '',
+        trainerId = '',
+      memberId = '';
 
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -57,6 +63,8 @@ class User {
       weight: (json['weight'] ?? 0).toDouble(),
       height: (json['height'] ?? 0).toDouble(),
       photo: json['photo'] ?? '',
+      trainerId: json['trainer_id'] ?? '',
+      memberId: json['member_id'] ?? '',
     );
   }
 }
