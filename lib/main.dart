@@ -24,6 +24,7 @@ import 'package:ugd6_b_9/view/feature/track.dart';
 import 'package:ugd6_b_9/view/showGym.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ugd6_b_9/routes/GeneratorRoutes.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 
 import 'package:flutter/material.dart';

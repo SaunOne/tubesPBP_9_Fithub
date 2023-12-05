@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   late int id = 0;
   late User user = User.empty();
 
-  List<Widget> content = [Home(), ProfileView(), SubcriptionView(), GridGuide()];
+  List<Widget> content = [Home(), SubcriptionView(), SubcriptionView(), GridGuide()];
 
   void onChange(index) {
     setState(
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     onChange(1);
                   },
                   icon: Icon(
-                    Icons.person,
+                    Icons.place,
                     size: 20,
                   ),
                 ),

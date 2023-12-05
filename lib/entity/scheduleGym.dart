@@ -27,15 +27,18 @@ class ScheduleGym {
         note = '';
 
 factory ScheduleGym.fromRawJson(String str) => ScheduleGym.fromJson(json.decode(str));
+
   factory ScheduleGym.fromJson(Map<String, dynamic> json) {
     json = json['Schedules'] ?? json;
+
+    print('json : ${json}');
 
     return ScheduleGym(
       id: json['id'] ?? 0,
       scheduleName: json['schedule_name'] ?? 0,
-      idUser: json['id_user'] ?? '',
+      idUser: json['user_id'] ?? '',
       tanggal: json['tanggal'] ?? '',
-      durasi: json['durasi'] ?? 0,
+      durasi: json['time'] ?? '',
       note: json['note'] ?? '', 
     );
   }
@@ -44,9 +47,10 @@ factory ScheduleGym.fromRawJson(String str) => ScheduleGym.fromJson(json.decode(
 
   Map<String,dynamic> toJson() => {
     "id": id,
+    "user_id" : idUser,
     "schedule_name": scheduleName,
     "tanggal": tanggal,
     "durasi": durasi,
-    "note": note,
+    "note": note
   };
 }
