@@ -1,16 +1,26 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/view/widget/customRatingWidget.dart';
 
 class DetailTrainer extends StatefulWidget {
-  const DetailTrainer({super.key});
-
+  int id_tempat_gym;
+  DetailTrainer({super.key, required this.id_tempat_gym});
   @override
   State<DetailTrainer> createState() => _DetailTrainerState();
 }
 
 class _DetailTrainerState extends State<DetailTrainer> {
+
+  int id = 0;
+  @override
+  void initState() {
+    // TODO: implement initState;
+    id = widget.id_tempat_gym;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

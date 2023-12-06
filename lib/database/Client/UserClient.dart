@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
 import 'package:ugd6_b_9/entity/image.dart';
-import 'package:ugd6_b_9/entity/Membership.dart';
+import 'package:ugd6_b_9/entity/model/Membership.dart';
 
 class Query {
   String token = '';
@@ -34,7 +34,7 @@ class Query {
       print(response.statusCode);
 
       if (response.statusCode == 200) {   
-        print(response.body);
+ 
         User user = User.fromJson(jsonDecode(response.body));
         return user;
       } else {
@@ -106,7 +106,7 @@ class Query {
       body: jsonEncode(data),
       );
       
-
+      print("response body : ${response.body}");
       print(response.statusCode);
 
       if (response.statusCode == 200) {

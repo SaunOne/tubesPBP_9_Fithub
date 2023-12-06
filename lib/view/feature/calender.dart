@@ -10,9 +10,9 @@ import 'package:ugd6_b_9/constant/app_constant.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:ugd6_b_9/database/ScheduleGym.dart';
+import 'package:ugd6_b_9/database/Client/ScheduleGymClient.dart';
 import 'package:ugd6_b_9/dummy/dummyAll.dart';
-import 'package:ugd6_b_9/entity/scheduleGym.dart';
+import 'package:ugd6_b_9/entity/model/scheduleGym.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:dialogs/dialogs.dart';
 
@@ -180,7 +180,6 @@ class CalendarScreenState extends State<CalendarScreen> {
          backgroundColor: Colors.white,
          body: Stack(
            children: [
-
       //       //Decoration Backorund blue
             Positioned(
                 child: Container(

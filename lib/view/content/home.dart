@@ -4,7 +4,8 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/database/Query.dart';
+import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
 
 import '../../Entity/User.dart';
 
