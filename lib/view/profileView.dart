@@ -1,9 +1,10 @@
+// ignore: file_names
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:ugd6_b_9/Entity/User.dart';
+import 'package:ugd6_b_9/entity/model/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
 import 'package:ugd6_b_9/database/Client/UserClient.dart';
+import 'package:ugd6_b_9/entity/model/User.dart';
 
-import '../../Entity/User.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,6 +22,7 @@ class _HomeState extends State<Home> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
 
     try {
+      
       User getUser = await Query().getByUserId(localStorage.getInt('id')!);
 
       setState(() {

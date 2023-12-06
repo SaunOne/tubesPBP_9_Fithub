@@ -1,11 +1,13 @@
+// ignore: file_names
 import 'dart:convert';
 
-import 'package:ugd6_b_9/Entity/User.dart';
+
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
 import 'package:ugd6_b_9/entity/image.dart';
 import 'package:ugd6_b_9/entity/model/Membership.dart';
+import 'package:ugd6_b_9/entity/model/User.dart';
 
 class Query {
   String token = '';
@@ -85,19 +87,12 @@ class Query {
     
 
     var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
-
+ 
     try {
       var data = {
-        'fullname': fullname,
-        'username': username,
-        'email': email,
-        'birthdate': birthdate,
-        'gender': gender,
-        'phone' : phone,
-        'weight': weight,  
-        'height': height,
-        'photo': photo ?? '',
+ 
       };
+
       var response = await put(url, headers: {
         'Content-type': 'application/json',
         'Accept': 'application/json',
@@ -224,7 +219,7 @@ class Query {
   }
 
 
-  Future<Memberships> MakeMembership(int id) async {
+  Future<Memberships> MakeMembership(int id) async { 
     String URL = networkUrl.prefix;
     String Endpoint = networkUrl.getMember;
     String token = await getToken();

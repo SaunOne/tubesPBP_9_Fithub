@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:ugd6_b_9/Entity/User.dart';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
