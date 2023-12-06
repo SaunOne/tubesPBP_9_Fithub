@@ -3,15 +3,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/database/Query.dart';
+
+import 'package:ugd6_b_9/database/Client/QueryClient.dart';
 import 'package:ugd6_b_9/view/content/searchGym.dart';
+
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
+
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/content/home.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
 import '../Entity/User.dart';
-import 'package:ugd6_b_9/entity/Membership.dart';
+import 'package:ugd6_b_9/entity/model/Membership.dart';
 
 
 class HomePage extends StatefulWidget {

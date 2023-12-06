@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
 import 'package:ugd6_b_9/constant/color.dart';
-import 'package:ugd6_b_9/database/Auth.dart';
+import 'package:ugd6_b_9/database/Client/AuthClient.dart';
 import 'package:ugd6_b_9/view/Login.dart';
 
 

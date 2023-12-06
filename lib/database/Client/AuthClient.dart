@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:io';
 import 'package:http/http.dart';
 import 'package:ugd6_b_9/Entity/User.dart';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
@@ -33,7 +31,7 @@ class Authentication {
     var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
       ResponseDataUser responseDataUser = ResponseDataUser.fromJson(jsonDecode(response.body));
       return responseDataUser;
     } else {

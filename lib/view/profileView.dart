@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/database/Query.dart';
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
 import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/utils/imageUtility.dart';

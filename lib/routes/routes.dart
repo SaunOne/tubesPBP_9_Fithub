@@ -23,7 +23,9 @@ class Routes {
   static const String detailTrainer = '/detailTrainer';
   static const String subcriptionView = '/subcroptionView';
   static const String newPass = '/newPass';
+
   static const String paymentView = '/paymentView';
   static const String searchGym = '/searchGym';
   static const String profile = 'profile';
-}
+
+  static const String testQuery = '/testQuery';

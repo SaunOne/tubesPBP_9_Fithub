@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:ugd6_b_9/constant/url.dart';
-import 'package:ugd6_b_9/database/ScheduleGym.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugd6_b_9/entity/scheduleGym.dart';
+import 'package:ugd6_b_9/entity/model/scheduleGym.dart';
 
 class ScheduleClient {
   static final String url = networkUrl.prefix;

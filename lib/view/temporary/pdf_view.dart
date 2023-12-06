@@ -8,7 +8,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:ugd6_b_9/view/temporary/preview_screenforPDF.dart';
-import 'package:ugd6_b_9/entity/gerakanGym.dart';
+import 'package:ugd6_b_9/entity/model/gerakanGym.dart';
 import 'package:intl/intl.dart';
 
 Future<pw.Document> generateDocument(

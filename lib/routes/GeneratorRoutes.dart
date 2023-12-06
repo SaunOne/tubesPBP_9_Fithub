@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd6_b_9/testing.dart';
 import 'package:ugd6_b_9/view/PreLogin.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
@@ -63,20 +64,26 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const TrainerView());
       case Routes.notificationView:
         return MaterialPageRoute(builder: (_) => const NotificationView());
-      case Routes.detailTrainer:
-        return MaterialPageRoute(builder: (_) => const DetailTrainer());
+      // case Routes.detailTrainer:
+      //   return MaterialPageRoute(builder: (_) => const DetailTrainer());
       case Routes.preLogin:
         return MaterialPageRoute(builder: (_) => const PreLogin());
       case Routes.subcriptionView:
         return MaterialPageRoute(builder: (_) => const SubcriptionView());
       case Routes.newPass:
         return MaterialPageRoute(builder: (_) => const NewPassword());
+
       case Routes.paymentView:
         return MaterialPageRoute(builder: (_) => const PaymentPage());
       case Routes.searchGym:
         return MaterialPageRoute(builder: (_) => const SearchGym());
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => const Profile());
+
+      case Routes.testQuery:
+        return MaterialPageRoute(builder: (_) => const TestQuery());
+
+
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());
     }
