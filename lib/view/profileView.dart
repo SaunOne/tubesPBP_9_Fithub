@@ -14,6 +14,7 @@ import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/utils/imageUtility.dart';
 import 'package:ugd6_b_9/entity/image.dart';
+import 'package:ugd6_b_9/view/profile.dart';
 
 enum Gender { male, female }
 
@@ -79,8 +80,7 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void loadStoredData() async {
-    Future.delayed(Duration(seconds: 3),
-            () async {
+    Future.delayed(Duration(seconds: 3), () async {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
 
       id = localStorage.getInt('id')!;
@@ -162,26 +162,23 @@ class _ProfileViewState extends State<ProfileView> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.black),
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => Profile(),
             ),
           ),
         ),
-        title: Text('Profile', style: TextStyle(color: Colors.black)),
+        title: Text('Profile', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit, color: Colors.black),
-            onPressed: _toggleEditMode,
-          ),
-        ],
+        
       ),
       body: FutureBuilder(
-        future: user != null ? Future.delayed(Duration(seconds: 1), () => user) : null,
+        future: user != null
+            ? Future.delayed(Duration(seconds: 1), () => user)
+            : null,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
@@ -230,31 +227,26 @@ class _ProfileViewState extends State<ProfileView> {
                     controller: fullnameController,
                     label: "Fullname",
                     icon: Icons.badge,
-                    isEditMode: isEditMode,
                   ),
                   _ProfileTextField(
                     controller: usernameController,
                     label: "Username",
                     icon: Icons.person_outline,
-                    isEditMode: isEditMode,
                   ),
                   _ProfileTextField(
                     controller: phoneController,
                     label: "No Telephone",
                     icon: Icons.phone_android_outlined,
-                    isEditMode: isEditMode,
                   ),
                   _ProfileTextField(
                     controller: emailController,
                     label: "Email",
                     icon: Icons.email_outlined,
-                    isEditMode: isEditMode,
                   ),
                   _ProfileDateField(
                     controller: dateOfBirthController,
                     label: "Date of Birth",
                     icon: Icons.calendar_today_outlined,
-                    isEditMode: isEditMode,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -264,7 +256,6 @@ class _ProfileViewState extends State<ProfileView> {
                           controller: heightController,
                           label: "Height",
                           icon: Icons.straighten,
-                          isEditMode: isEditMode,
                         ),
                       ),
                       SizedBox(width: 10),
@@ -273,7 +264,6 @@ class _ProfileViewState extends State<ProfileView> {
                           controller: weightController,
                           label: "Weight",
                           icon: Icons.monitor_weight,
-                          isEditMode: isEditMode,
                         ),
                       ),
                     ],
@@ -284,13 +274,11 @@ class _ProfileViewState extends State<ProfileView> {
                         activeColor: ColorPallete.primaryColor,
                         value: Gender.male,
                         groupValue: selectedGender,
-                        onChanged: isEditMode
-                            ? (Gender? value) {
-                                setState(() {
-                                  selectedGender = value;
-                                });
-                              }
-                            : null,
+                        onChanged: (Gender? value) {
+                          setState(() {
+                            selectedGender = value;
+                          });
+                        },
                       ),
                       const Text(
                         'Male',
@@ -300,13 +288,11 @@ class _ProfileViewState extends State<ProfileView> {
                         activeColor: ColorPallete.primaryColor,
                         value: Gender.female,
                         groupValue: selectedGender,
-                        onChanged: isEditMode
-                            ? (Gender? value) {
-                                setState(() {
-                                  selectedGender = value;
-                                });
-                              }
-                            : null,
+                        onChanged: (Gender? value) {
+                          setState(() {
+                            selectedGender = value;
+                          });
+                        },
                       ),
                       const Text(
                         'Female',
@@ -361,15 +347,13 @@ class _ProfileTextField extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool isPassword;
-  final bool isEditMode;
 
   const _ProfileTextField(
       {Key? key,
       required this.controller,
       required this.label,
       required this.icon,
-      this.isPassword = false,
-      required this.isEditMode})
+      this.isPassword = false})
       : super(key: key);
 
   @override
@@ -390,7 +374,6 @@ class _ProfileTextField extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         ),
         obscureText: isPassword,
-        enabled: isEditMode,
       ),
     );
   }
@@ -400,14 +383,12 @@ class _ProfileMetricField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
-  final bool isEditMode;
 
   const _ProfileMetricField({
     Key? key,
     required this.controller,
     required this.label,
     required this.icon,
-    required this.isEditMode,
   }) : super(key: key);
 
   @override
@@ -428,8 +409,6 @@ class _ProfileMetricField extends StatelessWidget {
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         ),
-        enabled:
-            isEditMode, // Tambahkan baris ini untuk mengatur status enabled
       ),
     );
   }
@@ -439,14 +418,12 @@ class _ProfileDateField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
-  final bool isEditMode;
 
   const _ProfileDateField({
     Key? key,
     required this.controller,
     required this.label,
     required this.icon,
-    required this.isEditMode,
   }) : super(key: key);
 
   @override
@@ -468,67 +445,18 @@ class _ProfileDateField extends StatelessWidget {
         ),
         readOnly: true,
         onTap: () async {
-          if (isEditMode) {
-            DateTime? pickedDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1900),
-              lastDate: DateTime(2100),
-            );
-            if (pickedDate != null) {
-              String formattedDate =
-                  "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-              controller.text = formattedDate;
-            }
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2100),
+          );
+          if (pickedDate != null) {
+            String formattedDate =
+                "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+            controller.text = formattedDate;
           }
         },
-        enabled: isEditMode,
-      ),
-    );
-  }
-}
-
-class _GenderSelector extends StatelessWidget {
-  final String gender;
-  final ValueChanged<String> onGenderChanged;
-
-  const _GenderSelector({
-    Key? key,
-    required this.gender,
-    required this.onGenderChanged,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: ListTile(
-              title: const Text('Male'),
-              leading: Radio<String>(
-                value: 'Male',
-                groupValue: gender,
-                onChanged: (value) {
-                  onGenderChanged(value!);
-                },
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListTile(
-              title: const Text('Female'),
-              leading: Radio<String>(
-                value: 'Female',
-                groupValue: gender,
-                onChanged: (value) {
-                  onGenderChanged(value!);
-                },
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

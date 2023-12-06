@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 40,
+          height: 10,
         ),
         Text(greeting() + ',' + user.fullname,style: StyleText().styleH2bWithColor,),
         SizedBox(

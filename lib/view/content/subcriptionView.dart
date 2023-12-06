@@ -7,7 +7,6 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ugd6_b_9/view/content/paymentView.dart';
 
-
 class SubcriptionView extends StatefulWidget {
   const SubcriptionView({super.key});
 
@@ -19,6 +18,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   int _currentOptionIndex = 0;
   CarouselController _carouselController = CarouselController();
   int _currentImageIndex = 0;
+  int _currentIndicatorIndex = 0;
 
   List<Map<String, dynamic>> subscriptionOptions = [
     {
@@ -26,8 +26,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
       'price': 'IDR 750.000,00',
       'features': ['Gym conventional', 'Sauna'],
       'images': [
-        'assets/img1.jpg',
-        'assets/img10.jpg',
+        'assets/img8.jpg',
+        'assets/img9.jpg',
       ],
     },
     {
@@ -39,8 +39,20 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         'Powerlifting room',
         'Weightlifting room',
         'Free refill water',
+        'Gym conventional',
+        'Sauna',
+        'Powerlifting room',
+        'Weightlifting room',
+        'Free refill water',
+        'Gym conventional',
+        'Sauna',
+        'Powerlifting room',
+        'Weightlifting room',
+        'Free refill water',
       ],
       'images': [
+        'assets/img8.jpg',
+        'assets/img9.jpg',
         'assets/img8.jpg',
         'assets/img9.jpg',
       ],
@@ -50,116 +62,142 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   @override
   Widget build(BuildContext context) {
     var currentSubscription = subscriptionOptions[_currentOptionIndex];
-    
-
-    double h = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double w = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 0.3 * h),
             Expanded(
               flex: 3,
-              child: CarouselSlider.builder(
-                carouselController: _carouselController,
-                itemCount: currentSubscription['images'].length,
-                itemBuilder: (context, index, realIndex) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    child: Image.asset(
-                      currentSubscription['images'][index],
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                },
-                options: CarouselOptions(
-                  viewportFraction: 0.8,
-                  enlargeCenterPage: true,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _currentImageIndex = index;
-                    });
-                  },
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List<Widget>.generate(
-                  currentSubscription['images'].length, (index) {
-                return Container(
-                  width: 5.0,
-                  height: 5.0,
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentImageIndex == index
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).primaryColor.withOpacity(0.4),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 0.045 * h,
                   ),
-                );
-              }),
-            ),
-            Column(
-              children: [
-                Text(
-                  currentSubscription['title'],
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  currentSubscription['price'],
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),  
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                        currentSubscription['features'].map<Widget>((feature) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 0.5),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.add,
-                              color: Theme.of(context).primaryColor,
-                              size: 22,
-                            ),
-                            SizedBox(width: 2 * w),
-                            Text(
-                              feature,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
+                  CarouselSlider.builder(
+                    carouselController: _carouselController,
+                    itemCount: currentSubscription['images'].length,
+                    itemBuilder: (context, index, realIndex) {
+                      return Container(
+                        child: Image.asset(
+                          currentSubscription['images'][index],
+                          fit: BoxFit.cover,
                         ),
                       );
-                    }).toList(),
+                    },
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 0.02 * h,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List<Widget>.generate(
+                        currentSubscription['images'].length, (index) {
+                      return Container(
+                        width: 0.02 * w,
+                        height: 0.02 * h,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 1.0, horizontal: 2.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _currentImageIndex == index
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).primaryColor.withOpacity(0.4),
+                        ),
+                      );
+                    }),
+                  ),
+                  SizedBox(
+                    height: 0.01 * h,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        currentSubscription['title'],
+                        style: TextStyle(
+                          fontSize: 0.06 * w,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        currentSubscription['price'],
+                        style: TextStyle(
+                          fontSize: 0.06 * w,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Container(
+                        width: 0.9 * w,
+                        child: Divider(
+                          thickness: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        child: SizedBox(
+                          height: 0.15 * h,
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: currentSubscription['features']
+                                .map<Widget>((feature) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: ColorC().primaryColor1,
+                                      size: 0.04 * w,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        feature,
+                                        style: TextStyle(
+                                          fontSize: 0.04 * w,
+                                          color: ColorC().primaryColor1,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 0.9 * w,
+                        child: Divider(
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             buildNavigationControls(),
-            SizedBox(height: 3 * h),
+            SizedBox(height: 0.1 * h),
           ],
         ),
       ),
@@ -167,11 +205,13 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   }
 
   Widget buildNavigationControls() {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.blue),
+          icon: Icon(Icons.arrow_back_ios, color: ColorC().primaryColor1),
           onPressed: () {
             if (_currentOptionIndex > 0) {
               _carouselController.previousPage();
@@ -183,25 +223,25 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => PaymentPage()),
             );
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
+            primary: ColorC().primaryColor1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 8.0),
           ),
           child: Text(
             'Subscribe',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 0.04 * w),
           ),
         ),
         IconButton(
-          icon: Icon(Icons.arrow_forward_ios, color: Colors.blue),
+          icon: Icon(Icons.arrow_forward_ios, color: ColorC().primaryColor1),
           onPressed: () {
             if (_currentOptionIndex < subscriptionOptions.length - 1) {
               _carouselController.nextPage();

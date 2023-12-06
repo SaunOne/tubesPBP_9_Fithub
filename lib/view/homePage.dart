@@ -3,7 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+
+import 'package:ugd6_b_9/database/Client/QueryClient.dart';
+import 'package:ugd6_b_9/view/content/searchGym.dart';
+
 import 'package:ugd6_b_9/database/Client/UserClient.dart';
+
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
@@ -26,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   late int id = 0;
   late User user = User.empty();
 
-  List<Widget> content = [Home(), SubcriptionView(), SubcriptionView(), GridGuide()];
+  List<Widget> content = [Home(), SearchGym(), SubcriptionView(), GridGuide()];
 
   void onChange(index) {
     setState(
@@ -233,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
-                        Navigator.pushNamed(context, Routes.profilePage);
+                        Navigator.pushNamed(context, Routes.profile);
                       },
                       child: Row(
                         children: [
