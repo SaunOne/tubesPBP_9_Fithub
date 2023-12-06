@@ -8,6 +8,8 @@ import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
+import 'package:ugd6_b_9/view/content/paymentView.dart';
+import 'package:ugd6_b_9/view/content/searchGym.dart';
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/notificationView.dart';
@@ -18,6 +20,7 @@ import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
+import 'package:ugd6_b_9/view/profile.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
@@ -68,7 +71,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SubcriptionView());
       case Routes.newPass:
         return MaterialPageRoute(builder: (_) => const NewPassword());
-
+      case Routes.paymentView:
+        return MaterialPageRoute(builder: (_) => const PaymentPage());
+      case Routes.searchGym:
+        return MaterialPageRoute(builder: (_) => const SearchGym());
+      case Routes.profile:
+        return MaterialPageRoute(builder: (_) => const Profile());
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());
     }

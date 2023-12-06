@@ -25,8 +25,6 @@ import 'package:ugd6_b_9/view/showGym.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ugd6_b_9/routes/GeneratorRoutes.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
-
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -34,7 +32,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
-
 
 
 class MyApp extends StatelessWidget {
@@ -55,7 +52,7 @@ class MyApp extends StatelessWidget {
         } else {
           return ProviderScope(
             child: MaterialApp(
-              initialRoute: snapshot.data ?? false ? Routes.home : Routes.preLogin,
+              initialRoute: snapshot.data ?? false ? Routes.paymentView : Routes.preLogin,
               onGenerateRoute: RouteGenerator.generateRoute,
             ),
           );

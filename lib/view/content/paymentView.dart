@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home: PaymentPage(),
-    );
-  }
-}
+import 'package:ugd6_b_9/constant/colorCons.dart';
+import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:lottie/lottie.dart';
+import 'package:ugd6_b_9/view/homePage.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({Key? key}) : super(key: key);
@@ -30,35 +21,85 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     double taxAmount = hargaPaket * taxPercent;
     double total = hargaPaket + taxAmount;
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Subscribe', style: TextStyle(color: Colors.black)),
+        title: Text('Subscribe',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        children: [
-          SizedBox(height: 24),
-          _buildPriceInformation('Total', 'IDR. 750,000.00', isTotal: true),
-          _buildPriceInformation('Basic package', 'IDR. 750,000.00'),
-          _buildPriceInformation('Tax', '1% IDR. 7,500.00'),
-          Divider(height: 24, thickness: 2),
-          _buildPriceInformation('IDR. 757,500.00', '', isTotal: true),
-          SizedBox(height: 24),
-          _buildBankSelection(),
-          SizedBox(height: 24),
-        ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              SizedBox(height: 0.04 * h),
+              Lottie.asset(
+                'assets/payment.json',
+                width: 600,
+                height: 200,
+              ),
+              SizedBox(height: 0.03 * h),
+              Text(
+                'Subscription',
+                style: StyleText().styleH1bWithColor,
+              ),
+              Text(
+                'Basic Package',
+                style: StyleText().styleH3lWithColor,
+              ),
+              SizedBox(
+                height: 0.03 * h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Price',
+                    style: StyleText().styleH3bWithColor,
+                  ),
+                  Spacer(),
+                  Text(
+                    'IDR. 750.000,00',
+                    style: StyleText().styleH3lWithColor,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tax',
+                    style: StyleText().styleH3bWithColor,
+                  ),
+                  Spacer(),
+                  Text(
+                    'IDR. 7.500,00 (1%)',
+                    style: StyleText().styleH3lWithColor,
+                  ),
+                ],
+              ),
+              Divider(height: 24, thickness: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total',
+                    style: StyleText().styleH3bWithColor,
+                  ),
+                  Text(
+                    'IDR. 750.000,00',
+                    style: StyleText().styleH3lWithColor,
+                  ),
+                ],
+              ),
+              SizedBox(height: 24),
+              _buildBankSelection(),
+            ],
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
@@ -67,69 +108,32 @@ class _PaymentPageState extends State<PaymentPage> {
           onPressed: _showPaymentSuccessDialog,
           label: Text(
             'Bayar',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-            ),
+            style: StyleText().styleH3bWithColor,
           ),
           icon: Icon(Icons.payment),
-          backgroundColor: Colors.blue,
+          backgroundColor: const Color.fromARGB(255, 0, 68, 170),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(icon: Icon(Icons.home), onPressed: () {}),
-            IconButton(icon: Icon(Icons.chat), onPressed: () {}),
-            IconButton(icon: Icon(Icons.credit_card), onPressed: () {}),
-            IconButton(icon: Icon(Icons.info_outline), onPressed: () {}),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPriceInformation(String title, String price,
-      {bool isTotal = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: isTotal ? 18.sp : 16.sp,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          Text(
-            price,
-            style: TextStyle(
-              fontSize: isTotal ? 18.sp : 16.sp,
-              fontWeight: FontWeight.bold,
-              color: title == 'Tax' ? Colors.red : null,
-            ),
-          ),
-        ],
       ),
     );
   }
 
   Widget _buildBankSelection() {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Pilih Pembayaran',
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          style: StyleText().styleH3bWithColor,
+        ),
+        SizedBox(
+          height: 0.02 * h,
         ),
         ..._buildPaymentOptions(),
       ],
     );
   }
-
 
   void _showPaymentSuccessDialog() {
     showDialog(
@@ -140,7 +144,10 @@ class _PaymentPageState extends State<PaymentPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
             },
             child: Text('OK'),
           ),
@@ -156,6 +163,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Radio<String>(
             value: 'BCA',
             groupValue: _selectedBank,
+            activeColor: ColorC().primaryColor1,
             onChanged: (value) {
               setState(() {
                 _selectedBank = value!;
@@ -165,7 +173,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Expanded(
             child: ListTile(
               leading:
-                  Image.asset('assets/LogoBank/BCA.png', width: 72, height: 72),
+                  Image.asset('assets/images/BCA.png', width: 72, height: 72),
               onTap: () {
                 setState(() {
                   _selectedBank = 'BCA';
@@ -176,6 +184,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Radio<String>(
             value: 'BNI',
             groupValue: _selectedBank,
+            activeColor: ColorC().primaryColor1,
             onChanged: (value) {
               setState(() {
                 _selectedBank = value!;
@@ -185,7 +194,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Expanded(
             child: ListTile(
               leading:
-                  Image.asset('assets/LogoBank/BNI.png', width: 72, height: 72),
+                  Image.asset('assets/images/BNI.png', width: 72, height: 72),
               onTap: () {
                 setState(() {
                   _selectedBank = 'BNI';
@@ -200,6 +209,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Radio<String>(
             value: 'BRI',
             groupValue: _selectedBank,
+            activeColor: ColorC().primaryColor1,
             onChanged: (value) {
               setState(() {
                 _selectedBank = value!;
@@ -209,7 +219,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Expanded(
             child: ListTile(
               leading:
-                  Image.asset('assets/LogoBank/BRI.png', width: 72, height: 72),
+                  Image.asset('assets/images/BRI.png', width: 72, height: 72),
               onTap: () {
                 setState(() {
                   _selectedBank = 'BRI';
@@ -220,6 +230,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Radio<String>(
             value: 'BPD DIY',
             groupValue: _selectedBank,
+            activeColor: ColorC().primaryColor1,
             onChanged: (value) {
               setState(() {
                 _selectedBank = value!;
@@ -228,7 +239,7 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           Expanded(
             child: ListTile(
-              leading: Image.asset('assets/LogoBank/BANK DIY.png',
+              leading: Image.asset('assets/images/BANK DIY.png',
                   width: 92, height: 92),
               onTap: () {
                 setState(() {
@@ -237,17 +248,8 @@ class _PaymentPageState extends State<PaymentPage> {
               },
             ),
           ),
-        ],  
+        ],
       ),
     ];
   }
-}
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: PaymentPage(),
-      debugShowCheckedModeBanner: false,
-    ),
-  );
 }
