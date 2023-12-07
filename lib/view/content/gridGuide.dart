@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
@@ -6,6 +7,8 @@ import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/main.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
+import 'package:ugd6_b_9/entity/model/gerakan.dart';
+import 'package:ugd6_b_9/database/Client/GerakanClient.dart'; // Import the GerakanClient
 
 class GridGuide extends StatefulWidget {
   const GridGuide({super.key});
@@ -16,11 +19,33 @@ class GridGuide extends StatefulWidget {
 
 class _GridGuideState extends State<GridGuide> {
   int nav = 1;
+  late GerakanClient _gerakanClient;
+  List<Gerakan>? _gerakans;
 
-  void changeGrid(nav) {
+  @override
+  void initState() {
+    super.initState();
+    _gerakanClient = GerakanClient();
+    _loadGerakans();
+  }
+
+  void _loadGerakans() async {
+    try {
+      var gerakans = await _gerakanClient.getGerakanByLevel(nav);
+      setState(() {
+        _gerakans = gerakans;
+      });
+    } catch (e) {
+      print("Error fetching gerakans: $e");
+    }
+  }
+
+  void changeGrid(int nav) {
     setState(() {
       this.nav = nav;
+      _gerakans = null;
     });
+    _loadGerakans();
   }
 
   @override
@@ -97,61 +122,52 @@ class _GridGuideState extends State<GridGuide> {
             height: 15,
           ),
           Expanded(
-              child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: [
-                  for (int i = 1; i <= 3; i++)
-                    MaterialButton(
-                      onPressed: () {
-                        if (i == 2) {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) {
-                            return TrackPage();
-                          }));
-                        } else {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Guide();
-                          }));
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        height: 160,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          image: DecorationImage(
-                            image: i == 2
-                                ? AssetImage('assets/images/eGym$i.jpg')
-                                : AssetImage('assets/images/eGym$i.png'),
-                            fit: BoxFit.cover,
+            child: _gerakans == null
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: _gerakans!.length,
+                    itemBuilder: (context, index) {
+                      var gerakan = _gerakans![index];
+                      return MaterialButton(
+                        onPressed: () {
+                          // Handle navigation logic here
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          height: 160,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            image: DecorationImage(
+                              image: AssetImage(gerakan
+                                  .imageGerakan),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  gerakan
+                                      .namaGerakan,
+                                  style: StyleText().styleH3bWithColor,
+                                ),
+                                Text(
+                                  gerakan
+                                      .deskripsi,
+                                  style: StyleText().stylePlWithColor,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Beginer',
-                                style: StyleText().styleH3bWithColor,
-                              ),
-                              Text(
-                                '|6 Workouts for Beginner',
-                                style: StyleText().stylePlWithColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          )),
+                      );
+                    },
+                  ),
+          ),
         ],
       ),
     );

@@ -26,8 +26,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
       'price': 'IDR 750.000,00',
       'features': ['Gym conventional', 'Sauna'],
       'images': [
-        'assets/img8.jpg',
-        'assets/img9.jpg',
+        'assets/img6.jpg',
+        'assets/img7.jpg',
       ],
     },
     {
@@ -104,25 +104,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                   ),
                   SizedBox(
                     height: 0.02 * h,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List<Widget>.generate(
-                        currentSubscription['images'].length, (index) {
-                      return Container(
-                        width: 0.02 * w,
-                        height: 0.02 * h,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 1.0, horizontal: 2.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentImageIndex == index
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).primaryColor.withOpacity(0.4),
-                        ),
-                      );
-                    }),
                   ),
                   SizedBox(
                     height: 0.01 * h,
