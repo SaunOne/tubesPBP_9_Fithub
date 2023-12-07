@@ -35,17 +35,14 @@ class TrainerClient{
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
-      print('response : ${response.body}');
+   
 
       Iterable list = json.decode(response.body)['data'];
-       print('list : ${list}');
+      
       TempatGym data;
        var listTrainer = list.map((e) => Trainer.fromJson(e)).toList();
         print('length list : ${listTrainer.length}');
-       for (int i = 0 ; i < listTrainer.length ; i ++ ){
-          data = await TempatGymClient().findTempatGymById(listTrainer[i].tempatGymId);
-          listTrainer[i].setTempatGym(data);
-       }
+  
 
       return listTrainer;
     } catch (e) {

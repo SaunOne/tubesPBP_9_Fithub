@@ -19,38 +19,73 @@ class TrainerView extends StatefulWidget {
 }
 
 class _TrainerViewState extends State<TrainerView> {
+  late List<Trainer> trainerList;
+  late List<MengajarTrainer> mengajarList;
+
+  Future<void> fetchData() async {
+    await TrainerClient().showAllTrainers().then((value) {
+      print('value : ${value}');
+
+      setState(() {
+        trainerList = value;
+      });
+    });
+    await MengajarTrainerClient().showAllMengajarTrainer().then((value) {
+      print('value : ${value}');
+
+      setState(() {
+        mengajarList = value;
+      });
+    });
+  }
+
+  Future<List<Trainer>> fetchData_future() async {
+    trainerList = await TrainerClient().showAllTrainers();
+    return trainerList;
+  }
+
+  Future<bool> checkData() async {
+    return trainerList != null;
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    fetchData().then((_) {
+      // Access the data after it has been fetched
+      if (trainerList != null && trainerList.isNotEmpty) {
+        print('trainer name : ${trainerList[0].namaTrainer}');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Trainer',
-          style: StyleText(color: Colors.black).styleH2bWithColor,
-        ),
-      ),
-      body: Container(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          decoration: BoxDecoration(),
-          child: FutureBuilder<List<Trainer>>(
-            future: TrainerClient().showAllTrainers(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
-              } else if (snapshot.hasError) {
-                print(snapshot);
-                return Text('Error: ${snapshot.error}');
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Text('Tidak ada data.');
-              } else {
-                List<Trainer> trainerList = snapshot.data!;
-                print('apakaah data null = ${trainerList[0].tempatGym == null}');
-                print('trainer length : ${trainerList.length}');
-                return ListView.builder(
+
+    return FutureBuilder<List<Trainer>>(
+      future: fetchData_future(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              title: Text(
+                'Trainer',
+                style: StyleText(color: Colors.black).styleH2bWithColor,
+              ),
+            ),
+            body: Container(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                decoration: BoxDecoration(),
+                child: ListView.builder(
                   itemCount: trainerList.length,
                   itemBuilder: (context, index) {
                     Trainer trainer = trainerList[index];
@@ -59,8 +94,10 @@ class _TrainerViewState extends State<TrainerView> {
                     return MaterialButton(
                       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 2),
                       onPressed: () {
-                        print("id sebelum masuk ${trainer.namaTrainer} : ${trainer.id}");
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                        print(
+                            "id sebelum masuk ${trainer.namaTrainer} : ${trainer.id}");
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return DetailTrainer(id_tempat_gym: trainer.id);
                         }));
                       },
@@ -141,11 +178,11 @@ class _TrainerViewState extends State<TrainerView> {
                                       Container(
                                         width: 60,
                                         child: Text(
-                                          'Domicile',
+                                          'Age',
                                           style: StyleText().styleP2lWithColor,
                                         ),
                                       ),
-                                      Text(': ${trainer.tempatGym!.namaTempat}',
+                                      Text(': ${trainer.age}',
                                           style: StyleText()
                                               .styleP2lWithColor), //data experience
                                     ],
@@ -183,34 +220,7 @@ class _TrainerViewState extends State<TrainerView> {
                                               snapshot.data!;
                                           print(
                                               'isi mengajar : ${listMengajar.length}');
-                                          return ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: listMengajar.length,
-                                            itemBuilder: (context, index) {
-                                              MengajarTrainer mengajar =
-                                                  listMengajar[index];
-                                              return Container(
-                                                margin:
-                                                    EdgeInsets.only(right: 10),
-                                                alignment: Alignment.center,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 12),
-                                                height: 17,
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        ColorC().primaryColor1,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Text(
-                                                  '${mengajar.jadwalMengajar!.hari}',
-                                                  style: StyleText(
-                                                          color: Colors.white)
-                                                      .styleP3bWithColor,
-                                                ),
-                                              );
-                                            },
-                                          );
+                                          return Container();
                                         }
                                       },
                                     ),
@@ -223,12 +233,12 @@ class _TrainerViewState extends State<TrainerView> {
                       ),
                     );
                   },
-                );
-              }
-            },
-          ),
-        ),
-      ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }

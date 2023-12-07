@@ -431,11 +431,11 @@ class _HomeState extends State<Home> {
                                       Container(
                                         width: 60,
                                         child: Text(
-                                          'Domicile',
+                                          'Age',
                                           style: StyleText().styleP2lWithColor,
                                         ),
                                       ),
-                                      Text(': ${trainer.tempatGym!.namaTempat}',
+                                      Text(': ${trainer.age}',
                                           style: StyleText()
                                               .styleP2lWithColor), //data experience
                                     ],
