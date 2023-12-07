@@ -35,7 +35,7 @@ class TempatGym {
       imageGym: json['image_gym'] ?? '',
       jamBuka: json['jam_buka'] ?? '',
       jamTutup: json['jam_tutup'] ?? '',
-      rating: json['rating'] ?? 0.0,
+      rating: (json['rating'] ?? 0.0).toDouble(),
       alamat: json['alamat'] ?? '',
       phoneNumber: json['phone_number'] ?? '',
       domisili: json['domisili'] ?? '',

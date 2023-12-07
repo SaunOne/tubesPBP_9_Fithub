@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ugd6_b_9/database/Client/TempatGymClient.dart';
 import 'package:ugd6_b_9/entity/model/tempat_gym.dart';
 
 class Trainer {
@@ -12,6 +13,7 @@ class Trainer {
   String jamSelesai;
   String phoneNumber;
   String status;
+  double age;
   double rating;
   TempatGym? tempatGym;
 
@@ -26,27 +28,18 @@ class Trainer {
       required this.phoneNumber,
       required this.status,
       required this.rating,
+      required this.age,
       this.tempatGym});
 
-  void setTempatGym(TempatGym data){
-    print('data : ${data}');
+  void setTempatGym(TempatGym data) {
+    print('data : ');
     this.tempatGym = data;
+    print('isi : ${tempatGym!.alamat}');
   }
 
   factory Trainer.fromRawJson(String str) => Trainer.fromJson(json.decode(str));
 
   factory Trainer.fromJson(Map<String, dynamic> json) {
-    var tempatGym = TempatGym(
-        id: json['id'] ?? 0,
-        namaTempat: json['nama_tempat'] ?? '',
-        codeZip: json['code_zip'] ?? '',
-        imageGym: json['image_gym'] ?? '',
-        jamBuka: json['jam_buka'] ?? '',
-        jamTutup: json['jam_tutup'] ?? '',
-        rating: json['rating'] ?? 2.2,
-        alamat: json['alamat'] ?? '',
-        domisili: json['domisili'] ?? '',
-        phoneNumber: json['phone_number'] ?? '' );
 
     return Trainer(
       id: json['id'] ?? 0,
@@ -58,8 +51,8 @@ class Trainer {
       jamSelesai: json['jam_selesai'] ?? '',
       phoneNumber: json['phone_number'] ?? '',
       status: json['status'] ?? '',
-      rating: json['rating'] ?? 0.0,
-      tempatGym: tempatGym.id == 0? null : tempatGym
+      rating: (json['rating'] ?? 0.0).toDouble(),
+      age: (json['age'] ?? 0.0).toDouble(),
     );
   }
 
@@ -76,5 +69,6 @@ class Trainer {
         "phone_number": phoneNumber,
         "status": status,
         "rating": rating,
+        "age" : age,
       };
 }

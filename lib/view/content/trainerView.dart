@@ -3,8 +3,10 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Client/MengajarClient.dart';
+import 'package:ugd6_b_9/database/Client/TempatGymClient.dart';
 import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
 import 'package:ugd6_b_9/entity/model/mengajar_trainer.dart';
+import 'package:ugd6_b_9/entity/model/tempat_gym.dart';
 import 'package:ugd6_b_9/entity/model/trainer.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
@@ -46,16 +48,20 @@ class _TrainerViewState extends State<TrainerView> {
                 return Text('Tidak ada data.');
               } else {
                 List<Trainer> trainerList = snapshot.data!;
+                print('apakaah data null = ${trainerList[0].tempatGym == null}');
                 print('trainer length : ${trainerList.length}');
                 return ListView.builder(
                   itemCount: trainerList.length,
                   itemBuilder: (context, index) {
                     Trainer trainer = trainerList[index];
+
+                    // print('nama trainer : ${trainer.tempatGym!.namaTempat}');
                     return MaterialButton(
                       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 2),
                       onPressed: () {
+                        print("id sebelum masuk ${trainer.namaTrainer} : ${trainer.id}");
                         Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return DetailTrainer(id_tempat_gym: trainer.tempatGymId);
+                          return DetailTrainer(id_tempat_gym: trainer.id);
                         }));
                       },
                       child: Container(

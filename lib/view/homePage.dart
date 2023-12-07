@@ -14,6 +14,8 @@ import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/content/home.dart';
+import 'package:ugd6_b_9/view/content/trainerView.dart';
+import 'package:ugd6_b_9/view/profile.dart';
 
 
 

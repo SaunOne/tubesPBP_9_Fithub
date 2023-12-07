@@ -16,7 +16,8 @@ class _GuideState extends State<Guide> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: 
+      Container(
         width: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(

@@ -112,6 +112,7 @@ flutter:
     - assets/images/
     - assets/images/trainer/
     - assets/images/logo/
+    - assets/images/bank/
     - assets/logo.png
   #   - images/a_dot_ham.jpeg
 

@@ -56,12 +56,14 @@ class SubscriptionClient {
 
   Future<http.Response> createSubscription(Map<String, dynamic> data) async {
     token = await getToken();
+    print('data : ${data}');
     try {
       var response = await http.post(
         Uri.http(url, endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );
+      print('response : ${response.body}');
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

@@ -105,7 +105,7 @@ class _ProfileViewState extends State<ProfileView> {
         dateOfBirthController.text = userData.birthdate;
         passwordController.text = userData.password;
         selectedGender =
-            userData.gender == 'Male' ? Gender.male : Gender.female;
+        userData.gender == 'Male' ? Gender.male : Gender.female;
         fullnameController.text = userData.fullname;
         phoneController.text = userData.phone;
         weightController.text = userData.weight.toString();

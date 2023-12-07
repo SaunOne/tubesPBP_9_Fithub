@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:lottie/lottie.dart';
+import 'package:ugd6_b_9/database/Client/BankClient.dart';
+import 'package:ugd6_b_9/database/Client/JenisPaketClient.dart';
+import 'package:ugd6_b_9/database/Client/SubscriptionClient.dart';
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
+import 'package:ugd6_b_9/entity/model/bank.dart';
+import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
+import 'package:ugd6_b_9/entity/model/user.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  final int id;
+  const PaymentPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -15,7 +24,28 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   final double hargaPaket = 750000.00;
   final double taxPercent = 0.01;
+  double totalHarga = 0;
   String _selectedBank = 'BCA';
+  int? id_paket, id_user, id_member;
+  User? user;
+  int? indexRadio;
+  int? id_bank;
+
+  void hitungTotalHarga(harga) {
+    totalHarga = harga + (harga * 0.01);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+    id_paket = widget.id;
+  }
+
+  Future<void> _initializeData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    id_user = localStorage.getInt('id');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,82 +60,110 @@ class _PaymentPageState extends State<PaymentPage> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              SizedBox(height: 0.04 * h),
-              Lottie.asset(
-                'assets/payment.json',
-                width: 600,
-                height: 200,
+      body: FutureBuilder<JenisPaket>(
+        future: JenisPaketClient().getJenisPaketById(id_paket!),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
+          } else if (snapshot.hasError) {
+            print(snapshot);
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData) {
+            return Text('Tidak ada data.');
+          } else {
+            JenisPaket jenisPaket = snapshot.data!;
+            hitungTotalHarga(jenisPaket.harga);
+            // print('isi mengajar : ${trainer[1].namaTrainer}');
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    SizedBox(height: 0.04 * h),
+                    Lottie.asset(
+                      'assets/payment.json',
+                      width: 600,
+                      height: 200,
+                    ),
+                    SizedBox(height: 0.03 * h),
+                    Text(
+                      'Rp.${jenisPaket.harga}',
+                      style: StyleText().styleH1bWithColor,
+                    ),
+                    Text(
+                      'Basic Package',
+                      style: StyleText().styleH3lWithColor,
+                    ),
+                    SizedBox(
+                      height: 0.03 * h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Price',
+                          style: StyleText().styleH3bWithColor,
+                        ),
+                        Spacer(),
+                        Text(
+                          'IDR. ${jenisPaket.harga}',
+                          style: StyleText().styleH3lWithColor,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tax',
+                          style: StyleText().styleH3bWithColor,
+                        ),
+                        Spacer(),
+                        Text(
+                          'IDR.${jenisPaket.harga * 0.01}',
+                          style: StyleText().styleH3lWithColor,
+                        ),
+                      ],
+                    ),
+                    Divider(height: 24, thickness: 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total',
+                          style: StyleText().styleH3bWithColor,
+                        ),
+                        Text(
+                          'IDR. ${totalHarga}',
+                          style: StyleText().styleH3lWithColor,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    _buildBankSelection(),
+                  ],
+                ),
               ),
-              SizedBox(height: 0.03 * h),
-              Text(
-                'Subscription',
-                style: StyleText().styleH1bWithColor,
-              ),
-              Text(
-                'Basic Package',
-                style: StyleText().styleH3lWithColor,
-              ),
-              SizedBox(
-                height: 0.03 * h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Price',
-                    style: StyleText().styleH3bWithColor,
-                  ),
-                  Spacer(),
-                  Text(
-                    'IDR. 750.000,00',
-                    style: StyleText().styleH3lWithColor,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tax',
-                    style: StyleText().styleH3bWithColor,
-                  ),
-                  Spacer(),
-                  Text(
-                    'IDR. 7.500,00 (1%)',
-                    style: StyleText().styleH3lWithColor,
-                  ),
-                ],
-              ),
-              Divider(height: 24, thickness: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total',
-                    style: StyleText().styleH3bWithColor,
-                  ),
-                  Text(
-                    'IDR. 750.000,00',
-                    style: StyleText().styleH3lWithColor,
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-              _buildBankSelection(),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: FloatingActionButton.extended(
-          onPressed: _showPaymentSuccessDialog,
+          onPressed: () {
+            if (id_bank == null) {
+              showFailureSnackbar(context, 'Pilih Metode Pembayran Terlebih Dahulu!!');
+            } else {
+              var data = {
+                "bank_id": id_bank,
+                "jenis_paket_id": 2,
+                "user_id": 1,
+              };
+              _showPaymentSuccessDialog(data);
+            }
+          },
           label: Text(
             'Bayar',
             style: StyleText().styleH3bWithColor,
@@ -120,22 +178,104 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget _buildBankSelection() {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Pilih Pembayaran',
-          style: StyleText().styleH3bWithColor,
-        ),
-        SizedBox(
-          height: 0.02 * h,
-        ),
-        ..._buildPaymentOptions(),
-      ],
+
+    return FutureBuilder<List<Bank>>(
+      future: BankClient().showAllBanks(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
+        } else if (snapshot.hasError) {
+          print(snapshot);
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData) {
+          return Text('Tidak ada data.');
+        } else {
+          List<Bank> listBank = snapshot.data!;
+          print('isi data bank : ${listBank.length}');
+          // print('isi mengajar : ${trainer[1].namaTrainer}');
+          return Container(
+            width: double.infinity,
+            height: 0.3 * h,
+
+            padding: EdgeInsets.all(
+                16.0), // Tambahkan padding agar teks tidak terlalu dekat dengan tepi
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Ganti ke CrossAxisAlignment.start
+              mainAxisAlignment:
+                  MainAxisAlignment.start, // Ganti ke MainAxisAlignment.start
+              children: [
+                Text(
+                  'Pilih Pembayaran',
+                  style: StyleText().styleH3bWithColor,
+                ),
+                SizedBox(
+                  height: 0.02 * h,
+                ),
+                Expanded(
+                    // Tambahkan Expanded untuk memberi ruang kepada GridView
+                    child: // Indeks bank yang dipilih
+
+                        GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 2.0,
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 8.0,
+                  children: List.generate(listBank.length, (index) {
+                    return RadioListTile(
+                      value: index,
+                      groupValue: indexRadio,
+                      onChanged: (value) {
+                        setState(() {
+                          indexRadio = value as int;
+                          id_bank = listBank[(value as int)].id;
+                          print('id bank : ${id_bank}');
+                        });
+                      },
+                      title: Center(
+                        child: Column(
+                          children: [
+                            Image.asset(
+                                'assets/images/bank/${listBank[index].namaBank}.png'),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                )),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
-  void _showPaymentSuccessDialog() {
+  void showSuccessSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  void showFailureSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void _showPaymentSuccessDialog(data) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -146,7 +286,10 @@ class _PaymentPageState extends State<PaymentPage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) {
+                  SubscriptionClient().createSubscription(data);
+                  return HomePage();
+                }),
               );
             },
             child: Text('OK'),
@@ -154,102 +297,5 @@ class _PaymentPageState extends State<PaymentPage> {
         ],
       ),
     );
-  }
-
-  List<Widget> _buildPaymentOptions() {
-    return [
-      Row(
-        children: [
-          Radio<String>(
-            value: 'BCA',
-            groupValue: _selectedBank,
-            activeColor: ColorC().primaryColor1,
-            onChanged: (value) {
-              setState(() {
-                _selectedBank = value!;
-              });
-            },
-          ),
-          Expanded(
-            child: ListTile(
-              leading:
-                  Image.asset('assets/images/BCA.png', width: 72, height: 72),
-              onTap: () {
-                setState(() {
-                  _selectedBank = 'BCA';
-                });
-              },
-            ),
-          ),
-          Radio<String>(
-            value: 'BNI',
-            groupValue: _selectedBank,
-            activeColor: ColorC().primaryColor1,
-            onChanged: (value) {
-              setState(() {
-                _selectedBank = value!;
-              });
-            },
-          ),
-          Expanded(
-            child: ListTile(
-              leading:
-                  Image.asset('assets/images/BNI.png', width: 72, height: 72),
-              onTap: () {
-                setState(() {
-                  _selectedBank = 'BNI';
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          Radio<String>(
-            value: 'BRI',
-            groupValue: _selectedBank,
-            activeColor: ColorC().primaryColor1,
-            onChanged: (value) {
-              setState(() {
-                _selectedBank = value!;
-              });
-            },
-          ),
-          Expanded(
-            child: ListTile(
-              leading:
-                  Image.asset('assets/images/BRI.png', width: 72, height: 72),
-              onTap: () {
-                setState(() {
-                  _selectedBank = 'BRI';
-                });
-              },
-            ),
-          ),
-          Radio<String>(
-            value: 'BPD DIY',
-            groupValue: _selectedBank,
-            activeColor: ColorC().primaryColor1,
-            onChanged: (value) {
-              setState(() {
-                _selectedBank = value!;
-              });
-            },
-          ),
-          Expanded(
-            child: ListTile(
-              leading: Image.asset('assets/images/BANK DIY.png',
-                  width: 92, height: 92),
-              onTap: () {
-                setState(() {
-                  _selectedBank = 'BPD DIY';
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-    ];
   }
 }

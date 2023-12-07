@@ -74,7 +74,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const NewPassword());
 
       case Routes.paymentView:
-        return MaterialPageRoute(builder: (_) => const PaymentPage());
+        // return MaterialPageRoute(builder: (_) => const PaymentPage());
       case Routes.searchGym:
         return MaterialPageRoute(builder: (_) => const SearchGym());
       case Routes.profile:

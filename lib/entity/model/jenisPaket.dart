@@ -17,7 +17,7 @@ class JenisPaket {
     return JenisPaket(
       id: json['id'] ?? 0,
       namaMembership: json['nama_membership'] ?? '',
-      harga: json['harga'] ?? 0.0,
+      harga: (json['harga'] ?? 0.0).toDouble(),
     );
   }
 
