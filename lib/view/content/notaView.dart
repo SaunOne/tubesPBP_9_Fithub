@@ -3,6 +3,8 @@ import 'package:lottie/lottie.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
+import 'package:ugd6_b_9/view/temporary/preview_screenforPDF.dart';
+import 'package:ugd6_b_9/view/temporary/dummby_generateDocument.dart';
 
 class NotaPage extends StatefulWidget {
   const NotaPage({super.key});
@@ -52,11 +54,14 @@ class _NotaPageState extends State<NotaPage> {
                             icon: Icon(
                               Icons.print,
                             ),
-                            onPressed: () {
+                            onPressed: () async {
+                              final doc = await generateInvoice();
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => PreviewScreen(
+                                    doc: doc,
+                                  ),
                                 ),
                               );
                             },
@@ -358,8 +363,7 @@ class _NotaPageState extends State<NotaPage> {
                           style: StyleText(
                             color: Color.fromARGB(255, 100, 100, 100),
                           ).stylePlWithColor,
-                          textAlign: TextAlign
-                              .center,
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

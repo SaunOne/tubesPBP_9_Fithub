@@ -8,11 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ugd6_b_9/routes/GeneratorRoutes.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   Future<bool> checkLogin() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -31,15 +31,13 @@ class MyApp extends StatelessWidget {
         } else {
           return ProviderScope(
             child: MaterialApp(
-
-              initialRoute: snapshot.data ?? false ? Routes.homePage : Routes.preLogin,
-
+              initialRoute:
+                  snapshot.data ?? false ? Routes.notaView : Routes.notaView,
               onGenerateRoute: RouteGenerator.generateRoute,
             ),
-          );  
+          );
         }
       },
     );
   }
 }
-
