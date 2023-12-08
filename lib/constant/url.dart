@@ -17,7 +17,7 @@ class networkUrl {
   static String levelGerakan = "api/level_gerakan";
   static String fasilitas = "api/fasilitas";
   // static String membership = "api/membership";
-  static String presensi = "api/presensi";
+  static String presensi = "api/presensi";  
   static String qrGenerate = "api/qrGenerate";
   static String subscription = "api/subscription";
 

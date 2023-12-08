@@ -729,7 +729,7 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.all(0),
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return Guide();
+                          return Guide(id: listGerakan[i].id,);
                         }));
                       },
                       child: Container(

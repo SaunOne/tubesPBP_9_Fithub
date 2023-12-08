@@ -40,12 +40,13 @@ class SubscriptionClient {
 
   Future<Subscription> showSubscriptionById(int id) async {
     token = await getToken();
+    print('masuk dengan id : $id');
     try {
       var response = await http.get(
         Uri.http(url, "$endpoint/$id"),
         headers: _setHeaders(),
       );
-
+      print('Response  show sub : ${response.body}');
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
       return Subscription.fromJson(json.decode(response.body)['data']);

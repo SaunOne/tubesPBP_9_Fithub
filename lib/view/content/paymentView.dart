@@ -10,48 +10,54 @@ import 'package:ugd6_b_9/database/Client/SubscriptionClient.dart';
 import 'package:ugd6_b_9/database/Client/UserClient.dart';
 import 'package:ugd6_b_9/entity/model/bank.dart';
 import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
+import 'package:ugd6_b_9/entity/model/subscription.dart';
 import 'package:ugd6_b_9/entity/model/user.dart';
 import 'package:ugd6_b_9/view/content/notaView.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 
 class PaymentPage extends StatefulWidget {
-  final int id;
-  const PaymentPage({Key? key, required this.id}) : super(key: key);
+  final int id_paket;
+  const PaymentPage({Key? key, required this.id_paket}) : super(key: key);
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  final double hargaPaket = 750000.00;
-  final double taxPercent = 0.01;
   double totalHarga = 0;
   String _selectedBank = 'BCA';
   int? id_paket, id_user, id_member;
-  User? user;
+  late User user;
+  Bank? bank ;
+  JenisPaket? jenis_paket;
   int? indexRadio;
   int? id_bank;
 
-  void hitungTotalHarga(harga) {
-    totalHarga = harga + (harga * 0.01);
+  void hitungTotalHarga(harga, pajak) {
+    totalHarga = harga + pajak;
+  }
+
+  Future<void> fetchAll() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    id_user = localStorage.getInt('id');
+    id_member = id_user;
+    await Query().getByUserId(id_user!).then((value) {
+      setState(() {
+        user = User(id: id_user!, fullname: value.fullname, username: value.username, email: value.email, password: value.password, birthdate: value.birthdate, gender: value.gender, phone: value.phone, weight: value.weight, height: value.height, photo: value.photo, trainerId: value.trainerId, memberId: value.id);
+      });
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _initializeData();
-    id_paket = widget.id;
-  }
+    fetchAll();
 
-  Future<void> _initializeData() async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    id_user = localStorage.getInt('id');
+    id_paket = widget.id_paket;
   }
 
   @override
   Widget build(BuildContext context) {
-    double taxAmount = hargaPaket * taxPercent;
-    double total = hargaPaket + taxAmount;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
@@ -73,7 +79,10 @@ class _PaymentPageState extends State<PaymentPage> {
             return Text('Tidak ada data.');
           } else {
             JenisPaket jenisPaket = snapshot.data!;
-            hitungTotalHarga(jenisPaket.harga);
+            jenis_paket = jenisPaket;
+            double harga = jenisPaket.harga -
+                (jenisPaket.harga * (jenisPaket.promo / 100));
+            hitungTotalHarga(harga, (jenisPaket.harga * 0.01));
             // print('isi mengajar : ${trainer[1].namaTrainer}');
             return SingleChildScrollView(
               child: Padding(
@@ -89,10 +98,22 @@ class _PaymentPageState extends State<PaymentPage> {
                     SizedBox(height: 0.03 * h),
                     Text(
                       'Rp.${jenisPaket.harga}',
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 20,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: Color.fromARGB(255, 255, 0,
+                            0), // Opsional, bisa dihilangkan jika tidak diperlukan
+                        decorationThickness:
+                            2.0, // Opsional, bisa dihilangkan jika tidak diperlukan
+                      ),
+                    ),
+                    Text(
+                      'Rp.${harga}',
                       style: StyleText().styleH1bWithColor,
                     ),
                     Text(
-                      'Basic Package',
+                      '${jenisPaket.namaMembership}',
                       style: StyleText().styleH3lWithColor,
                     ),
                     SizedBox(
@@ -107,7 +128,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                         Spacer(),
                         Text(
-                          'IDR. ${jenisPaket.harga}',
+                          'IDR. ${harga}',
                           style: StyleText().styleH3lWithColor,
                         ),
                       ],
@@ -116,7 +137,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Tax',
+                          'Tax 1%',
                           style: StyleText().styleH3bWithColor,
                         ),
                         Spacer(),
@@ -140,7 +161,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 10),
                     _buildBankSelection(),
                   ],
                 ),
@@ -155,14 +176,16 @@ class _PaymentPageState extends State<PaymentPage> {
         child: FloatingActionButton.extended(
           onPressed: () {
             if (id_bank == null) {
-              showFailureSnackbar(context, 'Pilih Metode Pembayran Terlebih Dahulu!!');
+              showFailureSnackbar(
+                  context, 'Pilih Metode Pembayran Terlebih Dahulu!!');
             } else {
               var data = {
                 "bank_id": id_bank,
-                "jenis_paket_id": 2,
-                "user_id": 1,
+                "jenis_paket_id": id_paket,
+                "user_id": user.id,
+                "membership_id": user.id
               };
-              _showPaymentSuccessDialog(data);
+              _showPaymentSuccessDialog(data,user,bank!,jenis_paket!);
             }
           },
           label: Text(
@@ -231,6 +254,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           indexRadio = value as int;
                           id_bank = listBank[(value as int)].id;
                           print('id bank : ${id_bank}');
+                          bank = listBank[value];
                         });
                       },
                       title: Center(
@@ -276,7 +300,7 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
-  void _showPaymentSuccessDialog(data) {
+  void _showPaymentSuccessDialog(data,User user,Bank bank,JenisPaket jenisPaekt) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -288,8 +312,9 @@ class _PaymentPageState extends State<PaymentPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) {
+                  Subscription? subscription;
                   SubscriptionClient().createSubscription(data);
-                  return NotaPage();
+                  return NotaPage(bank: bank,jensiPaket: jenis_paket!,user: user,id_subscription: user.id,);
                 }),
               );
             },
