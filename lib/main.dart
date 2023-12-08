@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           return ProviderScope(
             child: MaterialApp(
 
-              initialRoute: snapshot.data ?? false ? Routes.testQuery : Routes.preLogin,
+              initialRoute: snapshot.data ?? false ? Routes.notaView : Routes.preLogin,
 
               onGenerateRoute: RouteGenerator.generateRoute,
             ),

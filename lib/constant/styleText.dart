@@ -29,6 +29,10 @@ class StyleText {
     fontSize: 20, // Atur ukuran font sesuai kebutuhan Anda.
     fontWeight: FontWeight.w400, // Atur berat font sesuai kebutuhan Anda.;
   );
+  TextStyle styleM1 = GoogleFonts.poppins(
+    fontSize: 28, // Atur ukuran font sesuai kebutuhan Anda.
+    fontWeight: FontWeight.w500, // Atur berat font sesuai kebutuhan Anda.;
+  );
   TextStyle styleH3b = GoogleFonts.poppins(
     fontSize: 16, // Atur ukuran font sesuai kebutuhan Anda.
     fontWeight: FontWeight.w700, // Atur berat font sesuai kebutuhan Anda.;

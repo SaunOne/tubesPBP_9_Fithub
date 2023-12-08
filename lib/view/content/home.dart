@@ -17,6 +17,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   User user = User.empty();
+  late DateTime date = DateTime.now();
+  late String formattedDate;
+  
 
   void getUser() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -69,6 +72,9 @@ class _HomeState extends State<Home> {
   }
 
   SingleChildScrollView HomeView() {
+    date = DateTime.now();
+    formattedDate =
+        "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year.toString()}";
     return SingleChildScrollView(
     padding: EdgeInsets.all(20),
     child: Column(
@@ -77,7 +83,7 @@ class _HomeState extends State<Home> {
         SizedBox(
           height: 10,
         ),
-        Text(greeting() + ',' + user.fullname,style: StyleText().styleH2bWithColor,),
+        Text(greeting() + ', ' + user.fullname,style: StyleText().styleH2bWithColor,),
         SizedBox(
           height: 10,
         ),
@@ -104,8 +110,9 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     width: 10,
                   ),
+                  
                   Text(
-                    '21 Oct 2023',
+                    '${formattedDate}',
                     style: StyleText(color: Colors.white).stylePbWithColor,
                   ),
                 ],

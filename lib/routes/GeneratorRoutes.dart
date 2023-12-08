@@ -9,6 +9,7 @@ import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
+import 'package:ugd6_b_9/view/content/notaView.dart';
 import 'package:ugd6_b_9/view/content/paymentView.dart';
 import 'package:ugd6_b_9/view/content/searchGym.dart';
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
@@ -83,6 +84,8 @@ class RouteGenerator {
       case Routes.testQuery:
         return MaterialPageRoute(builder: (_) => const TestQuery());
 
+      case Routes.notaView:
+        return MaterialPageRoute(builder: (_) => const NotaPage());
 
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());

@@ -90,7 +90,15 @@ class Query {
  
     try {
       var data = {
- 
+        'fullname': fullname,
+        'username': username,
+        'email': email,
+        'birthdate': birthdate,
+        'gender': gender,
+        'phone' : phone,
+        'weight': weight,  
+        'height': height,
+        'photo': photo ?? '',
       };
 
       var response = await put(url, headers: {
