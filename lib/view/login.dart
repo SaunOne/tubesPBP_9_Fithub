@@ -37,11 +37,9 @@ class _LoginState extends State<Login> {
     // checkConnection();
   }
 
-
-
-
   void handleLogin(String Email, String Password) async {
-    ResponseDataUser? responseDataUser = await Authentication().authenticate(Email, Password);
+    ResponseDataUser? responseDataUser =
+        await Authentication().authenticate(Email, Password);
     if (responseDataUser.message == "Login Success") {
       print(responseDataUser.message);
       print(responseDataUser.Data.gender);
@@ -51,18 +49,13 @@ class _LoginState extends State<Login> {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       localStorage.setInt('id', responseDataUser.Data.id);
       localStorage.setString('token', responseDataUser.access_token);
-      localStorage.setString('photo' , responseDataUser.Data.photo);
+      localStorage.setString('photo', responseDataUser.Data.photo);
       Navigator.of(context).pop();
-      Navigator
-          .of(context)
-          .pushReplacement(
-          MaterialPageRoute(
-              builder: (BuildContext context) => HomePage()
-          )
-      );
-    }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
           backgroundColor: Colors.red,
           content: Row(
             children: [
@@ -78,22 +71,16 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ],
-          )));
+          ),
+        ),
+      );
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -171,19 +158,13 @@ class _LoginState extends State<Login> {
                   left: 30,
                   right: 30,
                   top: 0.04 * height,
-                  bottom: MediaQuery
-                      .of(context)
-                      .viewInsets
-                      .bottom + 20),
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 20),
               child: Column(
                 children: [
                   TextFormField(
                       scrollPadding: EdgeInsets.only(
                           bottom:
-                          MediaQuery
-                              .of(context)
-                              .viewInsets
-                              .bottom + 30),
+                              MediaQuery.of(context).viewInsets.bottom + 30),
                       controller: EmailController,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
@@ -194,7 +175,7 @@ class _LoginState extends State<Login> {
                       ),
                       validator: (value) {
                         if (value == '' || value!.isEmpty) {
-                          return 'please enter your Email';
+                          return 'Please enter your Email';
                         }
                         return null;
                       }),
@@ -202,45 +183,47 @@ class _LoginState extends State<Login> {
                     height: 20,
                   ),
                   TextFormField(
-                    scrollPadding: EdgeInsets.only(
-                        bottom: MediaQuery
-                            .of(context)
-                            .viewInsets
-                            .bottom + 30),
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      labelText: 'Password',
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                      scrollPadding: EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom + 30),
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.lock),
+                        labelText: 'Password',
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(40)),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(isPasswordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
-                      suffixIcon: IconButton(
-                        icon: Icon(isPasswordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility),
-                        onPressed: () {
-                          setState(() {
-                            isPasswordVisible = !isPasswordVisible;
-                          });
-                        },
-                      ),
-                    ),
-                    obscureText: !isPasswordVisible,
-                    validator: (value) =>
-                    value == '' ? 'please enter your password' : null,
-                  ),
+                      obscureText: !isPasswordVisible,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        } else if (value.length < 8) {
+                          return 'Password must at least be 8 characters';
+                        } else {
+                          return null;
+                        }
+                      }),
                   const SizedBox(
                     height: 10,
                   ),
                   TextButton(
                     onPressed: () {
                       if (passwordController.text == "" &&
-                          EmailController.text.isNotEmpty ||
+                              EmailController.text.isNotEmpty ||
                           formKey.currentState!.validate()) {
-
                         saveEmail();
                         Navigator.pushNamed(context, Routes.newPass);
-
                       }
                     },
                     style: TextButton.styleFrom(
@@ -258,8 +241,8 @@ class _LoginState extends State<Login> {
                     key: const Key('tap_login'),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        handleLogin(EmailController.text, passwordController.text);
-
+                        handleLogin(
+                            EmailController.text, passwordController.text);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -279,7 +262,6 @@ class _LoginState extends State<Login> {
           ],
         ));
   }
-
 
   // void checkConnection() {
   //   Authentication.checkConnection().then((value) =>
@@ -330,9 +312,8 @@ class _LoginState extends State<Login> {
   //   });
   // }
 
-  void saveEmail() async{
+  void saveEmail() async {
     SharedPreferences emailStorage = await SharedPreferences.getInstance();
     emailStorage.setString('email', EmailController.text);
   }
-
 }

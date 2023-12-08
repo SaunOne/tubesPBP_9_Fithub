@@ -24,9 +24,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   CarouselController _carouselController = CarouselController();
   int _currentImageIndex = 0;
   int _currentIndicatorIndex = 0;
-  
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +45,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
           } else {
             List<JenisPaket> listJenisPaket = snapshot.data!;
             // print('isi mengajar : ${trainer[1].namaTrainer}');
-            print('di atasi sebelum masujk ${listJenisPaket[_currentImageIndex].id}');
+            print(
+                'di atasi sebelum masujk ${listJenisPaket[_currentImageIndex].id}');
             return Container(
               child: SafeArea(
                 child: Column(
@@ -65,15 +63,14 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                             height: 0.045 * h,
                           ),
                           Container(
-                                child: Image.asset(
-                                  'assets/img8.jpg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                            child: Image.asset(
+                              'assets/img8.jpg',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           SizedBox(
                             height: 0.02 * h,
                           ),
-                        
                           SizedBox(
                             height: 0.01 * h,
                           ),
@@ -101,63 +98,70 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                                   thickness: 1,
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 20),
-                                child: SizedBox(
-                                  height: 0.18 * h,
-                                  child: FutureBuilder<List<Fasilitas>>(
-                                    future: FasilitasClient()
-                                        .showFasilitasByJenisPaket(
-                                            listJenisPaket[_currentOptionIndex]
-                                                .id),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
-                                      } else if (snapshot.hasError) {
-                                        print(snapshot);
-                                        return Text('Error: ${snapshot.error}');
-                                      } else if (!snapshot.hasData) {
-                                        return Text('Tidak ada data.');
-                                      } else {
-                                        List<Fasilitas> listFaislitas =
-                                            snapshot.data!;
-                                        // print('isi mengajar : ${trainer[1].namaTrainer}');
-                                        return ListView.builder(
-                                          itemCount: listFaislitas.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 8.0),
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    color:
-                                                        ColorC().primaryColor1,
-                                                    size: 0.04 * w,
-                                                  ),
-                                                  Expanded(
-                                                    child: Text(
-                                                      listFaislitas[index].namaFasilitas,
-                                                      style: TextStyle(
-                                                        fontSize: 0.04 * w,
+                              Container(
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 10),
+                                    child: SizedBox(
+                                      height: 0.13 * h,
+                                      child: FutureBuilder<List<Fasilitas>>(
+                                        future: FasilitasClient()
+                                            .showFasilitasByJenisPaket(
+                                                listJenisPaket[
+                                                        _currentOptionIndex]
+                                                    .id),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            print(snapshot);
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else if (!snapshot.hasData) {
+                                            return Text('Tidak ada data.');
+                                          } else {
+                                            List<Fasilitas> listFasilitas =
+                                                snapshot.data!;
+                                            return ListView.builder(
+                                              itemCount: listFasilitas.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.add,
                                                         color: ColorC()
                                                             .primaryColor1,
-                                                        fontWeight:
-                                                            FontWeight.normal,
+                                                        size: 0.04 * w,
                                                       ),
-                                                    ),
+                                                      Expanded(
+                                                        child: Text(
+                                                          listFasilitas[index]
+                                                              .namaFasilitas,
+                                                          style: TextStyle(
+                                                            fontSize: 0.04 * w,
+                                                            color: ColorC()
+                                                                .primaryColor1,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                );
+                                              },
+                                              shrinkWrap: true,
                                             );
-                                          },
-                                          shrinkWrap: true,
-                                        );
-                                      }
-                                    },
+                                          }
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -172,8 +176,9 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                         ],
                       ),
                     ),
-                    buildNavigationControls(listJenisPaket.length,listJenisPaket[_currentOptionIndex].id),
-                    SizedBox(height: 0.1 * h),
+                    buildNavigationControls(listJenisPaket.length,
+                        listJenisPaket[_currentOptionIndex].id),
+                        SizedBox(height: 0.1*h,)
                   ],
                 ),
               ),
@@ -184,7 +189,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
     );
   }
 
-  Widget buildNavigationControls(int length,int id_paket) {
+  Widget buildNavigationControls(int length, int id_paket) {
     print('id_paket $id_paket');
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -194,7 +199,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         IconButton(
           icon: Icon(Icons.arrow_back_ios, color: ColorC().primaryColor1),
           onPressed: () {
-            
             _carouselController.previousPage();
             setState(() {
               if (_currentOptionIndex == 0) {
@@ -210,7 +214,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => PaymentPage(id: id_paket)),
+              MaterialPageRoute(
+                  builder: (context) => PaymentPage(id: id_paket)),
             );
           },
           style: ElevatedButton.styleFrom(
@@ -228,7 +233,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         IconButton(
           icon: Icon(Icons.arrow_forward_ios, color: ColorC().primaryColor1),
           onPressed: () {
-            
             setState(() {
               if (_currentOptionIndex == (length - 1)) {
                 // _carouselController.jumpToPage(0);

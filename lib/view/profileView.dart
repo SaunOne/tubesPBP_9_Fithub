@@ -37,10 +37,9 @@ class _ProfileViewState extends State<ProfileView> {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController fullnameController = TextEditingController();
   late String pathPhoto = '';
-  bool isEditMode = false;
   late ImageUser image;
   Future<User> user = Future<User>.value(User.empty());
- 
+
   Gender? selectedGender;
 
   // String gender = 'Male'; // Default gender value
@@ -76,7 +75,7 @@ class _ProfileViewState extends State<ProfileView> {
       return Image.memory(bytes);
     } catch (e) {
       print(e);
-      return Image.asset('assets/logo.png');
+      return e;
     }
   }
 
@@ -105,7 +104,7 @@ class _ProfileViewState extends State<ProfileView> {
         dateOfBirthController.text = userData.birthdate;
         passwordController.text = userData.password;
         selectedGender =
-        userData.gender == 'Male' ? Gender.male : Gender.female;
+            userData.gender == 'Male' ? Gender.male : Gender.female;
         fullnameController.text = userData.fullname;
         phoneController.text = userData.phone;
         weightController.text = userData.weight.toString();
@@ -119,9 +118,6 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _saveProfile() async {
-    if (!isEditMode) {
-      return;
-    }
     await Query().updateProfile(
         id,
         fullnameController.text,
@@ -140,7 +136,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    isEditMode = false;
     getUserDataById();
     print('Save profile data');
   }
@@ -171,10 +166,10 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           ),
         ),
-        title: Text('Profile', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text('Profile',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
-        
       ),
       body: FutureBuilder(
         future: user != null
@@ -192,6 +187,7 @@ class _ProfileViewState extends State<ProfileView> {
                       pickImage();
                     },
                     child: CircleAvatar(
+                      backgroundColor: Colors.grey[400],
                       radius: 50,
                       child: imageFile != null
                           ? ClipRRect(
@@ -203,17 +199,23 @@ class _ProfileViewState extends State<ProfileView> {
                                 fit: BoxFit.fitHeight,
                               ),
                             )
-                          : Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              width: 100,
-                              height: 100,
-                              child: ClipRect(
-                                child: LoadImage(),
-                              ),
-                            ),
+                          : (pathPhoto.isNotEmpty
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  width: 100,
+                                  height: 100,
+                                  child: ClipRect(
+                                    child: LoadImage(),
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.account_circle_outlined,
+                                  size: 100,
+                                  color: const Color.fromARGB(255, 255, 255, 255),
+                                )),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -305,6 +307,12 @@ class _ProfileViewState extends State<ProfileView> {
                   ElevatedButton(
                     onPressed: () {
                       _saveProfile();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Profile(),
+                        ),
+                      );
                     },
                     child: Text(
                       'Save',
@@ -332,12 +340,6 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       // Add BottomNavigationBar or other widgets if needed
     );
-  }
-
-  void _toggleEditMode() {
-    setState(() {
-      isEditMode = !isEditMode;
-    });
   }
 }
 

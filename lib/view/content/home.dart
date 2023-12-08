@@ -27,6 +27,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   User user = User.empty();
+  late DateTime date = DateTime.now();
+  late String formattedDate;
 
   late List<Trainer> listTrainer;
   late List<TempatGym> listTempatGym;
@@ -139,6 +141,9 @@ class _HomeState extends State<Home> {
   }
 
   SingleChildScrollView HomeView() {
+    date = DateTime.now();
+    formattedDate =
+        "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year.toString()}";
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
@@ -183,7 +188,7 @@ class _HomeState extends State<Home> {
                       width: 10,
                     ),
                     Text(
-                      '21 Oct 2023',
+                      '${formattedDate}',
                       style: StyleText(color: Colors.white).stylePbWithColor,
                     ),
                   ],

@@ -11,6 +11,7 @@ import 'package:ugd6_b_9/database/Client/UserClient.dart';
 import 'package:ugd6_b_9/entity/model/bank.dart';
 import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
 import 'package:ugd6_b_9/entity/model/user.dart';
+import 'package:ugd6_b_9/view/content/notaView.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -288,7 +289,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 context,
                 MaterialPageRoute(builder: (context) {
                   SubscriptionClient().createSubscription(data);
-                  return HomePage();
+                  return NotaPage();
                 }),
               );
             },
