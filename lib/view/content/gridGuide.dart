@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/database/Client/GerakanClient.dart';
+import 'package:ugd6_b_9/entity/model/gerakan.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/main.dart';
@@ -16,11 +18,54 @@ class GridGuide extends StatefulWidget {
 
 class _GridGuideState extends State<GridGuide> {
   int nav = 1;
+  late List<Gerakan> intermediate;
+  late List<Gerakan> beginner;
+  late List<Gerakan> advance;
+  late List<Gerakan> mainListGerakan;
+
+  Future<void> fetchData() async {
+    await GerakanClient().getGerakanByLevel(1).then((value) {
+      print('value : ${value}');
+      setState(() {
+         intermediate = value;
+      });
+    });
+    await GerakanClient().getGerakanByLevel(2).then((value) {
+      print('value : ${value}');
+      setState(() {
+         beginner = value;
+      });
+    });
+    await GerakanClient().getGerakanByLevel(3).then((value) {
+      print('value : ${value}');
+      setState(() {
+         advance = value;
+      });
+    });
+  }
+
+  void activeMainListGerakan(listGerakan){
+    setState(() {
+       mainListGerakan = listGerakan;
+    });
+   
+  }
+
+  Future<bool> checkData() async {
+    return mainListGerakan != null;
+  }
 
   void changeGrid(nav) {
     setState(() {
       this.nav = nav;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchData();
+    super.initState();
   }
 
   @override
@@ -104,17 +149,7 @@ class _GridGuideState extends State<GridGuide> {
                   for (int i = 1; i <= 3; i++)
                     MaterialButton(
                       onPressed: () {
-                        if (i == 2) {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) {
-                            return TrackPage();
-                          }));
-                        } else {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Guide();
-                          }));
-                        }
+                        
                       },
                       child: Container(
                         margin: EdgeInsets.only(bottom: 10),

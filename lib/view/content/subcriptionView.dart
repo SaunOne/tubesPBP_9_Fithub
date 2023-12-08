@@ -13,7 +13,8 @@ import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
 import 'package:ugd6_b_9/view/content/paymentView.dart';
 
 class SubcriptionView extends StatefulWidget {
-  const SubcriptionView({super.key});
+  int id;
+  SubcriptionView({super.key,required this.id});
 
   @override
   State<SubcriptionView> createState() => _SubcriptionViewState();
@@ -24,9 +25,13 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   CarouselController _carouselController = CarouselController();
   int _currentImageIndex = 0;
   int _currentIndicatorIndex = 0;
-  
 
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
           } else {
             List<JenisPaket> listJenisPaket = snapshot.data!;
             // print('isi mengajar : ${trainer[1].namaTrainer}');
-            print('di atasi sebelum masujk ${listJenisPaket[_currentImageIndex].id}');
+            print(
+                'di atasi sebelum masujk ${listJenisPaket[_currentImageIndex].id}');
             return Container(
               child: SafeArea(
                 child: Column(
@@ -65,15 +71,20 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                             height: 0.045 * h,
                           ),
                           Container(
-                                child: Image.asset(
-                                  'assets/img8.jpg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                image: DecorationImage(
+                                    
+                                    image: AssetImage(
+                                        'assets/images/jenisPaket/${listJenisPaket[_currentOptionIndex].image}.jpg'),fit: BoxFit.cover)),
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            height: 300,
+                            width: double.infinity,
+                          ),
                           SizedBox(
                             height: 0.02 * h,
                           ),
-                        
                           SizedBox(
                             height: 0.01 * h,
                           ),
@@ -140,7 +151,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      listFaislitas[index].namaFasilitas,
+                                                      listFaislitas[index]
+                                                          .namaFasilitas,
                                                       style: TextStyle(
                                                         fontSize: 0.04 * w,
                                                         color: ColorC()
@@ -172,7 +184,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                         ],
                       ),
                     ),
-                    buildNavigationControls(listJenisPaket.length,listJenisPaket[_currentOptionIndex].id),
+                    buildNavigationControls(listJenisPaket.length,
+                        listJenisPaket[_currentOptionIndex].id),
                     SizedBox(height: 0.1 * h),
                   ],
                 ),
@@ -184,7 +197,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
     );
   }
 
-  Widget buildNavigationControls(int length,int id_paket) {
+  Widget buildNavigationControls(int length, int id_paket) {
     print('id_paket $id_paket');
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -194,7 +207,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         IconButton(
           icon: Icon(Icons.arrow_back_ios, color: ColorC().primaryColor1),
           onPressed: () {
-            
             _carouselController.previousPage();
             setState(() {
               if (_currentOptionIndex == 0) {
@@ -210,7 +222,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => PaymentPage(id: id_paket)),
+              MaterialPageRoute(
+                  builder: (context) => PaymentPage(id: id_paket)),
             );
           },
           style: ElevatedButton.styleFrom(
@@ -228,7 +241,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         IconButton(
           icon: Icon(Icons.arrow_forward_ios, color: ColorC().primaryColor1),
           onPressed: () {
-            
             setState(() {
               if (_currentOptionIndex == (length - 1)) {
                 // _carouselController.jumpToPage(0);

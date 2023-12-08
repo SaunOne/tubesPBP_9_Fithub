@@ -31,10 +31,10 @@ class MyApp extends StatelessWidget {
         } else {
           return ProviderScope(
             child: MaterialApp(
-              initialRoute: snapshot.data ?? false ? Routes.home : Routes.preLogin,
+              initialRoute: snapshot.data ?? false ? Routes.homePage : Routes.preLogin,
               onGenerateRoute: RouteGenerator.generateRoute,
             ),
-          );
+          );  
         }
       },
     );

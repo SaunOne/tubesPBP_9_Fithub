@@ -68,15 +68,14 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => const DetailTrainer());
       case Routes.preLogin:
         return MaterialPageRoute(builder: (_) => const PreLogin());
-      case Routes.subcriptionView:
-        return MaterialPageRoute(builder: (_) => const SubcriptionView());
+      
       case Routes.newPass:
         return MaterialPageRoute(builder: (_) => const NewPassword());
 
       case Routes.paymentView:
         // return MaterialPageRoute(builder: (_) => const PaymentPage());
       case Routes.searchGym:
-        return MaterialPageRoute(builder: (_) => const SearchGym());
+        return MaterialPageRoute(builder: (_) =>  SearchGym(id: 1,));
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => const Profile());
 

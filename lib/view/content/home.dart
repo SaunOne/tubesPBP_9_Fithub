@@ -5,6 +5,7 @@ import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Client/GerakanClient.dart';
 import 'package:ugd6_b_9/database/Client/JenisPaketClient.dart';
+import 'package:ugd6_b_9/database/Client/LevelGerakanClient.dart';
 import 'package:ugd6_b_9/database/Client/MengajarClient.dart';
 import 'package:ugd6_b_9/database/Client/TempatGymClient.dart';
 import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
@@ -12,11 +13,15 @@ import 'package:ugd6_b_9/database/Client/UserClient.dart';
 import 'package:ugd6_b_9/entity/model/User.dart';
 import 'package:ugd6_b_9/entity/model/gerakan.dart';
 import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
+import 'package:ugd6_b_9/entity/model/levelGerakan.dart';
 import 'package:ugd6_b_9/entity/model/mengajar_trainer.dart';
 import 'package:ugd6_b_9/entity/model/trainer.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
+import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
 import 'package:ugd6_b_9/entity/model/tempat_gym.dart';
+import 'package:ugd6_b_9/view/content/searchGym.dart';
+import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,6 +37,8 @@ class _HomeState extends State<Home> {
   late List<TempatGym> listTempatGym;
   late List<Gerakan> listGerakan;
   late List<JenisPaket> listJenisPaket;
+  late List<LevelGerakan> listLevelGerakan;
+  
 
   Future<void> fetchData() async {
     await TrainerClient().showTrainerHome().then((value) {
@@ -62,6 +69,13 @@ class _HomeState extends State<Home> {
         listJenisPaket = value;
       });
     });
+    await LevelGerakanClient().showAllLevelGerakan().then((value) {
+      print('length jenisPaket : ${value.length}');
+
+      setState(() {
+        listLevelGerakan = value;
+      });
+    });
   }
 
   Future<List<Trainer>> fetchData_future_trainerGym() async {
@@ -80,12 +94,21 @@ class _HomeState extends State<Home> {
   }
 
   Future<List<JenisPaket>> fetchData_future_jenisPaket() async {
-    listJenisPaket = await JenisPaketClient().showJenisPaketHome();
+    listJenisPaket = await JenisPaketClient().getAllJenisPaket();
     return listJenisPaket;
   }
 
   Future<bool> checkData() async {
     return listTrainer != null;
+  }
+
+  String findLevelGerakan(id){
+    for(int i = 0 ; i < listLevelGerakan.length; i++){
+      if(listLevelGerakan[i].id == id){
+        return listLevelGerakan[i].levelGerakan;
+      }
+    }
+    return '';
   }
 
   void getUser() async {
@@ -101,6 +124,8 @@ class _HomeState extends State<Home> {
       print(e);
     }
   }
+
+
 
   String greeting() {
     DateTime now = DateTime.now();
@@ -284,70 +309,78 @@ class _HomeState extends State<Home> {
               child: Row(
                 children: [
                   for (int i = 0; i < listTempatGym.length; i++)
-                    Container(
-                      margin: EdgeInsets.only(right: 8),
-                      alignment: Alignment.bottomCenter,
-                      height: 200,
-                      width: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/images/tempatGym/${listTempatGym[i].imageGym}.jpg',
-                            ),
-                            fit: BoxFit.cover),
-                      ),
+                    MaterialButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return SearchGym(id: listTempatGym[i].id);
+                        }));
+                      },
                       child: Container(
-                        width: double.infinity,
-                        height: 140,
+                        margin: EdgeInsets.only(right: 8),
+                        alignment: Alignment.bottomCenter,
+                        height: 200,
+                        width: 140,
                         decoration: BoxDecoration(
-                          color: ColorC().primaryColor1,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
-                          gradient: LinearGradient(
-                            begin: Alignment
-                                .topCenter, // Posisi awal gradien di atas
-                            end: Alignment
-                                .bottomCenter, // Posisi akhir gradien di bawah
-                            colors: [
-                              Colors.transparent,
-                              Colors.blue,
-                            ], // Warna gradien (tr  ansparan di atas, biru di bawah)
-                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images/tempatGym/${listTempatGym[i].imageGym}.jpg',
+                              ),
+                              fit: BoxFit.cover),
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${listTempatGym[i].namaTempat}',
-                                style: StyleText(color: Colors.white)
-                                    .styleH4bWithColor,
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.mapPin,
-                                    size: 16,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${listTempatGym[i].domisili}',
-                                    style: StyleText(color: Colors.white)
-                                        .stylePlWithColor,
-                                  )
-                                ],
-                              ),
-                            ],
+                          width: double.infinity,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            color: ColorC().primaryColor1,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20)),
+                            gradient: LinearGradient(
+                              begin: Alignment
+                                  .topCenter, // Posisi awal gradien di atas
+                              end: Alignment
+                                  .bottomCenter, // Posisi akhir gradien di bawah
+                              colors: [
+                                Colors.transparent,
+                                ColorC().primaryColor1,
+                              ], // Warna gradien (tr  ansparan di atas, biru di bawah)
+                            ),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '${listTempatGym[i].namaTempat}',
+                                  style: StyleText(color: Colors.white)
+                                      .styleH4bWithColor,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.mapPin,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      '${listTempatGym[i].domisili}',
+                                      style: StyleText(color: Colors.white)
+                                          .stylePlWithColor,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -569,6 +602,7 @@ class _HomeState extends State<Home> {
                 style: StyleText().styleH4b,
               ),
               MaterialButton(
+                padding: EdgeInsets.all(0),
                 onPressed: () {
                   Navigator.pushNamed(context, Routes.subcriptionView);
                 },
@@ -587,57 +621,65 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (int i = 0; i < 4; i++)
-                    Container(
-                      margin: EdgeInsets.only(right: 8),
-                      width: 180,
-                      height: 250,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/sGym1.png'),
-                              fit: BoxFit.cover),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Promo',
-                                  style: StyleText(color: Colors.white)
-                                      .styleH3bWithColor,
-                                ),
-                                Text(
-                                  '25% Off',
-                                  style: StyleText(color: Colors.white)
-                                      .styleH3bWithColor,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  '',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationColor: const Color.fromARGB(255, 0, 0, 0), // Opsional, bisa dihilangkan jika tidak diperlukan
-                                    decorationThickness:
-                                        2.0, // Opsional, bisa dihilangkan jika tidak diperlukan
+                  for (int i = 0; i < listJenisPaket.length; i++)
+                    MaterialButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return SubcriptionView(id: listGerakan[i].id,);
+                        }));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 8),
+                        width: 180,
+                        height: 250,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/jenisPaket/${listJenisPaket[i].image}.jpg'),
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Promo',
+                                    style: StyleText(color: Colors.white)
+                                        .styleH3bWithColor,
                                   ),
-                                ),
-                                Text(
-                                 '',
-                                  style: StyleText(color: Colors.white)
-                                      .stylePbWithColor,
-                                ),
-                              ],
-                            )
-                          ],
+                                  Text(
+                                    '${listJenisPaket[i].promo}% Off',
+                                    style: StyleText(color: Colors.white)
+                                        .styleH3bWithColor,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    'IDR ${listJenisPaket[i].harga}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor: const Color.fromARGB(255, 0, 0, 0), // Opsional, bisa dihilangkan jika tidak diperlukan
+                                      decorationThickness:
+                                          2.0, // Opsional, bisa dihilangkan jika tidak diperlukan
+                                    ),
+                                  ),
+                                  Text(
+                                   'IDR ${listJenisPaket[i].harga - (listJenisPaket[i].harga*(listJenisPaket[i].promo/100))}',
+                                    style: StyleText(color: Colors.white)
+                                        .stylePbWithColor,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -656,6 +698,7 @@ class _HomeState extends State<Home> {
                 style: StyleText().styleH4b,
               ),
               MaterialButton(
+                
                 onPressed: () {
                   Navigator.pushNamed(context, Routes.gridGuidePage);
                 },
@@ -677,44 +720,52 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: [
                   for (int i = 0; i < 5; i++)
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10, top: 5),
-                      padding: EdgeInsets.all(15),
-                      width: double.infinity,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey, // Warna bayangan
-                            offset: Offset(0, 1), // Posisi bayangan (x, y)
-                            blurRadius: 6, // Radius blur
-                            spreadRadius: 0.5, // Radius penyebaran
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/eGym3.png'),
-                            fit: BoxFit.cover),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Beginner',
-                            style: StyleText().styleH4b,
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 40,
-                              ),
-                              Text(
-                                '| Push Up',
-                                style: StyleText().styleH4lWithColor,
-                              ),
-                            ],
-                          ),
-                        ],
+                    MaterialButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return Guide();
+                        }));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 10, top: 5),
+                        padding: EdgeInsets.all(15),
+                        width: double.infinity,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey, // Warna bayangan
+                              offset: Offset(0, 1), // Posisi bayangan (x, y)
+                              blurRadius: 6, // Radius blur
+                              spreadRadius: 0.5, // Radius penyebaran
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/gerakan/${listGerakan[i].imageGerakan}.jpg'),
+                              fit: BoxFit.cover),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${findLevelGerakan(listGerakan[i].levelGerakanId)}',
+                              style: StyleText().styleH4b,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 40,
+                                ),
+                                Text(
+                                  '| ${listGerakan[i].namaGerakan}',
+                                  style: StyleText().styleH4lWithColor,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],

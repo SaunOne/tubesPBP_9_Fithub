@@ -34,13 +34,13 @@ class _HomePageState extends State<HomePage> {
   late int id = 0;
   late User user = User.empty();
 
-  List<Widget> content = [Home(), SearchGym(), SubcriptionView(), GridGuide()];
+  List<Widget> content = [Home(), SearchGym(id: 1,), SubcriptionView(id: 1,), GridGuide()];
 
   void onChange(index) {
     setState(
       () {
         indexContent = index;
-      },
+      }, 
     );
   }
 
