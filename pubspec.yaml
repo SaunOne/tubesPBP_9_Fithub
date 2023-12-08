@@ -114,7 +114,9 @@ flutter:
     - assets/images/trainer/
     - assets/images/logo/
     - assets/images/bank/
+    - assets/images/jenisPaket/
     - assets/images/tempatGym/
+    - assets/images/gerakan/
     - assets/logo.png
   #   - images/a_dot_ham.jpeg
 

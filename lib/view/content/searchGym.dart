@@ -31,7 +31,8 @@ class GymLocation {
 }
 
 class SearchGym extends StatefulWidget {
-  const SearchGym({Key? key}) : super(key: key);
+  int id;
+  SearchGym({Key? key,required this.id}) : super(key: key);
 
   @override
   State<SearchGym> createState() => _SearchGymState();
@@ -69,6 +70,7 @@ class _SearchGymState extends State<SearchGym> {
           bandung.add(tempatGymList[i]);
         } 
       }
+      
     });
     mainTempatGym = tempatGymList;
     print('Yogya : ${yogyakarta}');
@@ -87,6 +89,7 @@ class _SearchGymState extends State<SearchGym> {
   @override
   void initState() {
    print('hai2');
+   indexTempatGym = widget.id;
     super.initState();
     // TODO: implement initState
     fetchData().then((_) {
