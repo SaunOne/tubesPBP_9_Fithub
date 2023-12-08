@@ -84,11 +84,14 @@ class GerakanClient {
   Future<List<Gerakan>> getGerakanByLevel(int id) async {
     token = await getToken();
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/getGerakanByLevel/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.http(url, "$endpoint/level/$id"), headers: _setHeaders());
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
+      
+
       Iterable list = json.decode(response.body)['data'];
+      print('success');
       return list.map((e) => Gerakan.fromJson(e)).toList();
     } catch (e) {
       return Future.error(e.toString());
@@ -98,7 +101,7 @@ class GerakanClient {
   Future<List<Gerakan>> getGerakanByBodyPart(int id) async {
     token = await getToken();
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/getGerakanByBodyPart/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.http(url, "$endpoint/level/$id"), headers: _setHeaders());
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

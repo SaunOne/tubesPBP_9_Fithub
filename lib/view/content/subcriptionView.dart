@@ -34,188 +34,161 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   }
 
 
-  @override
+
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+  double h = MediaQuery.of(context).size.height;
+  double w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: FutureBuilder<List<JenisPaket>>(
-        future: JenisPaketClient().getAllJenisPaket(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
-          } else if (snapshot.hasError) {
-            print(snapshot);
-            return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData) {
-            return Text('Tidak ada data.');
-          } else {
-            List<JenisPaket> listJenisPaket = snapshot.data!;
-            // print('isi mengajar : ${trainer[1].namaTrainer}');
-            print(
-                'di atasi sebelum masujk ${listJenisPaket[_currentImageIndex].id}');
-            return Container(
-              child: SafeArea(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 0.045 * h,
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: FutureBuilder<List<JenisPaket>>(
+      future: JenisPaketClient().getAllJenisPaket(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          print(snapshot);
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData) {
+          return Text('Tidak ada data.');
+        } else {
+          List<JenisPaket> listJenisPaket = snapshot.data!;
+          print('di atasi sebelum masuk ${listJenisPaket[_currentImageIndex].id}');
+          return Container(
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 0.045 * h,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/jenisPaket/${listJenisPaket[_currentOptionIndex].image}.jpg'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          Container(
-
-
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    
-                                    image: AssetImage(
-                                        'assets/images/jenisPaket/${listJenisPaket[_currentOptionIndex].image}.jpg'),fit: BoxFit.cover)),
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            margin: EdgeInsets.symmetric(horizontal: 20),
-                            height: 300,
-                            width: double.infinity,
-
-                          ),
-                          SizedBox(
-                            height: 0.02 * h,
-                          ),
-                          SizedBox(
-                            height: 0.01 * h,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                listJenisPaket[_currentOptionIndex]
-                                    .namaMembership,
-                                style: TextStyle(
-                                  fontSize: 0.06 * w,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          height: 300,
+                          width: double.infinity,
+                        ),
+                        SizedBox(
+                          height: 0.02 * h,
+                        ),
+                        SizedBox(
+                          height: 0.01 * h,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              listJenisPaket[_currentOptionIndex].namaMembership,
+                              style: TextStyle(
+                                fontSize: 0.06 * w,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(
-                                'Rp.${listJenisPaket[_currentOptionIndex].harga}',
-                                style: TextStyle(
-                                  fontSize: 0.06 * w,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            ),
+                            Text(
+                              'Rp.${listJenisPaket[_currentOptionIndex].harga}',
+                              style: TextStyle(
+                                fontSize: 0.06 * w,
+                                fontWeight: FontWeight.w400,
                               ),
-                              Container(
-                                width: 0.9 * w,
-                                child: Divider(
-                                  thickness: 1,
-                                ),
+                            ),
+                            Container(
+                              width: 0.9 * w,
+                              child: Divider(
+                                thickness: 1,
                               ),
-
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 20),
-                                child: SizedBox(
-                                  height: 0.18 * h,
-                                  child: FutureBuilder<List<Fasilitas>>(
-                                    future: FasilitasClient()
-                                        .showFasilitasByJenisPaket(
-                                            listJenisPaket[_currentOptionIndex]
-                                                .id),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
-                                      } else if (snapshot.hasError) {
-                                        print(snapshot);
-                                        return Text('Error: ${snapshot.error}');
-                                      } else if (!snapshot.hasData) {
-                                        return Text('Tidak ada data.');
-                                      } else {
-                                        List<Fasilitas> listFaislitas =
-                                            snapshot.data!;
-                                        // print('isi mengajar : ${trainer[1].namaTrainer}');
-                                        return ListView.builder(
-                                          itemCount: listFaislitas.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 8.0),
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    color:
-                                                        ColorC().primaryColor1,
-                                                    size: 0.04 * w,
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              child: SizedBox(
+                                height: 0.11 * h,
+                                child: FutureBuilder<List<Fasilitas>>(
+                                  future: FasilitasClient()
+                                      .showFasilitasByJenisPaket(
+                                          listJenisPaket[_currentOptionIndex].id),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (snapshot.hasError) {
+                                      print(snapshot);
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (!snapshot.hasData) {
+                                      return Text('Tidak ada data.');
+                                    } else {
+                                      List<Fasilitas> listFaislitas = snapshot.data!;
+                                      return ListView.builder(
+                                        itemCount: listFaislitas.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.add,
+                                                  color: ColorC().primaryColor1,
+                                                  size: 0.04 * w,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    listFaislitas[index].namaFasilitas,
+                                                    style: TextStyle(
+                                                      fontSize: 0.04 * w,
+                                                      color: ColorC().primaryColor1,
+                                                      fontWeight: FontWeight.normal,
+                                                    ),
                                                   ),
-                                                  Expanded(
-                                                    child: Text(
-                                                      listFaislitas[index]
-                                                          .namaFasilitas,
-                                                      style: TextStyle(
-                                                        fontSize: 0.04 * w,
-                                                        color: ColorC()
-                                                            .primaryColor1,
-                                                        size: 0.04 * w,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          listFasilitas[index]
-                                                              .namaFasilitas,
-                                                          style: TextStyle(
-                                                            fontSize: 0.04 * w,
-                                                            color: ColorC()
-                                                                .primaryColor1,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                              shrinkWrap: true,
-                                            );
-                                          }
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         },
-                                      ),
-                                    ),
-                                  ),
+                                        shrinkWrap: true,
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
-                              Container(
-                                width: 0.9 * w,
-                                child: Divider(
-                                  thickness: 1,
-                                ),
+                            ),
+                            Container(
+                              width: 0.9 * w,
+                              child: Divider(
+                                thickness: 1,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    buildNavigationControls(listJenisPaket.length,
-                        listJenisPaket[_currentOptionIndex].id),
-
-                    SizedBox(height: 0.1 * h),
-
-                  ],
-                ),
+                  ),
+                  buildNavigationControls(listJenisPaket.length,listJenisPaket[_currentOptionIndex].id),
+                  SizedBox(height: 0.08 * h),
+                ],
               ),
-            );
-          }
-        },
-      ),
-    );
-  }
+            ),
+          );
+        }
+      },
+    ),
+  );
+}
+
 
   Widget buildNavigationControls(int length, int id_paket) {
     print('id_paket $id_paket');

@@ -4,6 +4,7 @@ import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Client/AuthClient.dart';
+import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/Login.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
@@ -352,7 +353,7 @@ class _RegisterState extends State<Register> {
                   const SizedBox(height: 40),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push (
                         context,
                         MaterialPageRoute(
                           builder: (context) => Login(),
@@ -407,7 +408,7 @@ class _RegisterState extends State<Register> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      Navigator.popAndPushNamed(context, Routes.login);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
