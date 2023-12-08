@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
         listGerakan = value;
       });
     });
-    await JenisPaketClient().showJenisPaketHome().then((value) {
+    await JenisPaketClient().getAllJenisPaket().then((value) {
       print('length jenisPaket : ${value.length}');
 
       setState(() {
@@ -621,7 +621,7 @@ class _HomeState extends State<Home> {
                             Column(
                               children: [
                                 Text(
-                                  "IDR Rp.500.000/mont",
+                                  '',
                                   style: TextStyle(
                                     color: Colors.white,
                                     decoration: TextDecoration.lineThrough,
@@ -631,7 +631,7 @@ class _HomeState extends State<Home> {
                                   ),
                                 ),
                                 Text(
-                                  "IDR Rp.500.000/mont",
+                                 '',
                                   style: StyleText(color: Colors.white)
                                       .stylePbWithColor,
                                 ),

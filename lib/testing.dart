@@ -23,7 +23,7 @@ class TestQuery extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              TrainerClient().showTrainerHome();
+              JenisPaketClient().showJenisPaketHome();
               
             },
             child: Text('Press'),
@@ -32,7 +32,7 @@ class TestQuery extends StatelessWidget {
             height: 400,
             width: 200,
             child: FutureBuilder<List<JenisPaket>>(
-              future: JenisPaketClient().getAllJenisPaket(),
+              future: JenisPaketClient().showJenisPaketHome(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
