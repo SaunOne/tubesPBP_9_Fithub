@@ -4,6 +4,7 @@ import 'package:ugd6_b_9/database/Client/GerakanClient.dart';
 import 'package:ugd6_b_9/database/Client/JenisPaketClient.dart';
 import 'package:ugd6_b_9/database/Client/LevelGerakanClient.dart';
 import 'package:ugd6_b_9/database/Client/MengajarClient.dart';
+import 'package:ugd6_b_9/database/Client/PresensiClient.dart';
 import 'package:ugd6_b_9/database/Client/SubscriptionClient.dart';
 import 'package:ugd6_b_9/database/Client/TempatGymClient.dart';
 import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
@@ -27,7 +28,7 @@ class TestQuery extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              GerakanClient().getGerakanByLevel(1);
+              PresensiClient().presensi('Fithub__cn7p453k9c');
               
             },
             child: Text('Press'),

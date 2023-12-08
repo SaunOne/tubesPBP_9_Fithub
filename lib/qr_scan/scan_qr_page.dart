@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ugd6_b_9/constant/app_constant.dart';
+import 'package:ugd6_b_9/database/Client/PresensiClient.dart';
 import 'package:ugd6_b_9/qr_scan/scanner_error_widget.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -117,7 +118,7 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView>
   }
 
   Future<void> processAttendance(String qrCode) async {
-    final String code = "http://PBP_GYM/";
+    final String code = "Fithub__";
 
     if(!qrCode.contains(code)) {
       ScaffoldMessenger.of(context).showSnackBar(

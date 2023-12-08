@@ -55,7 +55,7 @@ class RouteGenerator {
       case Routes.gridGuidePage:
         return MaterialPageRoute(builder: (_) => const GridGuide());
       case Routes.detailGuidePage:
-        return MaterialPageRoute(builder: (_) => const Guide());
+        return MaterialPageRoute(builder: (_) =>  Guide(id: 1,));
       case Routes.scanPage:
         return MaterialPageRoute(
             builder: (_) => const BarcodeScannerPageView());
@@ -85,14 +85,6 @@ class RouteGenerator {
       case Routes.testQuery:
         return MaterialPageRoute(builder: (_) => TestQuery());
 
-      case Routes.membershipPage:
-        return MaterialPageRoute(builder: (_) => const MembershipPage());
-
-      case Routes.historyPresensi:
-        return MaterialPageRoute(builder: (_) => const HistoryPresensi());
-
-      case Routes.notaView:
-        return MaterialPageRoute(builder: (_) => const NotaPage());
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());
     }

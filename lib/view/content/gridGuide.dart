@@ -22,18 +22,19 @@ class _GridGuideState extends State<GridGuide> {
   late List<Gerakan> beginner = [];
   late List<Gerakan> advance = [];
   late List<Gerakan> mainListGerakan = [];
+  List<String> listLevel = ['Beginner','Intermediate','Advance'];
 
   Future<void> fetchData() async {
     await GerakanClient().getGerakanByLevel(1).then((value) {
       print('value : ${value}');
       setState(() {
-        intermediate = value;
+        beginner = value;
       });
     });
     await GerakanClient().getGerakanByLevel(2).then((value) {
       print('value : ${value}');
       setState(() {
-        beginner = value;
+        intermediate = value;
       });
     });
     await GerakanClient().getGerakanByLevel(3).then((value) {
@@ -52,7 +53,10 @@ class _GridGuideState extends State<GridGuide> {
   }
 
   void activeMainListGerakan(listGerakan) {
-    mainListGerakan = listGerakan;
+    setState(() {
+       mainListGerakan = listGerakan;
+    });
+   
   }
 
   Future<List<Gerakan>> fetch_check() async {
@@ -91,7 +95,7 @@ class _GridGuideState extends State<GridGuide> {
         } else if (!snapshot.hasData) {
           return Text('Tidak ada data.');
         } else {
-          print('Main Lenget : ${mainListGerakan[3].imageGerakan}');
+        
           // print('isi mengajar : ${trainer[1].namaTrainer}');
           return Container(
             decoration: BoxDecoration(
@@ -108,6 +112,7 @@ class _GridGuideState extends State<GridGuide> {
                     MaterialButton(
                       onPressed: () {
                         changeGrid(1);
+                        activeMainListGerakan(beginner);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -126,6 +131,7 @@ class _GridGuideState extends State<GridGuide> {
                     MaterialButton(
                       onPressed: () {
                         changeGrid(2);
+                        activeMainListGerakan(intermediate);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -144,6 +150,7 @@ class _GridGuideState extends State<GridGuide> {
                     MaterialButton(
                       onPressed: () {
                         changeGrid(3);
+                        activeMainListGerakan(advance);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -169,9 +176,14 @@ class _GridGuideState extends State<GridGuide> {
                   child: Container(
                     child: Column(
                       children: [
-                        for (int i = 1; i < mainListGerakan.length; i++)
+                        for (int i = 0; i < mainListGerakan.length; i++)
                           MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              print('length : ${mainListGerakan.length}');
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return Guide(id: mainListGerakan[i].id);
+                              }));
+                            },
                             child: Container(
                               margin: EdgeInsets.only(bottom: 10),
                               height: 160,
@@ -192,11 +204,11 @@ class _GridGuideState extends State<GridGuide> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Beginer',
+                                      '${mainListGerakan[i].namaGerakan}',
                                       style: StyleText().styleH3bWithColor,
                                     ),
                                     Text(
-                                      '|6 Workouts for Beginner',
+                                      '|Workouts for ${mainListGerakan[i].levelGerakan!.levelGerakan}',
                                       style: StyleText().stylePlWithColor,
                                     ),
                                   ],

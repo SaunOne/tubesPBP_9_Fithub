@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ugd6_b_9/entity/model/body_part.dart';
+import 'package:ugd6_b_9/entity/model/levelGerakan.dart';
 
 class Gerakan {
   int id;
@@ -11,6 +12,7 @@ class Gerakan {
   String deskripsi;
   String durasi;
   BodyPart? bodyPart;
+  LevelGerakan? levelGerakan;
 
   Gerakan({
     required this.id,
@@ -20,12 +22,16 @@ class Gerakan {
     required this.imageGerakan,
     required this.deskripsi,
     required this.durasi,
-    this.bodyPart
+    this.bodyPart,
+    this.levelGerakan
   });
 
   factory Gerakan.fromRawJson(String str) => Gerakan.fromJson(json.decode(str));
 
   factory Gerakan.fromJson(Map<String, dynamic> json) {
+
+    LevelGerakan temp = LevelGerakan(id: 1, levelGerakan: json['level_gerakan']?? 'kosong');
+
     return Gerakan(
       id: json['id'] ?? 0,
       bodyPartId: json['body_part_id'],
@@ -34,6 +40,7 @@ class Gerakan {
       imageGerakan: json['image_gerakan'] ?? '',
       deskripsi: json['deskripsi'] ?? '',
       durasi: json['durasi'] ?? '',
+      levelGerakan: temp
     );
   }
 

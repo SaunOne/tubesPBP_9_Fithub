@@ -24,6 +24,7 @@ class PresensiClient {
   Future<Presensi> presensi(String qrCode) async {
     token = await getToken();
     try {
+      print('http : ${Uri.http(url, "$endpoint/$qrCode")}');
       var response = await http.post(
         Uri.http(url, "$endpoint/$qrCode"),
         headers: _setHeaders(),
