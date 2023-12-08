@@ -227,7 +227,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(20),
             width: double.infinity,
-            height: 150,
+            height: 110,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,
@@ -244,7 +244,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Goal For This Month',
+                  'Keep spirit to your exercise!',
                   style: StyleText().styleH3b,
                 ),
                 SizedBox(
@@ -253,29 +253,13 @@ class _HomeState extends State<Home> {
                 Row(
                   children: [
                     Icon(
-                      FontAwesomeIcons.weightHanging,
+                      FontAwesomeIcons.moneyBill,
                       size: 18,
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Text('Weight Loss 3Kg', style: StyleText().styleH4l),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_month,
-                      size: 18,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Gym Routine 12 Times / Month',
-                        style: StyleText().styleH4l),
+                    Text('Premium ' + 'Subscription', style: StyleText().styleH4l),
                   ],
                 ),
               ],

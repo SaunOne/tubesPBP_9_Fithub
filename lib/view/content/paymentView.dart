@@ -12,6 +12,7 @@ import 'package:ugd6_b_9/entity/model/bank.dart';
 import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
 import 'package:ugd6_b_9/entity/model/subscription.dart';
 import 'package:ugd6_b_9/entity/model/user.dart';
+import 'package:ugd6_b_9/view/content/checkSubs.dart';
 import 'package:ugd6_b_9/view/content/notaView.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 
@@ -314,7 +315,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 MaterialPageRoute(builder: (context) {
                   Subscription? subscription;
                   SubscriptionClient().createSubscription(data);
+
                   return NotaPage(bank: bank,jensiPaket: jenis_paket!,user: user,id_subscription: user.id,);
+
                 }),
               );
             },
