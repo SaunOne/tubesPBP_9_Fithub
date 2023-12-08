@@ -65,6 +65,7 @@ class User {
       photo: json['photo'] ?? '',
       trainerId: json['trainer_id'] ?? 0,
       memberId: json['member_id'] ?? 0,
+      
     );
   }
 }

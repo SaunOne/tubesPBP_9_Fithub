@@ -40,7 +40,7 @@ class _ProfileViewState extends State<ProfileView> {
   bool isEditMode = false;
   late ImageUser image;
   Future<User> user = Future<User>.value(User.empty());
-
+ 
   Gender? selectedGender;
 
   // String gender = 'Male'; // Default gender value

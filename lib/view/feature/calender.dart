@@ -213,7 +213,7 @@ class CalendarScreenState extends State<CalendarScreen> {
                                 FontAwesomeIcons.chevronLeft,
                                 color: Colors.white,
                                 weight: 300,
-                              )),
+                              ),),
                           Text(
                             'Training Schedule',
                             style: StyleText(color: Colors.white)

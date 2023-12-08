@@ -49,28 +49,23 @@ class TrainerClient{
       return Future.error(e.toString());
     } 
   }
+  
   Future<List<Trainer>> showTrainerHome() async {
     token = await getToken();
     try {
       print('url : ${Uri.http(url, endpoint+'_home')}');
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.http(url, endpoint+'_home'),
         headers: _setHeaders(),
       );
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
-      print('response : ${response.body}');
+    
 
       Iterable list = json.decode(response.body)['data'];
-       print('list : ${list}');
-      TempatGym data;
-       var listTrainer = list.map((e) => Trainer.fromJson(e)).toList();
-        print('length list : ${listTrainer.length}');
-       for (int i = 0 ; i < listTrainer.length ; i ++ ){
-          data = await TempatGymClient().findTempatGymById(listTrainer[i].tempatGymId);
-          listTrainer[i].setTempatGym(data);
-       }
+      print('length list home : ${list.length}');
+      var listTrainer = list.map((e) => Trainer.fromJson(e)).toList();
 
       return listTrainer;
     } catch (e) {

@@ -3,14 +3,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
+import 'package:ugd6_b_9/database/Client/GerakanClient.dart';
+import 'package:ugd6_b_9/database/Client/JenisPaketClient.dart';
 import 'package:ugd6_b_9/database/Client/MengajarClient.dart';
+import 'package:ugd6_b_9/database/Client/TempatGymClient.dart';
 import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
 import 'package:ugd6_b_9/database/Client/UserClient.dart';
 import 'package:ugd6_b_9/entity/model/User.dart';
+import 'package:ugd6_b_9/entity/model/gerakan.dart';
+import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
 import 'package:ugd6_b_9/entity/model/mengajar_trainer.dart';
 import 'package:ugd6_b_9/entity/model/trainer.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
+import 'package:ugd6_b_9/entity/model/tempat_gym.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,6 +27,66 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   User user = User.empty();
+
+  late List<Trainer> listTrainer;
+  late List<TempatGym> listTempatGym;
+  late List<Gerakan> listGerakan;
+  late List<JenisPaket> listJenisPaket;
+
+  Future<void> fetchData() async {
+    await TrainerClient().showTrainerHome().then((value) {
+      print('length trainer : ${value.length}');
+
+      setState(() {
+        listTrainer = value;
+      });
+    });
+    await TempatGymClient().showTempatGymHome().then((value) {
+      print('length tempatGym : ${value.length}');
+
+      setState(() {
+        listTempatGym = value;
+      });
+    });
+    await GerakanClient().showGerkaanHome().then((value) {
+      print('length Gerakan : ${value.length}');
+
+      setState(() {
+        listGerakan = value;
+      });
+    });
+    await JenisPaketClient().showJenisPaketHome().then((value) {
+      print('length jenisPaket : ${value.length}');
+
+      setState(() {
+        listJenisPaket = value;
+      });
+    });
+  }
+
+  Future<List<Trainer>> fetchData_future_trainerGym() async {
+    listTrainer = await TrainerClient().showTrainerHome();
+    return listTrainer;
+  }
+
+  Future<List<TempatGym>> fetchData_future_tempatGym() async {
+    listTempatGym = await TempatGymClient().showTempatGymHome();
+    return listTempatGym;
+  }
+
+  Future<List<Gerakan>> fetchData_future_gerakan() async {
+    listGerakan = await GerakanClient().showGerkaanHome();
+    return listGerakan;
+  }
+
+  Future<List<JenisPaket>> fetchData_future_jenisPaket() async {
+    listJenisPaket = await JenisPaketClient().showJenisPaketHome();
+    return listJenisPaket;
+  }
+
+  Future<bool> checkData() async {
+    return listTrainer != null;
+  }
 
   void getUser() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -51,14 +117,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    fetchData();
     getUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    return FutureBuilder(
-        future: user != null ? Future.delayed(Duration(seconds: 2)) : null,
+    return FutureBuilder<List<dynamic>>(
+        future: fetchData_future_jenisPaket(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -73,14 +139,8 @@ class _HomeState extends State<Home> {
   }
 
   SingleChildScrollView HomeView() {
-    double h = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double w = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       padding: EdgeInsets.all(20),
       child: Column(
@@ -223,7 +283,7 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (int i = 0; i < 5; i++)
+                  for (int i = 0; i < listTempatGym.length; i++)
                     Container(
                       margin: EdgeInsets.only(right: 8),
                       alignment: Alignment.bottomCenter,
@@ -233,7 +293,7 @@ class _HomeState extends State<Home> {
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
                             image: AssetImage(
-                              'assets/images/tGym1.png',
+                              'assets/images/tempatGym/${listTempatGym[i].imageGym}.jpg',
                             ),
                             fit: BoxFit.cover),
                       ),
@@ -263,7 +323,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                'Jakarta',
+                                '${listTempatGym[i].namaTempat}',
                                 style: StyleText(color: Colors.white)
                                     .styleH4bWithColor,
                               ),
@@ -281,7 +341,7 @@ class _HomeState extends State<Home> {
                                     width: 5,
                                   ),
                                   Text(
-                                    'Citi Walk',
+                                    '${listTempatGym[i].domisili}',
                                     style: StyleText(color: Colors.white)
                                         .stylePlWithColor,
                                   )
@@ -326,195 +386,175 @@ class _HomeState extends State<Home> {
             decoration: BoxDecoration(
               color: Colors.transparent,
             ),
-            child: FutureBuilder<List<Trainer>>(
-              future: TrainerClient().showAllTrainers(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
-                } else if (snapshot.hasError) {
-                  print(snapshot);
-                  return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData) {
-                  return Text('Tidak ada data.');
-                } else {
+            child: ListView.builder(
+              itemCount: (listTrainer.length),
+              itemBuilder: (context, index) {
+                Trainer trainer = listTrainer[index];
 
-                  List<Trainer> trainerList= snapshot.data!;
-                  // print('isi mengajar : ${trainer[1].namaTrainer}');
-                  return ListView.builder(
-                  itemCount: (trainerList.length <= 5? trainerList.length : 5),
-                  itemBuilder: (context, index) {
-                    Trainer trainer = trainerList[index];
-
-                    // print('nama trainer : ${trainer.tempatGym!.namaTempat}');
-                    return MaterialButton(
-                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 2),
-                      onPressed: () {
-                        print("id sebelum masuk ${trainer.namaTrainer} : ${trainer.id}");
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return DetailTrainer(id_tempat_gym: trainer.id);
-                        }));
-                      },
-                      child: Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            const BoxShadow(
-                              color: Colors.grey, // Warna bayangan
-                              offset: Offset(0, 1), // Posisi bayangan (x, y)
-                              blurRadius: 6, // Radius blur
-                              spreadRadius: 0.5, // Radius penyebaran
-                            ),
-                          ],
+                // print('nama trainer : ${trainer.tempatGym!.namaTempat}');
+                return MaterialButton(
+                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+                  onPressed: () {
+                    print(
+                        "id sebelum masuk ${trainer.namaTrainer} : ${trainer.id}");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DetailTrainer(id_tempat_gym: trainer.id);
+                    }));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                    height: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        const BoxShadow(
+                          color: Colors.grey, // Warna bayangan
+                          offset: Offset(0, 1), // Posisi bayangan (x, y)
+                          blurRadius: 6, // Radius blur
+                          spreadRadius: 0.5, // Radius penyebaran
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 0.3 * w,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/trainer/trainer${index + 1}.jpg'),
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                              ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 0.3 * w,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    'assets/images/trainer/trainer${index + 1}.jpg'),
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 13, vertical: 13),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 13, vertical: 13),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                trainer.namaTrainer,
+                                style: StyleText().styleH4bWithColor,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
                                 children: [
-                                  Text(
-                                    trainer.namaTrainer,
-                                    style: StyleText().styleH4bWithColor,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        child: Text(
-                                          'Experience',
-                                          style: StyleText().styleP2lWithColor,
-                                        ),
-                                      ),
-                                      Text(': ${trainer.experience} ',
-                                          style: StyleText()
-                                              .styleP2lWithColor), //data experience
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        child: Text(
-                                          'Phone',
-                                          style: StyleText().styleP2lWithColor,
-                                        ),
-                                      ),
-                                      Text(': ${trainer.phoneNumber}',
-                                          style: StyleText()
-                                              .styleP2lWithColor), //data umur
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        child: Text(
-                                          'Age',
-                                          style: StyleText().styleP2lWithColor,
-                                        ),
-                                      ),
-                                      Text(': ${trainer.age}',
-                                          style: StyleText()
-                                              .styleP2lWithColor), //data experience
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                    'Avaiable',
-                                    style: StyleText().styleP2lWithColor,
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
                                   Container(
-                                    // color: Colors.amber,
-                                    height: 0.02 * h,
-                                    width: 0.52 * w,
-                                    child: FutureBuilder<List<MengajarTrainer>>(
-                                      future: MengajarTrainerClient()
-                                          .showMengajarByTrainerID(trainer.id),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
-                                        } else if (snapshot.hasError) {
-                                          print(snapshot);
-                                          return Text(
-                                              'Error: ${snapshot.error}');
-                                        } else if (!snapshot.hasData ||
-                                            snapshot.data!.isEmpty) {
-                                          return Text('Tidak ada data.');
-                                        } else {
-                                          List<MengajarTrainer> listMengajar =
-                                              snapshot.data!;
-                                          print(
-                                              'isi mengajar : ${listMengajar.length}');
-                                          return ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: listMengajar.length,
-                                            itemBuilder: (context, index) {
-                                              MengajarTrainer mengajar =
-                                                  listMengajar[index];
-                                              return Container(
-                                                margin:
-                                                    EdgeInsets.only(right: 10),
-                                                alignment: Alignment.center,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 12),
-                                                height: 17,
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        ColorC().primaryColor1,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Text(
-                                                  '${mengajar.jadwalMengajar!.hari}',
-                                                  style: StyleText(
-                                                          color: Colors.white)
-                                                      .styleP3bWithColor,
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
+                                    width: 60,
+                                    child: Text(
+                                      'Experience',
+                                      style: StyleText().styleP2lWithColor,
                                     ),
                                   ),
+                                  Text(': ${trainer.experience} ',
+                                      style: StyleText()
+                                          .styleP2lWithColor), //data experience
                                 ],
                               ),
-                            ),
-                          ],
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    child: Text(
+                                      'Phone',
+                                      style: StyleText().styleP2lWithColor,
+                                    ),
+                                  ),
+                                  Text(': ${trainer.phoneNumber}',
+                                      style: StyleText()
+                                          .styleP2lWithColor), //data umur
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    child: Text(
+                                      'Age',
+                                      style: StyleText().styleP2lWithColor,
+                                    ),
+                                  ),
+                                  Text(': ${trainer.age}',
+                                      style: StyleText()
+                                          .styleP2lWithColor), //data experience
+                                ],
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                'Avaiable',
+                                style: StyleText().styleP2lWithColor,
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Container(
+                                // color: Colors.amber,
+                                height: 0.02 * h,
+                                width: 0.52 * w,
+                                child: FutureBuilder<List<MengajarTrainer>>(
+                                  future: MengajarTrainerClient()
+                                      .showMengajarByTrainerID(trainer.id),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return CircularProgressIndicator(); // Tampilkan indikator loading jika masih menunggu data
+                                    } else if (snapshot.hasError) {
+                                      print(snapshot);
+                                      return Text('Error: ${snapshot.error}');
+                                    } else if (!snapshot.hasData ||
+                                        snapshot.data!.isEmpty) {
+                                      return Text('Tidak ada data.');
+                                    } else {
+                                      List<MengajarTrainer> listMengajar =
+                                          snapshot.data!;
+                                      print(
+                                          'isi mengajar : ${listMengajar.length}');
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: listMengajar.length,
+                                        itemBuilder: (context, index) {
+                                          MengajarTrainer mengajar =
+                                              listMengajar[index];
+                                          return Container(
+                                            margin: EdgeInsets.only(right: 10),
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            height: 17,
+                                            decoration: BoxDecoration(
+                                                color: ColorC().primaryColor1,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Text(
+                                              '${mengajar.jadwalMengajar!.hari}',
+                                              style:
+                                                  StyleText(color: Colors.white)
+                                                      .styleP3bWithColor,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      ],
+                    ),
+                  ),
                 );
-                }
               },
             ),
           ),
@@ -582,8 +622,13 @@ class _HomeState extends State<Home> {
                               children: [
                                 Text(
                                   "IDR Rp.500.000/mont",
-                                  style: StyleText(color: Colors.white)
-                                      .stylePbWithColor,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: const Color.fromARGB(255, 0, 0, 0), // Opsional, bisa dihilangkan jika tidak diperlukan
+                                    decorationThickness:
+                                        2.0, // Opsional, bisa dihilangkan jika tidak diperlukan
+                                  ),
                                 ),
                                 Text(
                                   "IDR Rp.500.000/mont",

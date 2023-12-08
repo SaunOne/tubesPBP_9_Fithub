@@ -4,11 +4,15 @@ class JenisPaket {
   int id;
   String namaMembership;
   double harga;
+  String image;
+  double promo;
 
   JenisPaket({
     required this.id,
     required this.namaMembership,
     required this.harga,
+    required this.image,
+    required this.promo
   });
 
   factory JenisPaket.fromRawJson(String str) => JenisPaket.fromJson(json.decode(str));
@@ -18,6 +22,8 @@ class JenisPaket {
       id: json['id'] ?? 0,
       namaMembership: json['nama_membership'] ?? '',
       harga: (json['harga'] ?? 0.0).toDouble(),
+      image: json['image'] ?? '',
+      promo:(json['promo'] ?? 0.0).toDouble(),
     );
   }
 
@@ -27,5 +33,7 @@ class JenisPaket {
         "id": id,
         "nama_membership": namaMembership,
         "harga": harga,
+        "image" : image,
+        "promo" : promo
       };
 }

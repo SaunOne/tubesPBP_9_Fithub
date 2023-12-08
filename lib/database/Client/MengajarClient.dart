@@ -54,12 +54,9 @@ class MengajarTrainerClient {
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
       Iterable list = json.decode(response.body)['data'];
-      print('list ${list}');
-       print('list : ${list.map((e) => MengajarTrainer.fromJson(e)).toList()}');
-      //  List<MengajarTrainer> value = list.map((e) => MengajarTrainer.fromJson(e)).toList();
-        print('mengajar Trainer : ${list.length}');
+
         var a = list.map((e) => MengajarTrainer.fromJson(e)).toList();
-        print('length list = ${a[1].jadwalMengajar!.hari}');
+       
       return list.map((e) => MengajarTrainer.fromJson(e)).toList();
     } catch (e) {
       return Future.error(e.toString());

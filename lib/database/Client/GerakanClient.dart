@@ -42,6 +42,27 @@ class GerakanClient {
     }
   }
 
+  Future<List<Gerakan>> showGerkaanHome() async {
+    token = await getToken();
+    try {
+      print('url : ${Uri.http(url, endpoint+'_home')}');
+      var response = await http.get(
+        Uri.http(url, endpoint+'_home'),
+        headers: _setHeaders(),
+      );
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      print('response : ${response.body}');
+
+      Iterable list = json.decode(response.body)['data'];
+      print('list : ${list.map((e) => Gerakan.fromJson(e)).toList()}');
+      return list.map((e) => Gerakan.fromJson(e)).toList();
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
   Future<Gerakan> getGerakanById(int id) async {
     token = await getToken();
 

@@ -81,7 +81,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const Profile());
 
       case Routes.testQuery:
-        return MaterialPageRoute(builder: (_) => const TestQuery());
+        return MaterialPageRoute(builder: (_) =>  TestQuery());
 
 
       default:

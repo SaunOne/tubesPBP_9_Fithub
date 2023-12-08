@@ -13,8 +13,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
-
-
 class MyApp extends StatelessWidget {
   Future<bool> checkLogin() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -33,9 +31,7 @@ class MyApp extends StatelessWidget {
         } else {
           return ProviderScope(
             child: MaterialApp(
-
               initialRoute: snapshot.data ?? false ? Routes.homePage : Routes.preLogin,
-
               onGenerateRoute: RouteGenerator.generateRoute,
             ),
           );

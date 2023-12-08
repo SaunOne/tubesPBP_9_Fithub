@@ -32,9 +32,9 @@ class Trainer {
       this.tempatGym});
 
   void setTempatGym(TempatGym data) {
-    print('data : ');
+  
     this.tempatGym = data;
-    print('isi : ${tempatGym!.alamat}');
+  
   }
 
   factory Trainer.fromRawJson(String str) => Trainer.fromJson(json.decode(str));

@@ -10,10 +10,11 @@ import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
 import 'package:ugd6_b_9/entity/model/mengajar_trainer.dart';
 import 'package:ugd6_b_9/entity/model/tempat_gym.dart';
 import 'package:ugd6_b_9/entity/model/trainer.dart';
+import 'package:ugd6_b_9/view/content/trainerView.dart';
 
 class TestQuery extends StatelessWidget {
-  const TestQuery({super.key});
-
+  TestQuery({super.key});
+  List<Trainer>? listTrainer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,14 +23,8 @@ class TestQuery extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              var data = {
-                "bank_id" : 1,
-                "jenis_paket_id" : 2,
-                "user_id" : 1,
-                "membership_id" : 1,
-                "tanggal_pembayaran" : '12-12-12' 
-              };
-              SubscriptionClient().createSubscription(data);
+              TrainerClient().showTrainerHome();
+              
             },
             child: Text('Press'),
           ),
@@ -49,7 +44,9 @@ class TestQuery extends StatelessWidget {
                 } else {
                   List<JenisPaket> jenisPaket = snapshot.data!;
                   // print('isi mengajar : ${trainer[1].namaTrainer}');
-                  return Container(child: Text('${jenisPaket[0].namaMembership}'),);
+                  return Container(
+                    child: Text('${jenisPaket[0].namaMembership}'),
+                  );
                 }
               },
             ),
@@ -59,5 +56,3 @@ class TestQuery extends StatelessWidget {
     );
   }
 }
-
-

@@ -20,7 +20,6 @@ class TrainerView extends StatefulWidget {
 
 class _TrainerViewState extends State<TrainerView> {
   late List<Trainer> trainerList;
-  late List<MengajarTrainer> mengajarList;
 
   Future<void> fetchData() async {
     await TrainerClient().showAllTrainers().then((value) {
@@ -28,13 +27,6 @@ class _TrainerViewState extends State<TrainerView> {
 
       setState(() {
         trainerList = value;
-      });
-    });
-    await MengajarTrainerClient().showAllMengajarTrainer().then((value) {
-      print('value : ${value}');
-
-      setState(() {
-        mengajarList = value;
       });
     });
   }
@@ -220,7 +212,34 @@ class _TrainerViewState extends State<TrainerView> {
                                               snapshot.data!;
                                           print(
                                               'isi mengajar : ${listMengajar.length}');
-                                          return Container();
+                                          return ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: listMengajar.length,
+                                            itemBuilder: (context, index) {
+                                              MengajarTrainer mengajar =
+                                                  listMengajar[index];
+                                              return Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 10),
+                                                alignment: Alignment.center,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12),
+                                                height: 17,
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        ColorC().primaryColor1,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Text(
+                                                  '${mengajar.jadwalMengajar!.hari}',
+                                                  style: StyleText(
+                                                          color: Colors.white)
+                                                      .styleP3bWithColor,
+                                                ),
+                                              );
+                                            },
+                                          );
                                         }
                                       },
                                     ),
