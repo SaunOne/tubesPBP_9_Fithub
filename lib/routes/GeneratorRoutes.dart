@@ -28,6 +28,7 @@ import 'package:ugd6_b_9/view/feature/track.dart';
 import 'package:ugd6_b_9/view/showGym.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ugd6_b_9/view/NewPassword.dart';
+import 'package:ugd6_b_9/view/content/notaView.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -73,16 +74,17 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const NewPassword());
 
       case Routes.paymentView:
-        // return MaterialPageRoute(builder: (_) => const PaymentPage());
+      // return MaterialPageRoute(builder: (_) => const PaymentPage());
       case Routes.searchGym:
         return MaterialPageRoute(builder: (_) =>  SearchGym(id: 1,));
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => const Profile());
 
       case Routes.testQuery:
-        return MaterialPageRoute(builder: (_) =>  TestQuery());
+        return MaterialPageRoute(builder: (_) => TestQuery());
 
-
+      case Routes.notaView:
+        return MaterialPageRoute(builder: (_) => const NotaPage());
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());
     }

@@ -33,6 +33,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
     
   }
 
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -71,6 +72,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                             height: 0.045 * h,
                           ),
                           Container(
+
+
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 image: DecorationImage(
@@ -81,6 +84,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                             margin: EdgeInsets.symmetric(horizontal: 20),
                             height: 300,
                             width: double.infinity,
+
                           ),
                           SizedBox(
                             height: 0.02 * h,
@@ -112,6 +116,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                                   thickness: 1,
                                 ),
                               ),
+
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 30, vertical: 20),
@@ -157,19 +162,32 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                                                         fontSize: 0.04 * w,
                                                         color: ColorC()
                                                             .primaryColor1,
-                                                        fontWeight:
-                                                            FontWeight.normal,
+                                                        size: 0.04 * w,
                                                       ),
-                                                    ),
+                                                      Expanded(
+                                                        child: Text(
+                                                          listFasilitas[index]
+                                                              .namaFasilitas,
+                                                          style: TextStyle(
+                                                            fontSize: 0.04 * w,
+                                                            color: ColorC()
+                                                                .primaryColor1,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                );
+                                              },
+                                              shrinkWrap: true,
                                             );
-                                          },
-                                          shrinkWrap: true,
-                                        );
-                                      }
-                                    },
+                                          }
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -186,7 +204,9 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                     ),
                     buildNavigationControls(listJenisPaket.length,
                         listJenisPaket[_currentOptionIndex].id),
+
                     SizedBox(height: 0.1 * h),
+
                   ],
                 ),
               ),

@@ -3,6 +3,9 @@ import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
+import 'package:ugd6_b_9/entity/model/User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -12,6 +15,28 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  User user = User.empty();
+
+  void getUser() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+
+    try {
+      User getUser = await Query().getByUserId(localStorage.getInt('id')!);
+
+      setState(() {
+        user = getUser;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,14 +66,14 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'I Komang Agus Tinar Virgo V. T.',
+                            '${user.fullname}',
                             style: StyleText().styleH3bWithColor,
                           ),
                           Container(
                             child: Row(
                               children: [
                                 Text(
-                                  'Tinar@gmail.com',
+                                  '${user.email}',
                                   style: StyleText().styleH4lWithColor,
                                 ),
                                 SizedBox(
@@ -61,10 +86,15 @@ class _ProfileState extends State<Profile> {
                           Container(
                             child: Row(
                               children: [
-                                Text(
-                                  '0812345677',
-                                  style: StyleText().styleH4lWithColor,
-                                ),
+                                user.phone.isEmpty
+                                    ? Text(
+                                        '08xxxxxxxxxx',
+                                        style: StyleText().styleH4lWithColor,
+                                      )
+                                    : Text(
+                                        '${user.phone}',
+                                        style: StyleText().styleH4lWithColor,
+                                      ),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -76,7 +106,8 @@ class _ProfileState extends State<Profile> {
                             child: Row(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   decoration: const BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
@@ -89,7 +120,7 @@ class _ProfileState extends State<Profile> {
                                     children: [
                                       Text('Gender : ',
                                           style: StyleText().styleH4bWithColor),
-                                      Text('Male',
+                                      Text('${user.gender}',
                                           style: StyleText().styleH4lWithColor),
                                     ],
                                   ),
@@ -98,7 +129,8 @@ class _ProfileState extends State<Profile> {
                                   width: 30,
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   decoration: const BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
@@ -109,9 +141,9 @@ class _ProfileState extends State<Profile> {
                                   ),
                                   child: Row(
                                     children: [
-                                      Text('Age : ',
+                                      Text('Born : ',
                                           style: StyleText().styleH4bWithColor),
-                                      Text('20 years',
+                                      Text('${user.birthdate}',
                                           style: StyleText().styleH4lWithColor),
                                     ],
                                   ),
@@ -123,7 +155,8 @@ class _ProfileState extends State<Profile> {
                             child: Row(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   decoration: const BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
@@ -136,7 +169,7 @@ class _ProfileState extends State<Profile> {
                                     children: [
                                       Text('Height : ',
                                           style: StyleText().styleH4bWithColor),
-                                      Text('150 cm',
+                                      Text('${user.height}' + ' cm',
                                           style: StyleText().styleH4lWithColor),
                                     ],
                                   ),
@@ -145,7 +178,8 @@ class _ProfileState extends State<Profile> {
                                   width: 20,
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   decoration: const BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
@@ -158,7 +192,7 @@ class _ProfileState extends State<Profile> {
                                     children: [
                                       Text('Weight : ',
                                           style: StyleText().styleH4bWithColor),
-                                      Text('55 Kg',
+                                      Text('${user.weight}' + ' Kg',
                                           style: StyleText().styleH4lWithColor),
                                     ],
                                   ),
@@ -213,7 +247,10 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 30),
                 _ListMenu(
-                  icon: Icon(Icons.logout_outlined, color: Colors.red,),
+                  icon: Icon(
+                    Icons.logout_outlined,
+                    color: Colors.red,
+                  ),
                   text: Text('Logout', style: TextStyle(color: Colors.red)),
                   route: HomePage(),
                   colorArrow: Colors.red,
@@ -233,7 +270,11 @@ class _ListMenu extends StatelessWidget {
   Widget route;
   Color? colorArrow;
   _ListMenu(
-      {Key? key, required this.icon, required this.text, required this.route, this.colorArrow});
+      {Key? key,
+      required this.icon,
+      required this.text,
+      required this.route,
+      this.colorArrow});
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +302,9 @@ class _ListMenu extends StatelessWidget {
         child: Row(
           children: [
             icon,
-            SizedBox(width: 20,),
+            SizedBox(
+              width: 20,
+            ),
             text,
             Spacer(),
             Icon(Icons.arrow_forward_ios, color: colorArrow ?? Colors.black),
@@ -270,4 +313,10 @@ class _ListMenu extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<User> getUserById(int id) async {
+  print(id);
+  User data = await Query().getByUserId(id);
+  return data;
 }
