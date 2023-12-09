@@ -37,7 +37,7 @@ class Query {
 
       if (response.statusCode == 200) {   
  
-        User user = User.fromJson(jsonDecode(response.body));
+        User user = await User.fromJson(jsonDecode(response.body));
         return user;
       } else {
         print(response.body);

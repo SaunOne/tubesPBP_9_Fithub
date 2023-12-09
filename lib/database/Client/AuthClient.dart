@@ -52,7 +52,8 @@ class Authentication {
         'birthdate': birthdate, 
         'gender': gender,
       };
-
+      print('masuk sebelum url : ${data}');
+      print('ini url :  ${Uri.http(networkUrl.prefix, networkUrl.register)}');
       var url = Uri.http(networkUrl.prefix, networkUrl.register);
       var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
 

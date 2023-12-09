@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/database/Client/FasilitasClient.dart';
+import 'package:ugd6_b_9/database/Client/GerakanClient.dart';
 import 'package:ugd6_b_9/database/Client/JenisPaketClient.dart';
 import 'package:ugd6_b_9/database/Client/LevelGerakanClient.dart';
 import 'package:ugd6_b_9/database/Client/MengajarClient.dart';
+import 'package:ugd6_b_9/database/Client/PresensiClient.dart';
 import 'package:ugd6_b_9/database/Client/SubscriptionClient.dart';
 import 'package:ugd6_b_9/database/Client/TempatGymClient.dart';
 import 'package:ugd6_b_9/database/Client/TrainerClient.dart';
 import 'package:ugd6_b_9/entity/model/fasilitas.dart';
+import 'package:ugd6_b_9/entity/model/gerakan.dart';
 import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
 import 'package:ugd6_b_9/entity/model/levelGerakan.dart';
 import 'package:ugd6_b_9/entity/model/mengajar_trainer.dart';
@@ -25,7 +28,7 @@ class TestQuery extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              LevelGerakanClient().showAllLevelGerakan();
+              PresensiClient().presensi('Fithub__cn7p453k9c');
               
             },
             child: Text('Press'),

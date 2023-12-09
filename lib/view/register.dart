@@ -4,6 +4,7 @@ import 'package:ugd6_b_9/constant/color.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/database/Client/AuthClient.dart';
+import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/Login.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
@@ -305,7 +306,6 @@ class _RegisterState extends State<Register> {
                           isChecked = value ?? false;
                         });
                       },
-                      
                       validator: (value) {
                         if (value == null) {
                           return 'Please check the terms & condition';
@@ -314,7 +314,9 @@ class _RegisterState extends State<Register> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -326,16 +328,49 @@ class _RegisterState extends State<Register> {
                             ),
                           )),
                       onPressed: () async {
-                        print('masuk sebelum validate');
-                        if (formKey.currentState!.validate() && isChecked) {
-                          handleRegister(
-                              fullnameController.text,
-                              nameController.text,
-                              emailController.text,
-                              passwordController.text,
-                              tanggal_lahirController.text,
-                              genderController.text);
-                        }
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Confirmation'),
+                            content: Text(
+                                'Are you sure all the entered data is correct?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'No',
+                                  style:
+                                      StyleText(color: ColorC().primaryColor1)
+                                          .styleH4lWithColor,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  print('masuk sebelum validate');
+                                  if (formKey.currentState!.validate() &&
+                                      isChecked) {
+                                    handleRegister(
+                                        fullnameController.text,
+                                        nameController.text,
+                                        emailController.text,
+                                        passwordController.text,
+                                        tanggal_lahirController.text,
+                                        genderController.text);
+                                  }
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Yes',
+                                  style:
+                                      StyleText(color: ColorC().primaryColor1)
+                                          .styleH4lWithColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -352,7 +387,7 @@ class _RegisterState extends State<Register> {
                   const SizedBox(height: 40),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Login(),
@@ -407,7 +442,7 @@ class _RegisterState extends State<Register> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      Navigator.popAndPushNamed(context, Routes.login);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

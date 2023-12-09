@@ -40,6 +40,7 @@ class _HomeState extends State<Home> {
   late List<Gerakan> listGerakan;
   late List<JenisPaket> listJenisPaket;
   late List<LevelGerakan> listLevelGerakan;
+  
 
   Future<void> fetchData() async {
     await TrainerClient().showTrainerHome().then((value) {
@@ -103,9 +104,9 @@ class _HomeState extends State<Home> {
     return listTrainer != null;
   }
 
-  String findLevelGerakan(id) {
-    for (int i = 0; i < listLevelGerakan.length; i++) {
-      if (listLevelGerakan[i].id == id) {
+  String findLevelGerakan(id){
+    for(int i = 0 ; i < listLevelGerakan.length; i++){
+      if(listLevelGerakan[i].id == id){
         return listLevelGerakan[i].levelGerakan;
       }
     }
@@ -125,6 +126,8 @@ class _HomeState extends State<Home> {
       print(e);
     }
   }
+
+
 
   String greeting() {
     DateTime now = DateTime.now();
@@ -224,7 +227,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(20),
             width: double.infinity,
-            height: 150,
+            height: 110,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,
@@ -241,7 +244,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Goal For This Month',
+                  'Keep spirit to your exercise!',
                   style: StyleText().styleH3b,
                 ),
                 SizedBox(
@@ -250,29 +253,13 @@ class _HomeState extends State<Home> {
                 Row(
                   children: [
                     Icon(
-                      FontAwesomeIcons.weightHanging,
+                      FontAwesomeIcons.moneyBill,
                       size: 18,
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Text('Weight Loss 3Kg', style: StyleText().styleH4l),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_month,
-                      size: 18,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Gym Routine 12 Times / Month',
-                        style: StyleText().styleH4l),
+                    Text('Premium ' + 'Subscription', style: StyleText().styleH4l),
                   ],
                 ),
               ],
@@ -313,9 +300,8 @@ class _HomeState extends State<Home> {
                   for (int i = 0; i < listTempatGym.length; i++)
                     MaterialButton(
                       padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
                           return SearchGym(id: listTempatGym[i].id);
                         }));
                       },
@@ -627,10 +613,10 @@ class _HomeState extends State<Home> {
                   for (int i = 0; i < listJenisPaket.length; i++)
                     MaterialButton(
                       padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context){
-                        //   return SubcriptionView(id: listGerakan[i].id,);
-                        // }));
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return SubcriptionView(id: listGerakan[i].id,);
+                        }));
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 8),
@@ -638,8 +624,7 @@ class _HomeState extends State<Home> {
                         height: 250,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/jenisPaket/${listJenisPaket[i].image}.jpg'),
+                                image: AssetImage('assets/images/jenisPaket/${listJenisPaket[i].image}.jpg'),
                                 fit: BoxFit.cover),
                             borderRadius: BorderRadius.circular(20)),
                         child: Padding(
@@ -670,17 +655,13 @@ class _HomeState extends State<Home> {
                                     style: TextStyle(
                                       color: Colors.white,
                                       decoration: TextDecoration.lineThrough,
-                                      decorationColor: const Color.fromARGB(
-                                          255,
-                                          0,
-                                          0,
-                                          0), // Opsional, bisa dihilangkan jika tidak diperlukan
+                                      decorationColor: const Color.fromARGB(255, 0, 0, 0), // Opsional, bisa dihilangkan jika tidak diperlukan
                                       decorationThickness:
                                           2.0, // Opsional, bisa dihilangkan jika tidak diperlukan
                                     ),
                                   ),
                                   Text(
-                                    'IDR ${listJenisPaket[i].harga - (listJenisPaket[i].harga * (listJenisPaket[i].promo / 100))}',
+                                   'IDR ${listJenisPaket[i].harga - (listJenisPaket[i].harga*(listJenisPaket[i].promo/100))}',
                                     style: StyleText(color: Colors.white)
                                         .stylePbWithColor,
                                   ),
@@ -706,6 +687,7 @@ class _HomeState extends State<Home> {
                 style: StyleText().styleH4b,
               ),
               MaterialButton(
+                
                 onPressed: () {
                   Navigator.pushNamed(context, Routes.gridGuidePage);
                 },
@@ -729,10 +711,9 @@ class _HomeState extends State<Home> {
                   for (int i = 0; i < 5; i++)
                     MaterialButton(
                       padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return Guide();
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return Guide(id: listGerakan[i].id,);
                         }));
                       },
                       child: Container(
@@ -751,8 +732,7 @@ class _HomeState extends State<Home> {
                           ],
                           borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/gerakan/${listGerakan[i].imageGerakan}.jpg'),
+                              image: AssetImage('assets/images/gerakan/${listGerakan[i].imageGerakan}.jpg'),
                               fit: BoxFit.cover),
                         ),
                         child: Column(

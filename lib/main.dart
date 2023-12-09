@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
         } else {
           return ProviderScope(
             child: MaterialApp(
+
               initialRoute:
                   snapshot.data ?? false ? Routes.notaView : Routes.notaView,
               onGenerateRoute: RouteGenerator.generateRoute,
