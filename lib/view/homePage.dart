@@ -18,10 +18,6 @@ import 'package:ugd6_b_9/view/content/home.dart';
 import 'package:ugd6_b_9/view/content/trainerView.dart';
 import 'package:ugd6_b_9/view/profile.dart';
 
-
-
-
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -35,13 +31,19 @@ class _HomePageState extends State<HomePage> {
   late int id = 0;
   late User user = User.empty();
 
-  List<Widget> content = [Home(), SearchGym(id: 1,), SubcriptionView(id: 1,), GridGuide()];
+  List<Widget> content = [
+    Home(),
+    SearchGym(
+      id: 1,
+    ),
+    GridGuide()
+  ];
 
   void onChange(index) {
     setState(
       () {
         indexContent = index;
-      }, 
+      },
     );
   }
 
@@ -50,8 +52,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     loadUser();
   }
-
-
 
   void loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -361,8 +361,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void forcelogout(){
+  void forcelogout() {
     Navigator.pushNamed(context, Routes.preLogin);
   }
-
 }
