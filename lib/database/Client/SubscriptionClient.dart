@@ -46,7 +46,7 @@ class SubscriptionClient {
         Uri.http(url, "$endpoint/$id"),
         headers: _setHeaders(),
       );
-      print('Response  show sub : ${response.body}');
+      print('Response show sub : ${response.body}');
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
       return Subscription.fromJson(json.decode(response.body)['data']);
@@ -65,6 +65,39 @@ class SubscriptionClient {
         body: jsonEncode(data),
       );
       print('response : ${response.body}');
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  Future<http.Response> updateSubscription(int id, Map<String, dynamic> data) async {
+    token = await getToken();
+    try {
+      var response = await http.put(
+        Uri.http(url, "$endpoint/$id"),
+        headers: _setHeaders(),
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  Future<http.Response> deleteSubscription(int id) async {
+    token = await getToken();
+    try {
+      var response = await http.delete(
+        Uri.http(url, "$endpoint/$id"),
+        headers: _setHeaders(),
+      );
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

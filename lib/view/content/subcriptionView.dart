@@ -10,11 +10,15 @@ import 'package:ugd6_b_9/database/Client/FasilitasClient.dart';
 import 'package:ugd6_b_9/database/Client/JenisPaketClient.dart';
 import 'package:ugd6_b_9/entity/model/fasilitas.dart';
 import 'package:ugd6_b_9/entity/model/jenisPaket.dart';
+import 'package:ugd6_b_9/entity/model/subscription.dart';
 import 'package:ugd6_b_9/view/content/paymentView.dart';
 
 class SubcriptionView extends StatefulWidget {
   int id;
-  SubcriptionView({super.key, required this.id});
+  int type;
+  Subscription? updateSubs; //1 == crate 2 == udpate
+  SubcriptionView(
+      {super.key, required this.id, this.type = 1, this.updateSubs});
 
   @override
   State<SubcriptionView> createState() => _SubcriptionViewState();
@@ -25,9 +29,20 @@ class _SubcriptionViewState extends State<SubcriptionView> {
   CarouselController _carouselController = CarouselController();
   int _currentImageIndex = 0;
   int _currentIndicatorIndex = 0;
+  int typeTransaksi = 1;
+  Subscription? updateSubs;
 
   @override
   void initState() {
+     typeTransaksi = widget.type;
+    print('update sub apakah ada ??: ${widget.updateSubs == null}');
+    if(typeTransaksi == 2 ){
+      
+      updateSubs = widget.updateSubs!;
+    }
+    
+    
+    
     // TODO: implement initState
     super.initState();
   }
@@ -42,7 +57,7 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         future: JenisPaketClient().getAllJenisPaket(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             print(snapshot);
             return Text('Error: ${snapshot.error}');
@@ -101,7 +116,8 @@ class _SubcriptionViewState extends State<SubcriptionView> {
                                   color: const Color.fromARGB(255, 0, 0, 0),
                                   fontSize: 20,
                                   decoration: TextDecoration.lineThrough,
-                                  decorationColor: Color.fromARGB(255, 255, 0, 0), // Opsional, bisa dihilangkan jika tidak diperlukan
+                                  decorationColor: Color.fromARGB(255, 255, 0,
+                                      0), // Opsional, bisa dihilangkan jika tidak diperlukan
                                   decorationThickness:
                                       2.0, // Opsional, bisa dihilangkan jika tidak diperlukan
                                 ),
@@ -220,10 +236,19 @@ class _SubcriptionViewState extends State<SubcriptionView> {
         ),
         ElevatedButton(
           onPressed: () {
+         
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => PaymentPage(id_paket: id_paket)),
+                builder: (context) { 
+                  print('type di sub: ${typeTransaksi}');
+                  return PaymentPage(
+                    id_paket: id_paket,
+                    type: typeTransaksi, 
+                    updateSubs: updateSubs,
+                    );
+                }
+              ),
             );
           },
           style: ElevatedButton.styleFrom(

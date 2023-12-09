@@ -18,7 +18,11 @@ import 'package:ugd6_b_9/view/homePage.dart';
 
 class PaymentPage extends StatefulWidget {
   final int id_paket;
-  const PaymentPage({Key? key, required this.id_paket}) : super(key: key);
+  Subscription? updateSubs;
+  int type; //1 == create 2 == update
+  PaymentPage(
+      {Key? key, required this.id_paket, this.type = 1, this.updateSubs})
+      : super(key: key);
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -29,10 +33,12 @@ class _PaymentPageState extends State<PaymentPage> {
   String _selectedBank = 'BCA';
   int? id_paket, id_user, id_member;
   late User user;
-  Bank? bank ;
+  Bank? bank;
   JenisPaket? jenis_paket;
   int? indexRadio;
   int? id_bank;
+  int? typeTransaksi;
+  Subscription? updateSubs;
 
   void hitungTotalHarga(harga, pajak) {
     totalHarga = harga + pajak;
@@ -42,9 +48,27 @@ class _PaymentPageState extends State<PaymentPage> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     id_user = localStorage.getInt('id');
     id_member = id_user;
+    typeTransaksi = widget.type;
+    if (typeTransaksi == 2) {
+      updateSubs = widget.updateSubs;
+    }
+
     await Query().getByUserId(id_user!).then((value) {
       setState(() {
-        user = User(id: id_user!, fullname: value.fullname, username: value.username, email: value.email, password: value.password, birthdate: value.birthdate, gender: value.gender, phone: value.phone, weight: value.weight, height: value.height, photo: value.photo, trainerId: value.trainerId, memberId: value.id);
+        user = User(
+            id: id_user!,
+            fullname: value.fullname,
+            username: value.username,
+            email: value.email,
+            password: value.password,
+            birthdate: value.birthdate,
+            gender: value.gender,
+            phone: value.phone,
+            weight: value.weight,
+            height: value.height,
+            photo: value.photo,
+            trainerId: value.trainerId,
+            memberId: value.id);
       });
     });
   }
@@ -186,7 +210,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 "user_id": user.id,
                 "membership_id": user.id
               };
-              _showPaymentSuccessDialog(data,user,bank!,jenis_paket!);
+              _showPaymentSuccessDialog(data, user, bank!, jenis_paket!);
             }
           },
           label: Text(
@@ -301,7 +325,8 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
-  void _showPaymentSuccessDialog(data,User user,Bank bank,JenisPaket jenisPaekt) {
+  void _showPaymentSuccessDialog(
+      data, User user, Bank bank, JenisPaket jenisPaekt) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -313,11 +338,24 @@ class _PaymentPageState extends State<PaymentPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  Subscription? subscription;
-                  SubscriptionClient().createSubscription(data);
+                  print('type transaksi payment : ${typeTransaksi}');
 
-                  return NotaPage(bank: bank,jensiPaket: jenis_paket!,user: user,id_subscription: user.id,);
+                  if (typeTransaksi == 1) {
+                    // showSuccessSnackbar(context, 'Berhasil Create Transaksi');
+                    SubscriptionClient().createSubscription(data);
+                  } else {
+                    // showFailureSnackbar(context, 'Gagal Create Transaksi');
+                    print('ini id subcription : ${updateSubs!.id == null}');
+                    SubscriptionClient()
+                        .updateSubscription(updateSubs!.id, data);
+                  }
 
+                  return MembershipPage(
+                    bank: bank,
+                    jensiPaket: jenis_paket!,
+                    user: user,
+                    id_subscription: user.id,
+                  );
                 }),
               );
             },
