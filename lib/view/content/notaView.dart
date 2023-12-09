@@ -9,6 +9,9 @@ import 'package:ugd6_b_9/entity/model/subscription.dart';
 import 'package:ugd6_b_9/entity/model/user.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:intl/intl.dart';
+import 'package:ugd6_b_9/view/temporary/dummby_generateDocument.dart';
+import 'package:ugd6_b_9/view/temporary/pdf_view.dart';
+import 'package:ugd6_b_9/view/temporary/preview_screenforPDF.dart';
 
 class NotaPage extends StatefulWidget {
   User user;
@@ -119,7 +122,14 @@ class _NotaPageState extends State<NotaPage> {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => HomePage(),
+                                          builder: (context) {
+                                            // return  
+                                              return HomePage();
+                                              // PreviewScreen(doc: await generateInvoice().then((value) {
+                                              //   return value;
+                                              // }));
+                                            
+                                          } 
                                         ),
                                       );
                                     },

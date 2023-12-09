@@ -3,7 +3,7 @@ import 'dart:convert';
 class Presensi {
   int id;
   int userId;
-  DateTime tanggal;
+  String tanggal;
   String? codePresensi;
 
   Presensi({
@@ -19,7 +19,7 @@ class Presensi {
     return Presensi(
       id: json['id'] ?? 0,
       userId: json['user_id'] ?? 0,
-      tanggal: DateTime.parse(json['tanggal'] ?? ''),
+      tanggal: json['tanggal'] ?? '',
       codePresensi: json['code_presensi'] ?? '',
     );
   }
@@ -29,7 +29,7 @@ class Presensi {
   Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userId,
-        "tanggal": tanggal.toIso8601String().split('T')[0],
+        "tanggal": tanggal,
         "code_presensi": codePresensi,
       };
 }

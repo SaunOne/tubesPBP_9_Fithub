@@ -44,6 +44,7 @@ class PresensiClient {
     token = await getToken();
 
     try {
+      
       var response = await http.get(
         Uri.http(url, "$endpoint/user/$userId"),
         headers: _setHeaders(),
@@ -75,6 +76,45 @@ class PresensiClient {
 
       Iterable list = json.decode(response.body)['data'];
       return list.map((e) => Presensi.fromJson(e)).toList();
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+   Future<Presensi> updatePresensi(int id, String tanggal) async {
+    token = await getToken();
+    var data = {
+      "tanggal" : tanggal,
+    };
+    print('tanggal: ${tanggal}');
+    try {
+      var response = await http.put(
+        Uri.http(url, "$endpoint/update/${id}"),
+        headers: _setHeaders(),
+        body: jsonEncode(data),
+      );
+    print('http: ${Uri.http(url, "$endpoint/update/${id}")}');
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      print('response : ${response.body}');
+
+      return Presensi.fromJson(json.decode(response.body)['data']);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  Future<void> deletePresensi(int presensiId) async {
+    token = await getToken();
+    try {
+      var response = await http.delete(
+        Uri.http(url, "$endpoint/$presensiId"),
+        headers: _setHeaders(),
+      );
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      print('response : ${response.body}');
     } catch (e) {
       return Future.error(e.toString());
     }
