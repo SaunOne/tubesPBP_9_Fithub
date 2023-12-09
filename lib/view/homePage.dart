@@ -16,6 +16,7 @@ import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/content/home.dart';
 import 'package:ugd6_b_9/view/content/trainerView.dart';
+import 'package:ugd6_b_9/view/feature/track.dart';
 import 'package:ugd6_b_9/view/profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     SearchGym(
       id: 1,
     ),
+    SubcriptionView(id: 1),
     GridGuide()
   ];
 
@@ -297,7 +299,8 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return HistoryPresensi();
                         }));
                       },
@@ -311,6 +314,28 @@ class _HomePageState extends State<HomePage> {
                             width: 20,
                           ),
                           Text('history Presensi',
+                              style: StyleText().styleH4bWithColor),
+                        ],
+                      ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        isPop = false;
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return TrackPage();
+                        }));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.run_circle,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text('Track Running',
                               style: StyleText().styleH4bWithColor),
                         ],
                       ),

@@ -25,7 +25,7 @@ class CreateQrClient {
     token = await getToken();
     try {
       var response = await http.post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
 
               initialRoute:
-                  snapshot.data ?? false ? Routes.homePage : Routes.notaView,
+                  snapshot.data ?? false ? Routes.preLogin : Routes.notaView,
               onGenerateRoute: RouteGenerator.generateRoute,
             ),
           );

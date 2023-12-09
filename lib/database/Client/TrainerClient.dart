@@ -27,9 +27,9 @@ class TrainerClient{
   Future<List<Trainer>> showAllTrainers() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint)}');
+
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 
@@ -53,9 +53,9 @@ class TrainerClient{
   Future<List<Trainer>> showTrainerHome() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint+'_home')}');
+
       var response = await http.get(
-        Uri.http(url, endpoint+'_home'),
+        Uri.parse(url + endpoint + '/_home'),
         headers: _setHeaders(),
       );
 
@@ -77,9 +77,9 @@ class TrainerClient{
     token = await getToken();
 
     print("id yang masuk : ${id}");
-    print('url : ${Uri.http(url, "$endpoint/$id")}');
+
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/$id"),headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/$id'),headers: _setHeaders());
 
       print('response : ${response.body}');
 
@@ -104,7 +104,7 @@ class TrainerClient{
       var data = trainer.toJson();
 
       var response = await http.post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );

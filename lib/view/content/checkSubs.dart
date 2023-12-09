@@ -21,7 +21,7 @@ class MembershipPage extends StatefulWidget {
   JenisPaket jensiPaket;
   Bank bank;
   int id_subscription;
-  MembershipPage(
+    MembershipPage(
       {super.key,
       required this.user,
       required this.bank,

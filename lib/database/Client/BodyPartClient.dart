@@ -24,9 +24,9 @@ class BodyPartClient {
   Future<List<BodyPart>> showAllBodyParts() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint)}');
+
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 
@@ -45,9 +45,8 @@ class BodyPartClient {
   Future<BodyPart> findBodyPartById(int id) async {
     token = await getToken();
 
-    print('url : ${Uri.http(url, "$endpoint/$id")}');
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/$id'), headers: _setHeaders());
 
       print('response : ${response.body}');
 
@@ -66,7 +65,7 @@ class BodyPartClient {
       var data = {'nama_body_part': namaBodyPart};
 
       var response = await http.post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );

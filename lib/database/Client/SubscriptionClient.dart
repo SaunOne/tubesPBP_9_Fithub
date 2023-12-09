@@ -24,8 +24,9 @@ class SubscriptionClient {
   Future<List<Subscription>> showSubscriptions() async {
     token = await getToken();
     try {
+      print(Uri.parse(url + endpoint));
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 
@@ -40,10 +41,10 @@ class SubscriptionClient {
 
   Future<Subscription> showSubscriptionById(int id) async {
     token = await getToken();
-    print('masuk dengan id : $id');
+    print('masuk user id: $id');
     try {
       var response = await http.get(
-        Uri.http(url, "$endpoint/$id"),
+        Uri.parse(url + endpoint + '/$id'),
         headers: _setHeaders(),
       );
       print('Response show sub : ${response.body}');
@@ -60,7 +61,7 @@ class SubscriptionClient {
     print('data : ${data}');
     try {
       var response = await http.post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );
@@ -78,7 +79,7 @@ class SubscriptionClient {
     token = await getToken();
     try {
       var response = await http.put(
-        Uri.http(url, "$endpoint/$id"),
+        Uri.parse(url + endpoint + '/$id'),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );
@@ -95,7 +96,7 @@ class SubscriptionClient {
     token = await getToken();
     try {
       var response = await http.delete(
-        Uri.http(url, "$endpoint/$id"),
+        Uri.parse(url + endpoint + '/$id'),
         headers: _setHeaders(),
       );
 

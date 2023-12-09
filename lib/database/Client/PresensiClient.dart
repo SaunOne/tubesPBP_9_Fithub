@@ -24,9 +24,8 @@ class PresensiClient {
   Future<Presensi> presensi(String qrCode) async {
     token = await getToken();
     try {
-      print('http : ${Uri.http(url, "$endpoint/$qrCode")}');
       var response = await http.post(
-        Uri.http(url, "$endpoint/$qrCode"),
+        Uri.parse(url + endpoint + '/$qrCode'),
         headers: _setHeaders(),
       );
 
@@ -44,9 +43,8 @@ class PresensiClient {
     token = await getToken();
 
     try {
-      
       var response = await http.get(
-        Uri.http(url, "$endpoint/user/$userId"),
+        Uri.parse(url + endpoint + '/user/$userId'),
         headers: _setHeaders(),
       );
 
@@ -66,7 +64,7 @@ class PresensiClient {
 
     try {
       var response = await http.get(
-        Uri.http(url, "$endpoint/date/$date"),
+        Uri.parse(url + endpoint + '/date/$date'),
         headers: _setHeaders(),
       );
 
@@ -81,19 +79,18 @@ class PresensiClient {
     }
   }
 
-   Future<Presensi> updatePresensi(int id, String tanggal) async {
+  Future<Presensi> updatePresensi(int id, String tanggal) async {
     token = await getToken();
     var data = {
-      "tanggal" : tanggal,
+      "tanggal": tanggal,
     };
     print('tanggal: ${tanggal}');
     try {
       var response = await http.put(
-        Uri.http(url, "$endpoint/update/${id}"),
+        Uri.parse(url + endpoint + '/update/$id'),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );
-    print('http: ${Uri.http(url, "$endpoint/update/${id}")}');
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
       print('response : ${response.body}');
@@ -108,7 +105,7 @@ class PresensiClient {
     token = await getToken();
     try {
       var response = await http.delete(
-        Uri.http(url, "$endpoint/$presensiId"),
+        Uri.parse(url + endpoint + '/$presensiId'),
         headers: _setHeaders(),
       );
 

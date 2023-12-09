@@ -40,9 +40,6 @@ class _SubcriptionViewState extends State<SubcriptionView> {
       
       updateSubs = widget.updateSubs!;
     }
-    
-    
-    
     // TODO: implement initState
     super.initState();
   }

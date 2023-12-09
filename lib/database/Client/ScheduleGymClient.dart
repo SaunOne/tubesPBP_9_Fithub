@@ -26,7 +26,7 @@ class ScheduleClient {
     print('token : ${token}');
     try {
       var response = await get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 
@@ -44,7 +44,7 @@ class ScheduleClient {
   Future<ScheduleGym> find(id) async {
     token = await getToken();
     try {
-      var response = await get(Uri.http(url, "$endpoint/$id"));
+      var response = await get(Uri.parse(url + endpoint + '/$id'));
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
@@ -70,7 +70,7 @@ class ScheduleClient {
       };
 
       var response = await post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );
@@ -101,7 +101,7 @@ class ScheduleClient {
       };
       print('ini hasilnya');
       print(data);
-      var response = await put(Uri.http(url, '$endpoint/$id'),
+      var response = await put(Uri.parse(url + endpoint + '/$id'),
           headers: _setHeaders(), body: jsonEncode(data));
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
@@ -116,7 +116,7 @@ class ScheduleClient {
     try {
       token = await getToken();
       var response = await delete(
-        Uri.http(url, '$endpoint/$id'),
+        Uri.parse(url + endpoint + '/$id'),
         headers: _setHeaders(),
       );
 

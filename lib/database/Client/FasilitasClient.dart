@@ -24,8 +24,10 @@ class FasilitasClient {
   Future<List<Fasilitas>> showFasilitasByJenisPaket(int idJenisPaket) async {
     token = await getToken();
     try {
+      print(Uri.parse(url + endpoint + '/$idJenisPaket'));
       var response = await http.get(
-        Uri.http(url, "$endpoint/$idJenisPaket"),
+        
+        Uri.parse(url + endpoint + '/$idJenisPaket'),
         headers: _setHeaders(),
       );
       

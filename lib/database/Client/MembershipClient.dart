@@ -27,7 +27,7 @@ class MembershipClient {
       var data = {'id_user': idUser};
 
       var response = await http.post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );
@@ -47,7 +47,7 @@ class MembershipClient {
 
     try {
       var response = await http.get(
-        Uri.http(url, "$endpoint/check/$idUser"),
+        Uri.parse(url + endpoint + '/check/$idUser'),
         headers: _setHeaders(),
       );
 

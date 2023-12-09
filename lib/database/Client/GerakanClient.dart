@@ -24,9 +24,9 @@ class GerakanClient {
   Future<List<Gerakan>> getAllGerakan() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint)}');
+
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 
@@ -45,9 +45,8 @@ class GerakanClient {
   Future<List<Gerakan>> showGerkaanHome() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint+'_home')}');
       var response = await http.get(
-        Uri.http(url, endpoint+'_home'),
+        Uri.parse(url + endpoint + '/_home'),
         headers: _setHeaders(),
       );
 
@@ -66,9 +65,8 @@ class GerakanClient {
   Future<Gerakan> getGerakanById(int id) async {
     token = await getToken();
 
-    print('url : ${Uri.http(url, "$endpoint/$id")}');
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/$id'), headers: _setHeaders());
 
       print('response : ${response.body}');
 
@@ -84,7 +82,7 @@ class GerakanClient {
   Future<List<Gerakan>> getGerakanByLevel(int id) async {
     token = await getToken();
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/level/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/level/$id'), headers: _setHeaders());
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
@@ -101,7 +99,7 @@ class GerakanClient {
   Future<List<Gerakan>> getGerakanByBodyPart(int id) async {
     token = await getToken();
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/level/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/level/$id'), headers: _setHeaders());
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

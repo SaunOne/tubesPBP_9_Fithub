@@ -24,7 +24,7 @@ class Query {
     String Endpoint = networkUrl.getUser;
 
     // Use Uri.parse for a complete URL with the query parameters
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     try {
       var response = await get(url, headers: {
@@ -53,7 +53,7 @@ class Query {
     String URL = networkUrl.prefix;
     String Endpoint = networkUrl.reset;
 
-    var url = Uri.parse('http://$URL/$Endpoint/$Email');
+    var url = Uri.parse(URL + Endpoint + '/$Email');
 
     var data = {
       'password': Password,
@@ -86,7 +86,7 @@ class Query {
     String token = await getToken();
     
 
-    var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
+    var url = Uri.parse(URL + EndpointUpdate + '/$id');
  
     try {
       var data = {
@@ -132,7 +132,7 @@ class Query {
     String EndpointUpdate = networkUrl.updateProfile;
     String token = getToken() as String;
 
-    var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
+    var url = Uri.parse(URL + EndpointUpdate + '/$id');
 
     try{
       var data = {
@@ -168,7 +168,7 @@ class Query {
     String EndpointLogout = networkUrl.logout;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$EndpointLogout/$id');
+    var url = Uri.parse(URL + EndpointLogout + '/$id');
 
     try{
       var data = {
@@ -202,7 +202,7 @@ class Query {
     String Endpoint = networkUrl.getPhoto;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     try {
       var response = await get(url, headers: {
@@ -233,7 +233,7 @@ class Query {
     String Endpoint = networkUrl.getMember;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     var data= {
       "id_user": id,
@@ -269,7 +269,7 @@ class Query {
     String Endpoint = networkUrl.checkMember;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     try{
       var response = await get(url, headers: {

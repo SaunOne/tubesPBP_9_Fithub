@@ -26,7 +26,7 @@ class Authentication {
       'password': password,
     };
 
-    var url = Uri.http(networkUrl.prefix, networkUrl.login);
+    var url = Uri.parse(networkUrl.prefix + networkUrl.login );
     var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
     print(response.statusCode);
     if (response.statusCode == 200) {
@@ -52,9 +52,8 @@ class Authentication {
         'birthdate': birthdate, 
         'gender': gender,
       };
-      print('masuk sebelum url : ${data}');
-      print('ini url :  ${Uri.http(networkUrl.prefix, networkUrl.register)}');
-      var url = Uri.http(networkUrl.prefix, networkUrl.register);
+     
+      var url = Uri.parse(networkUrl.prefix + networkUrl.register );
       var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
 
       print(response.statusCode);

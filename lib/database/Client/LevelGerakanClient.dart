@@ -24,9 +24,9 @@ class LevelGerakanClient {
   Future<List<LevelGerakan>> showAllLevelGerakan() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint)}');
+
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint ),
         headers: _setHeaders(),
       );
 
@@ -45,9 +45,8 @@ class LevelGerakanClient {
   Future<LevelGerakan> showLevelGerakanById(int id) async {
     token = await getToken();
 
-    print('url : ${Uri.http(url, "$endpoint/$id")}');
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/$id'), headers: _setHeaders());
 
       print('response : ${response.body}');
 
@@ -66,7 +65,7 @@ class LevelGerakanClient {
       var data = levelGerakan.toJson();
 
       var response = await http.post(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
         body: jsonEncode(data),
       );

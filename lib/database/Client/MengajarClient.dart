@@ -26,14 +26,13 @@ class MengajarTrainerClient {
     print('token : ${token}');
     try {
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
       print('ini body : ${response.body}');
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
       var list = json.decode(response.body)['data'];
 
-      
       print('list : ${list.map((e) => MengajarTrainer.fromJson(e)).toList()}');
       return list.map((e) => MengajarTrainer.fromJson(e)).toList();
       // return json.decode(response.body)['data'];
@@ -45,9 +44,9 @@ class MengajarTrainerClient {
   Future<List<MengajarTrainer>> showMengajarByTrainerID(int trainerId) async {
     token = await getToken();
     try {
-      print(Uri.http(url, "$endpoint/$trainerId"));
+
       var response = await http.get(
-        Uri.http(url, "$endpoint/$trainerId"),
+        Uri.parse(url + endpoint + '/$trainerId'),
         headers: _setHeaders(),
       );
 
@@ -55,19 +54,20 @@ class MengajarTrainerClient {
 
       Iterable list = json.decode(response.body)['data'];
 
-        var a = list.map((e) => MengajarTrainer.fromJson(e)).toList();
-       
+      var a = list.map((e) => MengajarTrainer.fromJson(e)).toList();
+
       return list.map((e) => MengajarTrainer.fromJson(e)).toList();
     } catch (e) {
       return Future.error(e.toString());
     }
   }
 
-  Future<List<MengajarTrainer>> showMengajarByJadwalMengajarID(int jadwalMengajarId) async {
+  Future<List<MengajarTrainer>> showMengajarByJadwalMengajarID(
+      int jadwalMengajarId) async {
     token = await getToken();
     try {
       var response = await http.get(
-        Uri.http(url, "$endpoint/$jadwalMengajarId"),
+        Uri.parse(url + endpoint + '/$jadwalMengajarId'),
         headers: _setHeaders(),
       );
 

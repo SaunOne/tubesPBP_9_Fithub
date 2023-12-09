@@ -55,6 +55,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
     await Query().getByUserId(id_user!).then((value) {
       setState(() {
+        print('id : ${id_user}');
         user = User(
             id: id_user!,
             fullname: value.fullname,
@@ -350,12 +351,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         .updateSubscription(updateSubs!.id, data);
                   }
 
-                  return MembershipPage(
-                    bank: bank,
-                    jensiPaket: jenis_paket!,
-                    user: user,
-                    id_subscription: user.id,
-                  );
+                  return NotaPage(user: user, bank: bank, jensiPaket: jenisPaekt, id_subscription: id_user!);
                 }),
               );
             },

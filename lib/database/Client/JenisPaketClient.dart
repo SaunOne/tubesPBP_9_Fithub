@@ -24,9 +24,9 @@ class JenisPaketClient {
   Future<List<JenisPaket>> getAllJenisPaket() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint)}');
+      print(Uri.parse(url + endpoint));
       var response = await http.get(
-        Uri.http(url, endpoint),
+        Uri.parse(url + endpoint),
         headers: _setHeaders(),
       );
 
@@ -45,9 +45,9 @@ class JenisPaketClient {
   Future<List<JenisPaket>> showJenisPaketHome() async {
     token = await getToken();
     try {
-      print('url : ${Uri.http(url, endpoint+'_home')}');
+
       var response = await http.get(
-        Uri.http(url, endpoint+'_home'),
+        Uri.parse(url + endpoint + '/_home'),
         headers: _setHeaders(),
       );
 
@@ -66,9 +66,9 @@ class JenisPaketClient {
   Future<JenisPaket> getJenisPaketById(int id) async {
     token = await getToken();
 
-    print('url : ${Uri.http(url, "$endpoint/$id")}');
+
     try {
-      var response = await http.get(Uri.http(url, "$endpoint/$id"), headers: _setHeaders());
+      var response = await http.get(Uri.parse(url + endpoint + '/$id'), headers: _setHeaders());
 
       print('response : ${response.body}');
 
