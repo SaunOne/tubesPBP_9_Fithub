@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
 import 'package:ugd6_b_9/entity/model/User.dart';
+import 'package:ugd6_b_9/view/content/historyPresensi.dart';
 
 import 'package:ugd6_b_9/view/content/searchGym.dart';
 
@@ -296,17 +297,20 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return HistoryPresensi();
+                        }));
                       },
                       child: Row(
                         children: [
                           Icon(
-                            Icons.qr_code,
+                            Icons.history_edu,
                             size: 20,
                           ),
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Generate Qr',
+                          Text('history Presensi',
                               style: StyleText().styleH4bWithColor),
                         ],
                       ),
