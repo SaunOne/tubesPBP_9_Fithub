@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/constant/color.dart';
-import 'package:ugd6_b_9/database/Auth.dart';
+import 'package:ugd6_b_9/database/Client/AuthClient.dart';
 import 'package:ugd6_b_9/view/Login.dart';
 import 'package:ugd6_b_9/constant/url.dart';
-import 'package:ugd6_b_9/database/Query.dart';
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPassword extends StatefulWidget {

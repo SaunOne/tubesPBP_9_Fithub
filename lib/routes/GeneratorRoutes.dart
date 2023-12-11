@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd6_b_9/testing.dart';
 import 'package:ugd6_b_9/view/PreLogin.dart';
 import 'package:ugd6_b_9/view/content/detailGuide.dart';
 import 'package:ugd6_b_9/generate_qr/generate_qr_page.dart';
 import 'package:ugd6_b_9/view/content/detailTrainer.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/qr_scan/scan_qr_page.dart';
+import 'package:ugd6_b_9/view/content/checkSubs.dart';
+import 'package:ugd6_b_9/view/content/historyPresensi.dart';
+import 'package:ugd6_b_9/view/content/paymentView.dart';
+import 'package:ugd6_b_9/view/content/searchGym.dart';
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/feature/timer.dart';
 import 'package:ugd6_b_9/view/content/notificationView.dart';
@@ -18,12 +23,14 @@ import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/homePage.dart';
 import 'package:ugd6_b_9/view/login.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
+import 'package:ugd6_b_9/view/profile.dart';
 import 'package:ugd6_b_9/view/profileView.dart';
 import 'package:ugd6_b_9/view/register.dart';
 import 'package:ugd6_b_9/view/feature/track.dart';
 import 'package:ugd6_b_9/view/showGym.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ugd6_b_9/view/NewPassword.dart';
+import 'package:ugd6_b_9/view/content/notaView.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -48,7 +55,7 @@ class RouteGenerator {
       case Routes.gridGuidePage:
         return MaterialPageRoute(builder: (_) => const GridGuide());
       case Routes.detailGuidePage:
-        return MaterialPageRoute(builder: (_) => const Guide());
+        return MaterialPageRoute(builder: (_) =>  Guide(id: 1,));
       case Routes.scanPage:
         return MaterialPageRoute(
             builder: (_) => const BarcodeScannerPageView());
@@ -60,14 +67,23 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const TrainerView());
       case Routes.notificationView:
         return MaterialPageRoute(builder: (_) => const NotificationView());
-      case Routes.detailTrainer:
-        return MaterialPageRoute(builder: (_) => const DetailTrainer());
+      // case Routes.detailTrainer:
+      //   return MaterialPageRoute(builder: (_) => const DetailTrainer());
       case Routes.preLogin:
         return MaterialPageRoute(builder: (_) => const PreLogin());
-      case Routes.subcriptionView:
-        return MaterialPageRoute(builder: (_) => const SubcriptionView());
+      
       case Routes.newPass:
         return MaterialPageRoute(builder: (_) => const NewPassword());
+
+      case Routes.paymentView:
+      // return MaterialPageRoute(builder: (_) => const PaymentPage());
+      case Routes.searchGym:
+        return MaterialPageRoute(builder: (_) =>  SearchGym(id: 1,));
+      case Routes.profile:
+        return MaterialPageRoute(builder: (_) => const Profile());
+
+      case Routes.testQuery:
+        return MaterialPageRoute(builder: (_) => TestQuery());
 
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());

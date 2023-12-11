@@ -1,11 +1,13 @@
+// ignore: file_names
 import 'dart:convert';
 
-import 'package:ugd6_b_9/Entity/User.dart';
+
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
 import 'package:ugd6_b_9/entity/image.dart';
-import 'package:ugd6_b_9/entity/Membership.dart';
+import 'package:ugd6_b_9/entity/model/Membership.dart';
+import 'package:ugd6_b_9/entity/model/User.dart';
 
 class Query {
   String token = '';
@@ -22,7 +24,7 @@ class Query {
     String Endpoint = networkUrl.getUser;
 
     // Use Uri.parse for a complete URL with the query parameters
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     try {
       var response = await get(url, headers: {
@@ -34,8 +36,8 @@ class Query {
       print(response.statusCode);
 
       if (response.statusCode == 200) {   
-        print(response.body);
-        User user = User.fromJson(jsonDecode(response.body));
+ 
+        User user = await User.fromJson(jsonDecode(response.body));
         return user;
       } else {
         print(response.body);
@@ -51,7 +53,7 @@ class Query {
     String URL = networkUrl.prefix;
     String Endpoint = networkUrl.reset;
 
-    var url = Uri.parse('http://$URL/$Endpoint/$Email');
+    var url = Uri.parse(URL + Endpoint + '/$Email');
 
     var data = {
       'password': Password,
@@ -84,8 +86,8 @@ class Query {
     String token = await getToken();
     
 
-    var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
-
+    var url = Uri.parse(URL + EndpointUpdate + '/$id');
+ 
     try {
       var data = {
         'fullname': fullname,
@@ -97,7 +99,9 @@ class Query {
         'weight': weight,  
         'height': height,
         'photo': photo ?? '',
+
       };
+
       var response = await put(url, headers: {
         'Content-type': 'application/json',
         'Accept': 'application/json',
@@ -106,7 +110,7 @@ class Query {
       body: jsonEncode(data),
       );
       
-
+      print("response body : ${response.body}");
       print(response.statusCode);
 
       if (response.statusCode == 200) {
@@ -128,7 +132,7 @@ class Query {
     String EndpointUpdate = networkUrl.updateProfile;
     String token = getToken() as String;
 
-    var url = Uri.parse('http://$URL/$EndpointUpdate/$id');
+    var url = Uri.parse(URL + EndpointUpdate + '/$id');
 
     try{
       var data = {
@@ -164,7 +168,7 @@ class Query {
     String EndpointLogout = networkUrl.logout;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$EndpointLogout/$id');
+    var url = Uri.parse(URL + EndpointLogout + '/$id');
 
     try{
       var data = {
@@ -198,7 +202,7 @@ class Query {
     String Endpoint = networkUrl.getPhoto;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     try {
       var response = await get(url, headers: {
@@ -224,15 +228,16 @@ class Query {
   }
 
 
-  Future<Memberships> MakeMembership(int id) async {
+  Future<Memberships> MakeMembership(int id) async { 
     String URL = networkUrl.prefix;
     String Endpoint = networkUrl.getMember;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     var data= {
       "id_user": id,
+      
     };
 
 
@@ -264,7 +269,7 @@ class Query {
     String Endpoint = networkUrl.checkMember;
     String token = await getToken();
 
-    var url = Uri.parse('http://$URL/$Endpoint/$id');
+    var url = Uri.parse(URL + Endpoint + '/$id');
 
     try{
       var response = await get(url, headers: {

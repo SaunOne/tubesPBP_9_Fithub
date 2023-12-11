@@ -11,4 +11,5 @@ class ColorC{
   Color secondaryColor3 = Color.fromARGB(255, 139, 42, 48);
 
   Color AccentColor = Color.fromARGB(255, 0, 85, 165);
+  Color whiteColor = Colors.white;
 }

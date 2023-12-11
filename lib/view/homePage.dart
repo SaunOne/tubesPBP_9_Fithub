@@ -1,17 +1,23 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/colorCons.dart';
 import 'package:ugd6_b_9/constant/styleText.dart';
-import 'package:ugd6_b_9/database/Query.dart';
+import 'package:ugd6_b_9/entity/model/User.dart';
+import 'package:ugd6_b_9/view/content/historyPresensi.dart';
+
+import 'package:ugd6_b_9/view/content/searchGym.dart';
+
+import 'package:ugd6_b_9/database/Client/UserClient.dart';
+
 import 'package:ugd6_b_9/view/content/subcriptionView.dart';
 import 'package:ugd6_b_9/view/content/gridGuide.dart';
 import 'package:ugd6_b_9/routes/routes.dart';
 import 'package:ugd6_b_9/view/content/home.dart';
-import 'package:ugd6_b_9/view/profileView.dart';
-import '../Entity/User.dart';
-import 'package:ugd6_b_9/entity/Membership.dart';
-
+import 'package:ugd6_b_9/view/content/trainerView.dart';
+import 'package:ugd6_b_9/view/feature/track.dart';
+import 'package:ugd6_b_9/view/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,7 +32,14 @@ class _HomePageState extends State<HomePage> {
   late int id = 0;
   late User user = User.empty();
 
-  List<Widget> content = [Home(), ProfileView(), SubcriptionView(), GridGuide()];
+  List<Widget> content = [
+    Home(),
+    SearchGym(
+      id: 1,
+    ),
+    SubcriptionView(id: 1),
+    GridGuide()
+  ];
 
   void onChange(index) {
     setState(
@@ -41,8 +54,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     loadUser();
   }
-
-
 
   void loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -119,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                     onChange(1);
                   },
                   icon: Icon(
-                    Icons.person,
+                    Icons.place,
                     size: 20,
                   ),
                 ),
@@ -233,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
-                        Navigator.pushNamed(context, Routes.profilePage);
+                        Navigator.pushNamed(context, Routes.profile);
                       },
                       child: Row(
                         children: [
@@ -288,17 +299,43 @@ class _HomePageState extends State<HomePage> {
                     MaterialButton(
                       onPressed: () {
                         isPop = false;
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return HistoryPresensi();
+                        }));
                       },
                       child: Row(
                         children: [
                           Icon(
-                            Icons.qr_code,
+                            Icons.history_edu,
                             size: 20,
                           ),
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Generate Qr',
+                          Text('history Presensi',
+                              style: StyleText().styleH4bWithColor),
+                        ],
+                      ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        isPop = false;
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return TrackPage();
+                        }));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.run_circle,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text('Track Running',
                               style: StyleText().styleH4bWithColor),
                         ],
                       ),
@@ -349,8 +386,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void forcelogout(){
+  void forcelogout() {
     Navigator.pushNamed(context, Routes.preLogin);
   }
-
 }

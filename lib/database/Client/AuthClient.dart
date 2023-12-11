@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:io';
 import 'package:http/http.dart';
-import 'package:ugd6_b_9/Entity/User.dart';
 import 'package:ugd6_b_9/Entity/ResponseDataUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd6_b_9/constant/url.dart';
@@ -29,11 +26,11 @@ class Authentication {
       'password': password,
     };
 
-    var url = Uri.http(networkUrl.prefix, networkUrl.login);
+    var url = Uri.parse(networkUrl.prefix + networkUrl.login );
     var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
       ResponseDataUser responseDataUser = ResponseDataUser.fromJson(jsonDecode(response.body));
       return responseDataUser;
     } else {
@@ -55,8 +52,8 @@ class Authentication {
         'birthdate': birthdate, 
         'gender': gender,
       };
-
-      var url = Uri.http(networkUrl.prefix, networkUrl.register);
+     
+      var url = Uri.parse(networkUrl.prefix + networkUrl.register );
       var response = await post(url, body: jsonEncode(data), headers: _setHeaders());
 
       print(response.statusCode);
